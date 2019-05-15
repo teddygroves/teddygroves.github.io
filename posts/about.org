@@ -1,8 +1,28 @@
 #+TITLE: How I made this website
 #+OPTIONS: author:nil Date:nil toc:nil
 
-I had a go at making this website with org-publish.
+I had a go at making a personal website, mainly to share [[file:drag_race.html][my attempt to predict
+RuPaul's drag race]]. It was really fun and not as difficult as I thought it
+would be. I thought I'd write up the steps I went through in case anyone else
+is curious.
 
-You can find the source code here..
+The emacs package [[https://orgmode.org/manual/Publishing.html][org publish]] makes it possible to write all the content for a
+website in .org files, then convert them all to html files with a quick command
+~M-x org-publish~. If you are already used to emacs and org mode I think this
+is a bit easier than learning how to use a static site generator. I read a few
+tutorials and found [[https://orgmode.org/worg/org-tutorials/org-publish-html-tutorial.html][this one]] the most useful. The gist is that you configure a
+variable called ~org-publish-project-alist~ with some publishing targets (for
+example the content of the homepage file and a directory full of posts). You
+make the pages look nice by adding an html head to each target that points at a
+css stylesheet.
 
-* Inspiration
+To style the website I started with [[https://gongzhitaao.org/orgcss/][this really nice theme]], and had a nice time
+learning about css by adding and removing things. I used two of the [[https://www.pantone.com/color-intelligence/color-of-the-year/color-of-the-year-2019-palette-exploration][colours of
+the year]] for links and titles and used some fonts from [[https://fonts.google.com/][Google fonts]] with the
+help of [[https://developers.google.com/fonts/docs/getting_started][this tutorial]].
+
+To put the website on the internet I used [[https://pages.github.com/][github pages]], which is completely
+magical - you just push to the repository and seconds later the page has
+changed.
+
+You can find all the source code [[https://github.com/teddygroves/teddygroves.github.io/][here]].

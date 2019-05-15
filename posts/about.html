@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2019-05-15 Wed 21:32 -->
+<!-- 2019-05-15 Wed 22:30 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>How I made this website</title>
@@ -247,16 +247,40 @@ for the JavaScript code in this tag.
 <div id="content">
 <h1 class="title">How I made this website</h1>
 <p>
-I had a go at making this website with org-publish.
+I had a go at making a personal website, mainly to share <a href="drag_race.html">my attempt to predict
+RuPaul's drag race</a>. It was really fun and not as difficult as I thought it
+would be. I thought I'd write up the steps I went through in case anyone else
+is curious.
 </p>
 
 <p>
-You can find the source code here..
+The emacs package <a href="https://orgmode.org/manual/Publishing.html">org publish</a> makes it possible to write all the content for a
+website in .org files, then convert them all to html files with a quick command
+<code>M-x org-publish</code>. If you are already used to emacs and org mode I think this
+is a bit easier than learning how to use a static site generator. I read a few
+tutorials and found <a href="https://orgmode.org/worg/org-tutorials/org-publish-html-tutorial.html">this one</a> the most useful. The gist is that you configure a
+variable called <code>org-publish-project-alist</code> with some publishing targets (for
+example the content of the homepage file and a directory full of posts). You
+make the pages look nice by adding an html head to each target that points at a
+css stylesheet.
 </p>
 
-<div id="outline-container-org9c514fd" class="outline-2">
-<h2 id="org9c514fd">Inspiration</h2>
-</div>
+<p>
+To style the website I started with <a href="https://gongzhitaao.org/orgcss/">this really nice theme</a>, and had a nice time
+learning about css by adding and removing things. I used two of the <a href="https://www.pantone.com/color-intelligence/color-of-the-year/color-of-the-year-2019-palette-exploration">colours of
+the year</a> for links and titles and used some fonts from <a href="https://fonts.google.com/">Google fonts</a> with the
+help of <a href="https://developers.google.com/fonts/docs/getting_started">this tutorial</a>.
+</p>
+
+<p>
+To put the website on the internet I used <a href="https://pages.github.com/">github pages</a>, which is completely
+magical - you just push to the repository and seconds later the page has
+changed.
+</p>
+
+<p>
+You can find all the source code <a href="https://github.com/teddygroves/teddygroves.github.io/">here</a>.
+</p>
 </div>
 </body>
 </html>
