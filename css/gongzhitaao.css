@@ -1,0 +1,430 @@
+/*! normalize.css v4.1.1 | MIT License | github.com/necolas/normalize.css */
+@import url('https://fonts.googleapis.com/css?family=Open+Sans');
+@import url('https://fonts.googleapis.com/css?family=Source+Serif+Pro');
+html{
+    font-family:'Open Sans';
+    line-height:1.15;
+    -ms-text-size-adjust:100%;
+    -webkit-text-size-adjust:100%
+}
+html:before{
+    content:'';
+    display:block;
+    height:50px;
+    width:100%;
+    background: url('../img/tartan.png');
+    background-size: auto;
+    left:0;
+    top:0;
+    right:0
+}
+
+/* Body...  */
+body{
+    color:#000;
+    background-color:#fff;
+    width:95%;
+    margin:2% auto;
+    font-size:14px;
+    line-height:1.5em;
+    color:#333;
+}
+@media screen and (min-width:600px){
+    body{
+        font-size:18px
+    }
+}
+@media screen and (min-width:910px){
+    body{
+        width:900px
+    }
+}
+
+/* Links... */
+a{
+    -webkit-text-decoration-skip:objects;
+    color:inherit;
+    background-color:inherit;
+    font:inherit;
+    text-decoration:inherit;
+    color:#184a45;
+    text-decoration:none
+}
+a:hover{
+    text-decoration:underline
+}
+a:active,a:hover{
+    outline-width:0
+}
+
+/* Headings... */
+h1,h2,h3,h4,h5,h6{
+    color:#ff6f61;
+    line-height:1em;
+    font-family: 'Source Serif Pro'
+}
+h1,h2,h3{
+    line-height:1.4em
+}
+h4,h5,h6{
+    font-size:1em
+}
+@media screen and (min-width:600px){
+    h1{
+        font-size:2.3em
+    }
+    h2{
+        font-size:1.5em
+    }
+    h3{
+        font-size:1.3em
+    }
+    h1,h2,h3{
+        line-height:1.4em
+    }
+    h4,h5,h6{
+        font-size:1.1em
+    }
+}
+
+.main-header h1 {
+    margin: .1em .5em
+}
+/* Title */
+.title{
+    text-align:center;
+    margin:.3em auto;
+    color:#000
+}
+
+/* Code blocks*/
+.org-src-container{
+    /* border:1px solid #ccc; */
+    /* box-shadow:3px 3px 3px #eee; */
+    font-family:Lucida Console,monospace;
+    font-size:80%;
+    margin:1em auto;
+    padding:.1em .5em;
+    position:relative
+}
+.org-src-container>pre{
+    overflow:auto
+}
+.org-src-container>pre:before{
+    display:block;
+    position:absolute;
+    background-color:#b3b3b3;
+    top:0;
+    right:0;
+    padding:0 .5em;
+    border-bottom-left-radius:8px;
+    border:0;
+    color:#fff;
+    font-size:80%
+}
+.org-src-container>pre.src-sh:before{
+    content:"sh"
+}
+.org-src-container>pre.src-bash:before{
+    content:"bash"
+}
+.org-src-container>pre.src-emacs-lisp:before{
+    content:"Emacs Lisp"
+}
+.org-src-container>pre.src-stan:before{
+    content:"Stan"
+}
+.org-src-container>pre.src-python:before{
+    content:"Python"
+}
+/* /\* Mystery... *\/ */
+#org-div-home-and-up{
+    font-size:70%;
+    text-align:right;
+    white-space:nowrap
+}
+.linenr{
+    font-size:90%
+}
+.code-highlighted{
+    background-color:#ff0
+}
+.creator{
+    display:block
+}
+@media screen and (min-width:600px){
+    .creator{
+        display:inline;
+        float:right
+    }
+}
+article,aside,details,figcaption,figure,footer,header,main,menu,nav,section,summary{
+    display:block
+}
+audio,canvas,progress,video{
+    display:inline-block
+}
+audio:not([controls]){
+    display:none;
+    height:0
+}
+progress{
+    vertical-align:baseline
+}
+[hidden],template{
+    display:none
+}
+abbr[title]{
+    border-bottom:none;
+    text-decoration:underline;
+    text-decoration:underline dotted
+}
+b,strong{
+    font-weight:inherit;
+    font-weight:bolder
+}
+dfn{
+    font-style:italic
+}
+
+mark{
+    background-color:#ff0;
+    color:#000
+}
+small{
+    font-size:80%
+}
+sub,sup{
+    font-size:75%;
+    line-height:0;
+    position:relative;
+    vertical-align:baseline
+}
+sub{
+    bottom:-.25em
+}
+sup{
+    top:-.5em
+}
+img{
+    border-style:none
+}
+svg:not(:root){
+    overflow:hidden
+}
+code,kbd,pre,samp{
+    font-family:monospace,monospace;
+    font-size:1em
+}
+figure{
+    margin:1em 40px
+}
+hr{
+    box-sizing:content-box;
+    height:0;
+    overflow:visible
+}
+button,input,optgroup,select,textarea{
+    font:inherit;
+    margin:0
+}
+optgroup{
+    font-weight:700
+}
+button,input{
+    overflow:visible
+}
+button,select{
+    text-transform:none
+}
+[type=reset],[type=submit],button,html [type=button]{
+    -webkit-appearance:button
+}
+[type=button]::-moz-focus-inner,[type=reset]::-moz-focus-inner,[type=submit]::-moz-focus-inner,button::-moz-focus-inner{
+    border-style:none;
+    padding:0
+}
+[type=button]:-moz-focusring,[type=reset]:-moz-focusring,[type=submit]:-moz-focusring,button:-moz-focusring{
+    outline:1px dotted ButtonText
+}
+fieldset{
+    border:1px solid silver;
+    margin:0 2px;
+    padding:.35em .625em .75em
+}
+legend{
+    box-sizing:border-box;
+    color:inherit;
+    display:table;
+    max-width:100%;
+    padding:0;
+    white-space:normal
+}
+textarea{
+    overflow:auto
+}
+[type=checkbox],[type=radio]{
+    box-sizing:border-box;
+    padding:0
+}
+[type=number]::-webkit-inner-spin-button,[type=number]::-webkit-outer-spin-button{
+    height:auto
+}
+[type=search]{
+    -webkit-appearance:textfield;
+    outline-offset:-2px
+}
+[type=search]::-webkit-search-cancel-button,[type=search]::-webkit-search-decoration{
+    -webkit-appearance:none
+}
+::-webkit-input-placeholder{
+    color:inherit;
+    opacity:.54
+}
+::-webkit-file-upload-button{
+    -webkit-appearance:button;
+    font:inherit
+}
+::selection{
+    background:#d6edff
+}
+dl,ol,p,ul{
+    margin-top:0.8em;
+    margin-bottom:0.8em;
+    margin-left: auto;
+    margin-right: auto;
+}
+.subtitle{
+    text-align:center;
+    font-size:1.1em;
+    line-height:1.4;
+    font-weight:700;
+    margin:1em auto
+}
+.abstract{
+    margin:auto;
+    width:80%;
+    font-style:italic
+}
+.abstract p:last-of-type:before{
+    content:" ";
+    white-space:pre
+}
+[class^=section-number-]{
+    margin-right:.5em
+}
+[id^=orgheadline]{
+    clear:both
+}
+#footnotes{
+    font-size:90%
+}
+.footpara{
+    display:inline;
+    margin:.2em auto
+}
+.footdef{
+    margin-bottom:1em
+}
+.footdef sup{
+    padding-right:.5em
+}
+figure{
+    padding:0;
+    margin:1em auto;
+    text-align:center
+}
+img{
+    max-width:100%;
+    vertical-align:middle
+}
+.MathJax_Display{
+    margin:0!important;
+    width:90%!important
+}
+dt{
+    font-weight:700
+}
+table{
+    margin:1em auto;
+    border-top:2px solid;
+    border-bottom:2px solid;
+    border-collapse:collapse
+}
+thead{
+    border-bottom:2px solid
+}
+table td+td,table th+th{
+    border-left:1px solid grey
+}
+table tr{
+    border-top:1px solid #d3d3d3
+}
+td,th{
+    padding:.3em .6em;
+    vertical-align:middle
+}
+caption.t-above{
+    caption-side:top
+}
+caption.t-bottom{
+    caption-side:bottom
+}
+caption{
+    margin-bottom:.3em
+}
+figcaption{
+    margin-top:.3em
+}
+th.org-center,th.org-left,th.org-right{
+    text-align:center
+}
+blockquote{
+    margin:1em 2em;
+    padding-left:1em;
+    border-left:3px solid #ccc
+}
+kbd{
+    background-color:#f7f7f7;
+    font-size:80%;
+    margin:0 .1em;
+    padding:.1em .6em
+}
+#table-of-contents li{
+    clear:both
+}
+.tag{
+    font-family:Lucida Console,monospace;
+    font-size:.7em;
+    font-weight:400
+}
+.tag span{
+    padding:.3em;
+    float:right;
+    margin-right:.5em;
+    border:1px solid #bbb;
+    border-radius:3px;
+    background-clip:padding-box;
+    color:#333;
+    background-color:#eee;
+    line-height:1
+}
+.underline{
+    text-decoration:underline
+}
+#postamble p,#preamble p{
+    font-size:90%;
+    margin:.2em
+}
+p.verse{
+    margin-left:3%
+}
+:not(pre)>code{
+    padding:2px 5px;
+    margin:auto 1px;
+    border:1px solid #ddd;
+    border-radius:3px;
+    background-clip:padding-box;
+    color:#333;
+    font-size:80%
+}

@@ -1,0 +1,8 @@
+#+TITLE: How I made this website
+#+OPTIONS: author:nil Date:nil toc:nil
+
+I had a go at making this website with org-publish.
+
+You can find the source code here.
+
+* Inspiration

@@ -1,0 +1,13 @@
+#+TITLE: 
+#+OPTIONS: author:nil toc:nil
+
+I work at [[https://www.biosustain.dtu.dk/][DTU's Biosustain research center]] making statistical models of
+chemical reactions that happen inside living cells.
+
+I love football, politics, philosophy and animals.
+
+I have [[https://github.com/teddygroves][GitHub]], [[HTTps://twitter.com/teddygroves][Twitter]] and [[https://www.linkedin.com/in/teddy-groves-9002b8117/][LinkedIn]] and you can email me at ~groves DOT teddy AT gmail DOT com~.
+
+* Posts
+
+#+INCLUDE: posts/sitemap.org
