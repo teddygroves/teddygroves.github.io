@@ -48,9 +48,11 @@ a{
     background-color:inherit;
     font:inherit;
     color:#184a45;
+    text-decoration: none;
 }
 a:hover{
     color:#ff6f61;
+    text-decoration: underline;
 }
 a:active,a:hover{
     outline-width:0
