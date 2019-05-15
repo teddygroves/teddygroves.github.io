@@ -1,7 +1,7 @@
 #+TITLE: How to predict Rupaul's drag race
 #+OPTIONS: author:nil Date:nil toc:nil
 
-[[file:../../img/emotional_rose.png]]
+[[file:../img/emotional_rose.png]]
 
 I entered [[https://shiraamitchell.github.io/rpdr][this competition]] to predict the outcomes of RuPaul's Drag Race season
 11 - it was really fun and I learned a lot, so I thought I'd write down how the

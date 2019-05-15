@@ -3,6 +3,6 @@
 
 I had a go at making this website with org-publish.
 
-You can find the source code here.
+You can find the source code here..
 
 * Inspiration
