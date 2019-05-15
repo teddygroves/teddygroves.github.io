@@ -1,4 +1,4 @@
-#+TITLE: How to predict Rupaul's drag race
+#+TITLE: How to predict who will win Rupaul's drag race
 #+OPTIONS: author:nil Date:nil toc:nil
 
 [[file:../img/emotional_rose.png]]
