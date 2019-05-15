@@ -1,0 +1,669 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<!-- 2019-05-15 Wed 21:10 -->
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>How to predict Rupaul's drag race</title>
+<meta name="generator" content="Org mode" />
+<style type="text/css">
+ <!--/*--><![CDATA[/*><!--*/
+  .title  { text-align: center;
+             margin-bottom: .2em; }
+  .subtitle { text-align: center;
+              font-size: medium;
+              font-weight: bold;
+              margin-top:0; }
+  .todo   { font-family: monospace; color: red; }
+  .done   { font-family: monospace; color: green; }
+  .priority { font-family: monospace; color: orange; }
+  .tag    { background-color: #eee; font-family: monospace;
+            padding: 2px; font-size: 80%; font-weight: normal; }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .org-right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .org-left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .org-center { margin-left: auto; margin-right: auto; text-align: center; }
+  .underline { text-decoration: underline; }
+  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
+  p.verse { margin-left: 3%; }
+  pre {
+    border: 1px solid #ccc;
+    box-shadow: 3px 3px 3px #eee;
+    padding: 8pt;
+    font-family: monospace;
+    overflow: auto;
+    margin: 1.2em;
+  }
+  pre.src {
+    position: relative;
+    overflow: visible;
+    padding-top: 1.2em;
+  }
+  pre.src:before {
+    display: none;
+    position: absolute;
+    background-color: white;
+    top: -10px;
+    right: 10px;
+    padding: 3px;
+    border: 1px solid black;
+  }
+  pre.src:hover:before { display: inline;}
+  /* Languages per Org manual */
+  pre.src-asymptote:before { content: 'Asymptote'; }
+  pre.src-awk:before { content: 'Awk'; }
+  pre.src-C:before { content: 'C'; }
+  /* pre.src-C++ doesn't work in CSS */
+  pre.src-clojure:before { content: 'Clojure'; }
+  pre.src-css:before { content: 'CSS'; }
+  pre.src-D:before { content: 'D'; }
+  pre.src-ditaa:before { content: 'ditaa'; }
+  pre.src-dot:before { content: 'Graphviz'; }
+  pre.src-calc:before { content: 'Emacs Calc'; }
+  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
+  pre.src-fortran:before { content: 'Fortran'; }
+  pre.src-gnuplot:before { content: 'gnuplot'; }
+  pre.src-haskell:before { content: 'Haskell'; }
+  pre.src-hledger:before { content: 'hledger'; }
+  pre.src-java:before { content: 'Java'; }
+  pre.src-js:before { content: 'Javascript'; }
+  pre.src-latex:before { content: 'LaTeX'; }
+  pre.src-ledger:before { content: 'Ledger'; }
+  pre.src-lisp:before { content: 'Lisp'; }
+  pre.src-lilypond:before { content: 'Lilypond'; }
+  pre.src-lua:before { content: 'Lua'; }
+  pre.src-matlab:before { content: 'MATLAB'; }
+  pre.src-mscgen:before { content: 'Mscgen'; }
+  pre.src-ocaml:before { content: 'Objective Caml'; }
+  pre.src-octave:before { content: 'Octave'; }
+  pre.src-org:before { content: 'Org mode'; }
+  pre.src-oz:before { content: 'OZ'; }
+  pre.src-plantuml:before { content: 'Plantuml'; }
+  pre.src-processing:before { content: 'Processing.js'; }
+  pre.src-python:before { content: 'Python'; }
+  pre.src-R:before { content: 'R'; }
+  pre.src-ruby:before { content: 'Ruby'; }
+  pre.src-sass:before { content: 'Sass'; }
+  pre.src-scheme:before { content: 'Scheme'; }
+  pre.src-screen:before { content: 'Gnu Screen'; }
+  pre.src-sed:before { content: 'Sed'; }
+  pre.src-sh:before { content: 'shell'; }
+  pre.src-sql:before { content: 'SQL'; }
+  pre.src-sqlite:before { content: 'SQLite'; }
+  /* additional languages in org.el's org-babel-load-languages alist */
+  pre.src-forth:before { content: 'Forth'; }
+  pre.src-io:before { content: 'IO'; }
+  pre.src-J:before { content: 'J'; }
+  pre.src-makefile:before { content: 'Makefile'; }
+  pre.src-maxima:before { content: 'Maxima'; }
+  pre.src-perl:before { content: 'Perl'; }
+  pre.src-picolisp:before { content: 'Pico Lisp'; }
+  pre.src-scala:before { content: 'Scala'; }
+  pre.src-shell:before { content: 'Shell Script'; }
+  pre.src-ebnf2ps:before { content: 'ebfn2ps'; }
+  /* additional language identifiers per "defun org-babel-execute"
+       in ob-*.el */
+  pre.src-cpp:before  { content: 'C++'; }
+  pre.src-abc:before  { content: 'ABC'; }
+  pre.src-coq:before  { content: 'Coq'; }
+  pre.src-groovy:before  { content: 'Groovy'; }
+  /* additional language identifiers from org-babel-shell-names in
+     ob-shell.el: ob-shell is the only babel language using a lambda to put
+     the execution function name together. */
+  pre.src-bash:before  { content: 'bash'; }
+  pre.src-csh:before  { content: 'csh'; }
+  pre.src-ash:before  { content: 'ash'; }
+  pre.src-dash:before  { content: 'dash'; }
+  pre.src-ksh:before  { content: 'ksh'; }
+  pre.src-mksh:before  { content: 'mksh'; }
+  pre.src-posh:before  { content: 'posh'; }
+  /* Additional Emacs modes also supported by the LaTeX listings package */
+  pre.src-ada:before { content: 'Ada'; }
+  pre.src-asm:before { content: 'Assembler'; }
+  pre.src-caml:before { content: 'Caml'; }
+  pre.src-delphi:before { content: 'Delphi'; }
+  pre.src-html:before { content: 'HTML'; }
+  pre.src-idl:before { content: 'IDL'; }
+  pre.src-mercury:before { content: 'Mercury'; }
+  pre.src-metapost:before { content: 'MetaPost'; }
+  pre.src-modula-2:before { content: 'Modula-2'; }
+  pre.src-pascal:before { content: 'Pascal'; }
+  pre.src-ps:before { content: 'PostScript'; }
+  pre.src-prolog:before { content: 'Prolog'; }
+  pre.src-simula:before { content: 'Simula'; }
+  pre.src-tcl:before { content: 'tcl'; }
+  pre.src-tex:before { content: 'TeX'; }
+  pre.src-plain-tex:before { content: 'Plain TeX'; }
+  pre.src-verilog:before { content: 'Verilog'; }
+  pre.src-vhdl:before { content: 'VHDL'; }
+  pre.src-xml:before { content: 'XML'; }
+  pre.src-nxml:before { content: 'XML'; }
+  /* add a generic configuration mode; LaTeX export needs an additional
+     (add-to-list 'org-latex-listings-langs '(conf " ")) in .emacs */
+  pre.src-conf:before { content: 'Configuration File'; }
+
+  table { border-collapse:collapse; }
+  caption.t-above { caption-side: top; }
+  caption.t-bottom { caption-side: bottom; }
+  td, th { vertical-align:top;  }
+  th.org-right  { text-align: center;  }
+  th.org-left   { text-align: center;   }
+  th.org-center { text-align: center; }
+  td.org-right  { text-align: right;  }
+  td.org-left   { text-align: left;   }
+  td.org-center { text-align: center; }
+  dt { font-weight: bold; }
+  .footpara { display: inline; }
+  .footdef  { margin-bottom: 1em; }
+  .figure { padding: 1em; }
+  .figure p { text-align: center; }
+  .equation-container {
+    display: table;
+    text-align: center;
+    width: 100%;
+  }
+  .equation {
+    vertical-align: middle;
+  }
+  .equation-label {
+    display: table-cell;
+    text-align: right;
+    vertical-align: middle;
+  }
+  .inlinetask {
+    padding: 10px;
+    border: 2px solid gray;
+    margin: 10px;
+    background: #ffffcc;
+  }
+  #org-div-home-and-up
+   { text-align: right; font-size: 70%; white-space: nowrap; }
+  textarea { overflow-x: auto; }
+  .linenr { font-size: smaller }
+  .code-highlighted { background-color: #ffff00; }
+  .org-info-js_info-navigation { border-style: none; }
+  #org-info-js_console-label
+    { font-size: 10px; font-weight: bold; white-space: nowrap; }
+  .org-info-js_search-highlight
+    { background-color: #ffff00; color: #000000; font-weight: bold; }
+  .org-svg { width: 90%; }
+  /*]]>*/-->
+</style>
+<link rel='stylesheet' href='../../css/gongzhitaao.css' type='text/css'/>
+<script type="text/javascript">
+/*
+@licstart  The following is the entire license notice for the
+JavaScript code in this tag.
+
+Copyright (C) 2012-2019 Free Software Foundation, Inc.
+
+The JavaScript code in this tag is free software: you can
+redistribute it and/or modify it under the terms of the GNU
+General Public License (GNU GPL) as published by the Free Software
+Foundation, either version 3 of the License, or (at your option)
+any later version.  The code is distributed WITHOUT ANY WARRANTY;
+without even the implied warranty of MERCHANTABILITY or FITNESS
+FOR A PARTICULAR PURPOSE.  See the GNU GPL for more details.
+
+As additional permission under GNU GPL version 3 section 7, you
+may distribute non-source (e.g., minimized or compacted) forms of
+that code without the copy of the GNU GPL normally required by
+section 4, provided you include this license notice and a URL
+through which recipients can access the Corresponding Source.
+
+
+@licend  The above is the entire license notice
+for the JavaScript code in this tag.
+*/
+<!--/*--><![CDATA[/*><!--*/
+ function CodeHighlightOn(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(null != target) {
+     elem.cacheClassElem = elem.className;
+     elem.cacheClassTarget = target.className;
+     target.className = "code-highlighted";
+     elem.className   = "code-highlighted";
+   }
+ }
+ function CodeHighlightOff(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(elem.cacheClassElem)
+     elem.className = elem.cacheClassElem;
+   if(elem.cacheClassTarget)
+     target.className = elem.cacheClassTarget;
+ }
+/*]]>*///-->
+</script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        displayAlign: "center",
+        displayIndent: "0em",
+
+        "HTML-CSS": { scale: 100,
+                        linebreaks: { automatic: "false" },
+                        webFont: "TeX"
+                       },
+        SVG: {scale: 100,
+              linebreaks: { automatic: "false" },
+              font: "TeX"},
+        NativeMML: {scale: 100},
+        TeX: { equationNumbers: {autoNumber: "AMS"},
+               MultLineWidth: "85%",
+               TagSide: "right",
+               TagIndent: ".8em"
+             }
+});
+</script>
+<script type="text/javascript"
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS_HTML"></script>
+</head>
+<body>
+<div id="preamble" class="status">
+<div class='main-header'><h1><a href='../index.html'> Teddy's Picnic </a></h1></div>
+</div>
+<div id="content">
+<h1 class="title">How to predict Rupaul's drag race</h1>
+
+<div class="figure">
+<p><img src="../../img/emotional_rose.png" alt="emotional_rose.png" />
+</p>
+</div>
+
+<p>
+I entered <a href="https://shiraamitchell.github.io/rpdr">this competition</a> to predict the outcomes of RuPaul's Drag Race season
+11 - it was really fun and I learned a lot, so I thought I'd write down how the
+model I made works.
+</p>
+
+<div id="outline-container-org5fba13d" class="outline-2">
+<h2 id="org5fba13d">Model</h2>
+<div class="outline-text-2" id="text-org5fba13d">
+<p>
+My model treats the outcomes of both Drag Race episodes and <a href="https://www.reddit.com/r/rupaulsdragrace/comments/bmzhfk/s11e12_rpdr_poll_did_you_rankings_get_a_makeover/">Data For Progress's
+surveys</a> as depending probabilistically on the abilities of the contestants. The
+higher a queen's ability, the more likely it is that she will do well. Other
+factors - e.g. does Ru just want to keep you around for the drama? - don't
+directly feature, but can be thought of either as implicitly part of ability or
+as contributing a bit of randomness.
+</p>
+</div>
+
+<div id="outline-container-orge77e9b2" class="outline-3">
+<h3 id="orge77e9b2">Priors</h3>
+<div class="outline-text-3" id="text-orge77e9b2">
+<p>
+Although there there are at least four dimensions of drag ability, for
+simplicity I assumed that these can safely be reduced to one number \(\eta_i\)
+for each contestant \(i\).
+</p>
+
+<p>
+I used a pretty standard multilevel structure to represent the available
+pre-competition information about these ability parameters:
+</p>
+
+\begin{align*}
+\eta_i &\sim Normal(X_i\beta, \sigma_{\eta}) \\
+\beta &\sim Normal(0,1) \\
+\sigma_{\eta} &\sim halfNormal(0, 1)
+\end{align*}
+
+<p>
+These assumptions allow us to use some information in a design matrix \(X\) to
+predict how good each competitor will be, with the amounts being controlled by
+the \(\beta\) parameters, and deviation from the predicted ability controlled by
+the parameter \(\sigma_{\eta}\).
+</p>
+
+<p>
+To fill up the design matrix I used age and number of pre-competition twitter
+followers. I massaged the latter numbers a little: instead of using the raw
+numbers I used each contestant's rank compared to the other season
+starters. This was to avoid being biased by between-season trends in the number
+of followers drag race competitors tend to have.
+</p>
+</div>
+</div>
+
+<div id="outline-container-org08d80ab" class="outline-3">
+<h3 id="org08d80ab">Episode outcomes</h3>
+<div class="outline-text-3" id="text-org08d80ab">
+<p>
+The trickiest bit was to connect abilities with episode outcomes, which don't
+fit that neatly into a standard statistical model (at least not one that I was
+aware of before working on this competiton).
+</p>
+
+<p>
+Each episode ends with the remaining contestants being sorted into ordered
+groups - typically these are win, high, safe, low, bottom and eliminated -
+according to how well they performed. The total number of contestants changes
+from week to week, and the number in each group is unpredictable - Ru often
+mixes things up with double wins, double eliminations and suchlike.
+</p>
+
+<p>
+To represent this structure in my model I started with the rank-ordered logit
+model. This is a standard-ish model for data where some things are ranked in a
+way that depends probabilistically on their latent qualities. <a href="http://khakieconomics.github.io/2018/12/27/Ranked-random-coefficients-logit.html">This blog</a> has a
+really nice explanation of the rank-ordered logit model and an interesting case
+study from economics.
+</p>
+
+<p>
+The main idea with a rank-logit model is that the probability that option \(i\)
+comes first out of \(J\) options is
+</p>
+
+<p>
+\[
+\frac{\exp(\eta_i)}{\sum_{j=i}^{J}\exp(\eta_j)}
+\]
+</p>
+
+<p>
+The probability of a whole ranking (e.g. \(a\) beats \(b\) beats \(c\) beats \(d\)) can
+be found by evaluating this equation for each number from \(1\) to \(J-1\), then
+multiplying together the resulting probabilities.
+</p>
+
+<p>
+This would fit the drag race if only Ru would explicitly rank every queen in
+every episode, with no ties allowed. Unfortunately this means that we need to
+generalise the rank ordered logit model.
+</p>
+
+<p>
+The correct generalisation finds the probability of an outcome with ties by
+enumerating all the possible no-tie orderings that are consistent with it and
+averaging their probabilities. <a href="https://pdfs.semanticscholar.org/b6de/4079beb058979185b887fad3be0dcee8251d.pdf">This paper</a> lays out the maths of this idea. I
+had a go at applying this approach to drag race outcomes but didn't get very
+far because there are just too many no-tie orderings to consider. Say there is
+one winner, two high queens, 9 safe contestants, one low queen and two
+eliminees: this not-too-unusual early season outcome has \(2 * 9! * 2 = 1451520\)
+compatible no-tie orderings.
+</p>
+
+<p>
+Instead of the correct solution, I used the following approximation. For each
+rank, I found the rank-logit probability that each non-eliminated queen with
+that rank would came first in a contest featuring them and all the queens with
+equal or worse rank. In other words, I found this number for each
+non-eliminated queen:
+</p>
+
+<p>
+\[
+\frac{\exp(\eta_i)}{\sum_{rank(j)\geq rank(i)}^{J}\exp(\eta_j)}
+\]
+</p>
+
+<p>
+To find the probability of a whole episode's outcome I multiplied all of these
+numbers together. 
+</p>
+
+<p>
+I'm still not sure this is the best way to approximate a full rank-ordered
+logit model with ties, but I was a bit encouraged when I found <a href="http://www.glicko.net/research/multicompetitor.pdf">this paper</a> by
+Mark Glickman and Jonathan Hennessy. The authors use the same approximation
+with some success to model competitive downhill skiing, which it turns out is
+structurally kind of similar to the drag race! They also explain the model very
+nicely - check it out!
+</p>
+</div>
+</div>
+
+<div id="outline-container-org696c0da" class="outline-3">
+<h3 id="org696c0da">Viewer survey data</h3>
+<div class="outline-text-3" id="text-org696c0da">
+<p>
+Even if the model extracted as much information as possible from the outcome
+data, there would still be some room for improvement, as the final result
+doesn't always tell the whole story. Some wins are more impressive than others,
+and sometimes even a winning performance can reveal long-term limitations. To
+try and capture this kind of dynamic I thought the survey results on data for
+progress's spreadsheet might be a nice complement to the outcome data. Whereas
+the outcomes are nice because they are the exact same thing the model wants to
+predict, the survey responses are also nice because they use extra information
+that isn't available in the outcomes.
+</p>
+
+<p>
+The survey data consists of binary choices between two current contestants -
+the answerer has to enter a winner and a loser, and the time they took to make
+the choice is recorded. I decided to only use data from the most recent
+available survey out of fear that old ones might mess things up. I found the
+aggregate win/loss score for each pair and modelled these as depending on the
+same abilities as the episode outcome data, according to the following
+equation:
+</p>
+
+<p>
+\[
+wins_{ij} \sim Binomial(comparisons_{ij}, logit^{-1}(\eta_i -\eta_j))
+\]
+</p>
+
+<p>
+Putting the same &eta; variables in two different likelihood functions is a
+really simple example of joint modelling, which you can find out more about in
+<a href="https://www.sambrilleman.com/talk/2018_contributed_stancon/">this video</a>.
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgff679c5" class="outline-2">
+<h2 id="orgff679c5">Implementation</h2>
+<div class="outline-text-2" id="text-orgff679c5">
+<p>
+I largely followed <a href="https://shiraamitchell.github.io/rpdr#model">Shira Mitchell's approach</a> to representing drag race outcomes
+in Stan - the ability parameters for the contestants in each episode are sorted
+according to the outcome, making it much easier to calculate all the (log
+scale) probabilities. Here's how I implemented the custom likelihood function
+described above:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-stan"><span style="color: #859900; font-weight: bold;">functions</span> {
+  <span style="color: #b58900;">real</span> <span style="color: #268bd2;">rpdr_outcome_lp</span>(<span style="color: #b58900;">vector</span> ability, <span style="color: #b58900;">int</span>[] episode_rank){
+    <span style="color: #b58900;">real</span> out <span style="color: #268bd2; font-weight: bold;">=</span> 0;
+    <span style="color: #b58900;">int</span> first_in_group <span style="color: #268bd2; font-weight: bold;">=</span> 1;
+    <span style="color: #859900; font-weight: bold;">for</span> (contestant <span style="color: #859900; font-weight: bold;">in</span> 1:<span style="color: #268bd2;">rows</span>(ability)){
+      <span style="color: #859900; font-weight: bold;">if</span> ((contestant &gt; 1)
+          &amp;&amp; (episode_rank[contestant] &gt; episode_rank[contestant-1])){
+        first_in_group <span style="color: #268bd2; font-weight: bold;">=</span> contestant;
+      }
+      <span style="color: #859900; font-weight: bold;">if</span> (episode_rank[contestant] &lt; <span style="color: #268bd2;">max</span>(episode_rank)){
+        out <span style="color: #268bd2; font-weight: bold;">+=</span> ability[contestant] - <span style="color: #268bd2;">log_sum_exp</span>(ability[first_in_group:]);
+      }
+  }
+  <span style="color: #859900; font-weight: bold;">return</span> out;
+  }
+}
+</pre>
+</div>
+<p>
+Here's the rest of the model:
+</p>
+<div class="org-src-container">
+<pre class="src src-stan"><span style="color: #859900; font-weight: bold;">data</span> {
+  <span style="color: #b58900;">int</span>&lt;<span style="color: #859900; font-weight: bold;">lower</span><span style="color: #268bd2; font-weight: bold;">=</span>1&gt; <span style="color: #268bd2;">N</span>;         <span style="color: #586e75;">// </span><span style="color: #586e75;">Number of episode participations</span>
+  <span style="color: #b58900;">int</span>&lt;<span style="color: #859900; font-weight: bold;">lower</span><span style="color: #268bd2; font-weight: bold;">=</span>1&gt; <span style="color: #268bd2;">K</span>;         <span style="color: #586e75;">// </span><span style="color: #586e75;">Number of predictors</span>
+  <span style="color: #b58900;">int</span>&lt;<span style="color: #859900; font-weight: bold;">lower</span><span style="color: #268bd2; font-weight: bold;">=</span>1&gt; <span style="color: #268bd2;">E</span>;         <span style="color: #586e75;">// </span><span style="color: #586e75;">Number of episodes</span>
+  <span style="color: #b58900;">int</span>&lt;<span style="color: #859900; font-weight: bold;">lower</span><span style="color: #268bd2; font-weight: bold;">=</span>1&gt; <span style="color: #268bd2;">C</span>;         <span style="color: #586e75;">// </span><span style="color: #586e75;">Number of contestants</span>
+  <span style="color: #b58900;">int</span>&lt;<span style="color: #859900; font-weight: bold;">lower</span><span style="color: #268bd2; font-weight: bold;">=</span>1&gt; <span style="color: #268bd2;">N_survey</span>;  <span style="color: #586e75;">// </span><span style="color: #586e75;">Number of surveys</span>
+  <span style="color: #b58900;">matrix</span>[C, K] <span style="color: #268bd2;">X</span>;         <span style="color: #586e75;">// </span><span style="color: #586e75;">Contestant level predictors</span>
+  <span style="color: #586e75;">// </span><span style="color: #586e75;">episode data</span>
+  <span style="color: #b58900;">int</span>&lt;<span style="color: #859900; font-weight: bold;">lower</span><span style="color: #268bd2; font-weight: bold;">=</span>1&gt; <span style="color: #268bd2;">N_episode_contestant</span>[E];
+  <span style="color: #b58900;">int</span>&lt;<span style="color: #859900; font-weight: bold;">lower</span><span style="color: #268bd2; font-weight: bold;">=</span>1,<span style="color: #859900; font-weight: bold;">upper</span><span style="color: #268bd2; font-weight: bold;">=</span>6&gt; <span style="color: #268bd2;">episode_rank</span>[N];
+  <span style="color: #b58900;">int</span>&lt;<span style="color: #859900; font-weight: bold;">lower</span><span style="color: #268bd2; font-weight: bold;">=</span>1,<span style="color: #859900; font-weight: bold;">upper</span><span style="color: #268bd2; font-weight: bold;">=</span>C&gt; <span style="color: #268bd2;">contestant</span>[N];
+  <span style="color: #586e75;">// </span><span style="color: #586e75;">survey data</span>
+  <span style="color: #b58900;">int</span>&lt;<span style="color: #859900; font-weight: bold;">lower</span><span style="color: #268bd2; font-weight: bold;">=</span>1,<span style="color: #859900; font-weight: bold;">upper</span><span style="color: #268bd2; font-weight: bold;">=</span>C&gt; <span style="color: #268bd2;">survey_contestant</span>[N_survey];
+  <span style="color: #b58900;">int</span>&lt;<span style="color: #859900; font-weight: bold;">lower</span><span style="color: #268bd2; font-weight: bold;">=</span>1,<span style="color: #859900; font-weight: bold;">upper</span><span style="color: #268bd2; font-weight: bold;">=</span>C&gt; <span style="color: #268bd2;">survey_opponent</span>[N_survey];
+  <span style="color: #b58900;">int</span>&lt;<span style="color: #859900; font-weight: bold;">lower</span><span style="color: #268bd2; font-weight: bold;">=</span>1&gt; <span style="color: #268bd2;">survey_count</span>[N_survey];
+  <span style="color: #b58900;">int</span>&lt;<span style="color: #859900; font-weight: bold;">lower</span><span style="color: #268bd2; font-weight: bold;">=</span>0&gt; <span style="color: #268bd2;">survey_wins</span>[N_survey];
+  <span style="color: #586e75;">// </span><span style="color: #586e75;">config </span>
+  <span style="color: #b58900;">int</span>&lt;<span style="color: #859900; font-weight: bold;">lower</span><span style="color: #268bd2; font-weight: bold;">=</span>0,<span style="color: #859900; font-weight: bold;">upper</span><span style="color: #268bd2; font-weight: bold;">=</span>1&gt; <span style="color: #268bd2;">use_survey</span>;
+  <span style="color: #b58900;">int</span>&lt;<span style="color: #859900; font-weight: bold;">lower</span><span style="color: #268bd2; font-weight: bold;">=</span>0,<span style="color: #859900; font-weight: bold;">upper</span><span style="color: #268bd2; font-weight: bold;">=</span>1&gt; <span style="color: #268bd2;">use_episodes</span>;
+}
+<span style="color: #859900; font-weight: bold;">parameters</span> {
+  <span style="color: #b58900;">vector</span>[C] <span style="color: #268bd2;">ability_z</span>;
+  <span style="color: #b58900;">real</span>&lt;<span style="color: #859900; font-weight: bold;">lower</span><span style="color: #268bd2; font-weight: bold;">=</span>0&gt; <span style="color: #268bd2;">sigma_ability</span>;
+  <span style="color: #b58900;">vector</span>[K] <span style="color: #268bd2;">beta</span>;
+}
+<span style="color: #859900; font-weight: bold;">transformed parameters</span> {
+  <span style="color: #b58900;">vector</span>[C] ability <span style="color: #268bd2; font-weight: bold;">=</span> X * beta + ability_z * sigma_ability;
+}
+<span style="color: #859900; font-weight: bold;">model</span> {
+  <span style="color: #b58900;">int</span> pos <span style="color: #268bd2; font-weight: bold;">=</span> 1;
+  <span style="color: #586e75;">// </span><span style="color: #586e75;">priors</span>
+  ability_z <span style="color: #268bd2; font-weight: bold;">~</span> <span style="color: #268bd2;">normal</span>(0, 1);
+  beta <span style="color: #268bd2; font-weight: bold;">~</span> <span style="color: #268bd2;">normal</span>(0, 1);
+  sigma_ability <span style="color: #268bd2; font-weight: bold;">~</span> <span style="color: #268bd2;">normal</span>(0, 1);
+  <span style="color: #586e75;">// </span><span style="color: #586e75;">likelihood</span>
+  <span style="color: #859900; font-weight: bold;">if</span> (use_survey <span style="color: #268bd2; font-weight: bold;">==</span> 1){
+    survey_wins <span style="color: #268bd2; font-weight: bold;">~</span> <span style="color: #268bd2;">binomial_logit</span>(survey_count, ability[survey_contestant] - ability[survey_opponent]);
+  }
+  <span style="color: #859900; font-weight: bold;">if</span> (use_episodes <span style="color: #268bd2; font-weight: bold;">==</span> 1){
+    <span style="color: #859900; font-weight: bold;">for</span> (<span style="color: #268bd2;">e</span> <span style="color: #859900; font-weight: bold;">in</span> 1:E){
+      <span style="color: #b58900;">int</span> <span style="color: #268bd2;">contestants</span>[N_episode_contestant[<span style="color: #268bd2;">e</span>]] <span style="color: #268bd2; font-weight: bold;">=</span> <span style="color: #268bd2;">segment</span>(contestant, pos, N_episode_contestant[<span style="color: #268bd2;">e</span>]);
+      <span style="color: #b58900;">int</span> <span style="color: #268bd2;">episode_ranks</span>[N_episode_contestant[<span style="color: #268bd2;">e</span>]] <span style="color: #268bd2; font-weight: bold;">=</span> <span style="color: #268bd2;">segment</span>(episode_rank, pos, N_episode_contestant[<span style="color: #268bd2;">e</span>]);
+      <span style="color: #859900; font-weight: bold;">target</span> <span style="color: #268bd2; font-weight: bold;">+=</span> rpdr_outcome_lp(ability[contestants], episode_ranks);
+      pos <span style="color: #268bd2; font-weight: bold;">+=</span> N_episode_contestant[<span style="color: #268bd2;">e</span>];
+    }
+  }
+}
+</pre>
+</div>
+<p>
+I used <a href="https://pandas.pydata.org/">pandas</a>, <a href="https://pystan.readthedocs.io/en/latest/">pystan</a> and <a href="https://arviz-devs.github.io/arviz/">arviz</a> to get data in and out of the resulting
+model. <a href="https://github.com/teddygroves/drag_race">Here</a>'s a link to a github repository with all the code.
+</p>
+</div>
+</div>
+<div id="outline-container-org58382c9" class="outline-2">
+<h2 id="org58382c9">Results</h2>
+<div class="outline-text-2" id="text-org58382c9">
+<p>
+Here's what the model thinks of the remaining season 11 competitors (the low
+and high are the 10% and 90% quantiles of the posterior distributions). I
+didn't include survey data this week as it was a bit out of date.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-exact">                          ability_low  ability_median  ability_high
+contestant_name                                                    
+Brooke Lynn Hytes               -0.04            0.22          0.59
+Yvie Oddly                      -0.12            0.13          0.48
+Silky Nutmeg Ganache            -0.12            0.12          0.44
+A'keria Chanel Davenport        -0.11            0.11          0.42
+Vanessa Vanjie Mateo            -0.17            0.09          0.35
+</pre>
+</div>
+
+<p>
+These results more or less agree with my take on the current situation. Brooke
+is the clear frontrunner, with very little to choose between the remaining four
+and Vanjie probably the weakest.
+</p>
+
+<p>
+I've also been sanity checking the model by looking at who it thinks were the
+best RPDR contestants of all time. This is a bit tricky as there aren't any
+between-season comparisons.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-exact">                    ability_low  ability_median  ability_high
+contestant_name                                              
+Sasha Velour              -0.00            0.28          0.65
+Jinkx Monsoon             -0.01            0.27          0.65
+Tyra Sanchez              -0.01            0.27          0.66
+Bianca Del Rio            -0.05            0.26          0.67
+Sharon Needles            -0.05            0.24          0.63
+Brooke Lynn Hytes         -0.04            0.22          0.59
+Ginger Minj               -0.04            0.21          0.53
+Shea Couleé               -0.05            0.21          0.54
+Violet Chachki            -0.07            0.19          0.53
+Manila Luzon              -0.05            0.18          0.52
+Raja                      -0.07            0.18          0.53
+Bob the Drag Queen        -0.07            0.18          0.51
+Aquaria                   -0.08            0.17          0.50
+Roxxxy Andrews            -0.08            0.17          0.49
+Alaska                    -0.08            0.15          0.47
+Chad Michaels             -0.13            0.14          0.51
+Kim Chi                   -0.12            0.13          0.47
+Yvie Oddly                -0.12            0.13          0.48
+Nina Flowers              -0.12            0.13          0.51
+Trinity Taylor            -0.11            0.13          0.44
+</pre>
+</div>
+
+<p>
+This seems more or less plausible - as Yvie Oddly observed this season, Sasha
+Velour had talent!
+</p>
+</div>
+</div>
+
+<div id="outline-container-org5d0e60a" class="outline-2">
+<h2 id="org5d0e60a">Things that could be improved</h2>
+<div class="outline-text-2" id="text-org5d0e60a">
+<p>
+This was a really fun task - I learned lots about ordinal models and came up
+with something that more or less passed my smell test. There are a few extra
+features it would be nice to add - I'm not sure I'll ever get round to them but
+it's still a good exercise.
+</p>
+</div>
+
+<div id="outline-container-org9767bf2" class="outline-3">
+<h3 id="org9767bf2">Probabilistic predictions</h3>
+<div class="outline-text-3" id="text-org9767bf2">
+<p>
+Rather than just ranking competitors by ability it would be nice if the model
+outputted the probability of each queen winning or being eliminated in each
+episode. This wasn't strictly required for this competition as only a discrete
+best/worst prediction for the next episode was needed, but would make it a lot
+easier to test the model. Unfortunately a custom random number generating Stan
+function would be needed for this and I didn't quite have the emotional energy
+to attempt to implement one.
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgf181002" class="outline-3">
+<h3 id="orgf181002">Extra ability dimensions</h3>
+<div class="outline-text-3" id="text-orgf181002">
+<p>
+There were a few times when I thought the model was a bit limited by only
+having one ability dimensions. For example, in the snatch game episode I
+thought it was pretty clear that personality queens Nina West and Silky Nutmeg
+Ganashe would do better than indicated by their overall track records.
+</p>
+</div>
+</div>
+
+<div id="outline-container-org780af75" class="outline-3">
+<h3 id="org780af75">Separate lipsync mechanics</h3>
+<div class="outline-text-3" id="text-org780af75">
+<p>
+I think it would be nice to handle lipsyncs with a separate model. I initially
+took this approach but gave up as I seemed to be doing everything twice and the
+lipsync component of the model wasn't having a very big effect. Of course, as
+soon as I did this Rajah emerged as season 11's lipsync assassin and I started
+getting second thoughts.
+</p>
+</div>
+</div>
+</div>
+</div>
+</body>
+</html>
