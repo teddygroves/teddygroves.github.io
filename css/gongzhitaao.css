@@ -19,6 +19,11 @@ html:before{
     right:0
 }
 
+/* Don't display 'figure' before captions */
+.figure-number {
+    display: none;
+}
+
 /* Body...  */
 body{
     color:#000;
