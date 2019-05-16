@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2019-05-16 Thu 10:14 -->
+<!-- 2019-05-16 Thu 10:41 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>How to predict who will win Rupaul's drag race</title>
@@ -374,8 +374,9 @@ multiplying together the resulting probabilities.
 
 <p>
 This would fit the drag race if only Ru would explicitly rank every queen in
-every episode, with no ties allowed. Unfortunately this means that we need to
-generalise the rank ordered logit model.
+every episode, with no ties allowed. To capture what actually happens -
+i.e. multiple competitors getting the same rank - the rank ordered logit model
+needs to be generalised a bit.
 </p>
 
 <p>
@@ -385,8 +386,8 @@ averaging their probabilities. <a href="https://pdfs.semanticscholar.org/b6de/40
 had a go at applying this approach to drag race outcomes but didn't get very
 far because there are just too many no-tie orderings to consider. Say there is
 one winner, two high queens, 9 safe contestants, one low queen and two
-eliminees: this not-too-unusual early season outcome has \(2 * 9! * 2 = 1451520\)
-compatible no-tie orderings.
+eliminees: this not-too-unusual early season outcome has \(2! * 9! * 2! =
+1451520\) compatible no-tie orderings.
 </p>
 
 <p>

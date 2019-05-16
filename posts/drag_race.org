@@ -69,8 +69,9 @@ be found by evaluating this equation for each number from $1$ to $J-1$, then
 multiplying together the resulting probabilities.
 
 This would fit the drag race if only Ru would explicitly rank every queen in
-every episode, with no ties allowed. Unfortunately this means that we need to
-generalise the rank ordered logit model.
+every episode, with no ties allowed. To capture what actually happens -
+i.e. multiple competitors getting the same rank - the rank ordered logit model
+needs to be generalised a bit.
 
 The correct generalisation finds the probability of an outcome with ties by
 enumerating all the possible no-tie orderings that are consistent with it and
@@ -78,8 +79,8 @@ averaging their probabilities. [[https://pdfs.semanticscholar.org/b6de/4079beb05
 had a go at applying this approach to drag race outcomes but didn't get very
 far because there are just too many no-tie orderings to consider. Say there is
 one winner, two high queens, 9 safe contestants, one low queen and two
-eliminees: this not-too-unusual early season outcome has $2 * 9! * 2 = 1451520$
-compatible no-tie orderings.
+eliminees: this not-too-unusual early season outcome has $2! * 9! * 2! =
+1451520$ compatible no-tie orderings.
 
 Instead of the correct solution, I used the following approximation. For each
 rank, I found the rank-logit probability that each non-eliminated queen with
