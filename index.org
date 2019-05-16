@@ -1,5 +1,5 @@
-#+TITLE: 
-#+OPTIONS: author:nil toc:nil
+#+TITLE: Teddy's Picnic
+#+OPTIONS: author:nil toc:nil title:nil
 
 I work at [[https://www.biosustain.dtu.dk/][DTU's Biosustain research center]] making statistical models of
 chemical reactions that happen inside living cells.
