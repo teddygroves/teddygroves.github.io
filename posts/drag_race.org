@@ -1,7 +1,7 @@
 #+TITLE: How to predict who will win Rupaul's drag race
 #+OPTIONS: author:nil Date:nil toc:nil
 
-[[file:../img/emotional_rose.png]]
+[[file:../img/emotional.png]]
 
 I entered [[https://shiraamitchell.github.io/rpdr][this competition]] to predict the outcomes of RuPaul's Drag Race season
 11 - it was really fun and I learned a lot, so I thought I'd write down how the
@@ -256,6 +256,8 @@ Trinity Taylor            -0.11            0.13          0.44
 
 This seems more or less plausible - as Yvie Oddly observed this season, Sasha
 Velour had talent!
+
+[[file:../img/emotional_rose.png]]
 
 * Things that could be improved
 This was a really fun task - I learned lots about ordinal models and came up
