@@ -104,7 +104,7 @@ Fourth, the method by which Best for Britain turned the MRP analysis into
 tactical voting advice is opaque - I couldn't find any explanation on the
 website, so again there is a problem of accessibility and assessibility. There
 is another problem though, which @dsquareddigest [[https://twitter.com/dsquareddigest/status/1189876959217631232?s=20][pointed out on Twitter]]. On its
-own an MRP analysis isn't enough to determine sound tactical voting advice.
+own a MRP analysis isn't enough to determine sound tactical voting advice.
 
 In order to make a good tactical voting decision you need to know how other
 people are likely to tactically vote. Even if your best guess is that the
@@ -123,12 +123,12 @@ Finally, though this isn't really my area of expertise, there seems to be a bit
 of a problem of responsibility. Focaldata know the most about the analysis, but
 they don't seem to appear on the website outside a footnote in some
 screenshots. Best for Britain seem to have been hoping that people would just
-trust that must have found someone good, that focaldata's reputation would
-speak for itself, or perhaps that the magic letters 'MRP' would satisfy
+trust that someone good must have been involved, or that focaldata's reputation
+would speak for itself, or perhaps that the magic letters 'MRP' would satisfy
 everyone. For their part, focaldata don't seem to have made proper presentation
 of their work a condition for selling their analysis, which seems like a bit of
-a mistake now as that analysis is being used to give bad advice that it can't
-easily be disaggregated from.
+a mistake as bad advice is now being given out and their work can't easily be
+disaggregated from it.
 
 * So how should I vote tactically?
 First you should use all available information about how people are likely to
@@ -138,8 +138,8 @@ up-to-date and reproducible MRP analysis and b) also taking into account
 historical results from your constituency.
 
 In addition, you also need to take into account that other people are going to
-vote tactically as well, and that most people who do so won't be relying on
-Best for Britain's website.
+vote tactically as well, and that they probably won't be relying on Best for
+Britain's website.
 
 * Footnotes
 
