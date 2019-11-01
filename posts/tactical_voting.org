@@ -71,14 +71,15 @@ some uncertainty that the analysis probably isn't taking into account (I say
 probably as I can't be /certain/ that they didn't do a [[http://www.stat.columbia.edu/~gelman/research/unpublished/MRT(1).pdf][dynamic MRP]], but I think
 it's highly unlikely).
 
-Another problem is that the analysis likely does not include historical
-constituency results, even though these are quite informative as to the future
-results. This is the main criticism that has been made on Twitter and I think
-it is correct. For example, in [[https://en.wikipedia.org/wiki/Hendon_(UK_Parliament_constituency)][Hendon]] the Libdem vote share in the last 3
-elections has been between 4% and 12%, but the model [[https://getvoting.org/?postcode=NW4+3BU][apparently]] predicts 27% in
-this one. Obviously history is not destiny, but it is surely comparably
-relevant to survey data obtained three months before polling day and shouldn't
-be ignored completely.
+Another reason why focaldata's analysis isn't the best possible election
+prediction is that it likely (again there's no way to know for sure) does not
+include historical constituency results, even though these are quite
+informative as to the future results. This is the main criticism that has been
+made on Twitter and I think it is correct. For example, in [[https://en.wikipedia.org/wiki/Hendon_(UK_Parliament_constituency)][Hendon]] the Libdem
+vote share in the last 3 elections has been between 4% and 12%, but the model
+[[https://getvoting.org/?postcode=NW4+3BU][apparently]] predicts 27% in this one. Obviously history is not destiny, but it
+is surely comparably relevant to survey data obtained three months before
+polling day and shouldn't be ignored completely.
 
 These problems aren't so much with the analysis itself but with its
 interpretation as a prediction of the final result. If interpreted as a summary
