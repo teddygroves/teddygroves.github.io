@@ -18,10 +18,10 @@ what I thought here.
 
 I am interested because I am into multilevel regression and statistical
 communication, follow UK politics and also have a tangential connection with
-focaldata. About a year ago I did a job interview at focaldata and found them
-great. They pay people to do best-practice multilevel regressions within a
-modern and professional software engineering setup and have a cutting edge
-data. I think it seems like a great place to work.
+focaldata. About a year ago I did a job interview there and found them
+great. They pay people to do best-practice Bayesian statistics within a modern
+and professional software engineering setup, have some really cool data and
+generally come across very well.
 
 * What is tactical voting?
 Tactical voting is when you vote for something you don't like because you think
