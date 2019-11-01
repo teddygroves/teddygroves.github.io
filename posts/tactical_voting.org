@@ -1,6 +1,7 @@
 #+TITLE: Think twice before using MRP-branded websites for tactical voting!
 #+OPTIONS: author:nil Date:nil toc:nil
 
+#+CAPTION: An unrelated poster from [[http://resource.nlm.nih.gov/101454456][the US National Library of Medicine]]
 [[file:../img/careful.jpg]]
 
 *tl:dr* If you want to vote tactically, use all available information and don't
