@@ -50,7 +50,7 @@ reproduce it), **intelligible**, **usable** (i.e. directly the model output
 should relate directly to what the communicee cares about) and
 **assessable**. Uncertainty should be confidently acknowledged and
 represented. Potential misunderstandings should be pre-empted. Careful thought
-should go into the the relationship between the communicator and listener.
+should go into the relationship between the communicator and listener.
 
 * What went wrong in this case?
 First, MRP is very sensitive to implementation details and there is no way for
