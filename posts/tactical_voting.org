@@ -97,10 +97,10 @@ Labour by 2% here' or 'Labour and the Libdems are about the same, I honestly
 can't really tell who is ahead'.
 
 Fourth, the method by which Best for Britain turned the MRP analysis into
-tactical voting advice is opaque and probably flawed. I couldn't find any
-explanation on the website, so again there is a problem of accessibility and
-assessibility. There is another problem though: on its own an MRP analysis
-isn't enough to determine sound tactical voting advice.
+tactical voting advice is opaque - I couldn't find any explanation on the
+website, so again there is a problem of accessibility and assessibility. There
+is another problem though, which @dsquareddigest [[https://twitter.com/dsquareddigest/status/1189876959217631232?s=20][pointed out on Twitter]]. On its
+own an MRP analysis isn't enough to determine sound tactical voting advice.
 
 In order to make a good tactical voting decision you need to know how other
 people are likely to tactically vote. Even if your best guess is that the
