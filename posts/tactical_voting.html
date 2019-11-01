@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2019-11-01 Fri 13:00 -->
+<!-- 2019-11-01 Fri 13:19 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Think twice before using MRP-branded websites for tactical voting!</title>
@@ -261,18 +261,21 @@ forget that other people can also do this.
 <h2 id="org2133de1">What happened?</h2>
 <div class="outline-text-2" id="text-org2133de1">
 <p>
-A company called <a href="https://www.focaldata.com/">focaldata</a> did a MRP analysis of some online surveys that were
-completed at some point in September or October and sold it to a group called
-<a href="https://www.bestforbritain.org/">Best for Britain</a>, who are now using the MRP brand to promote their <a href="https://getvoting.org/">tactical
-voting website</a>. Along the way I think some bad statistics communication
-happened. I had some quick chats about this on Twitter with <a href="https://twitter.com/dsquareddigest">@dsquareddigest</a>,
+A company called <a href="https://www.focaldata.com/">focaldata</a> did a MRP analysis of some online surveys and sold
+it to a group called <a href="https://www.bestforbritain.org/">Best for Britain</a>, who are now using the MRP brand to
+promote their <a href="https://getvoting.org/">tactical voting website</a>. Along the way I think some bad
+statistics communication happened.
+</p>
+
+<p>
+I had some quick chats about this situation on Twitter with <a href="https://twitter.com/dsquareddigest">@dsquareddigest</a>,
 <a href="https://twitter.com/hmclandress">@hmclandress</a> and <a href="https://twitter.com/JustinIbbett/">@JustinIbbet</a> (founder and CEO of focaldata), then wrote up
 what I thought here.
 </p>
 
 <p>
-I am interested because I am into both multilevel regression and UK politics
-discourse, and also because I have a tangential connection with
+I am interested because I am into multilevel regression and statistical
+communication, follow UK politics and also have a tangential connection with
 focaldata. About a year ago I did a job interview at focaldata and found them
 great. They pay people to do best-practice multilevel regressions within a
 modern and professional software engineering setup and have a cutting edge
@@ -297,30 +300,31 @@ prevent the Conservative candidate winning in your parliamentary constituency.
 <h2 id="orgf1b68ed">What is a MRP?</h2>
 <div class="outline-text-2" id="text-orgf1b68ed">
 <p>
-Multilevel regression and poststratification means making assumptions about how
-different kinds of people vote (specifically a multilevel regression model) and
-adjusting these assumptions based on some more assumptions about how many
-people of each kind there are (this is called post-stratification).<sup><a id="fnr.1" class="footref" href="#fn.1">1</a></sup>
+In this context, multilevel regression and post-stratification means making
+predictions about how different kinds of people in a sample vote (specifically
+using a multilevel regression model) and adjusting these predictions based on
+how many people of each kind you think there are in the population at large
+(this is called post-stratification).<sup><a id="fnr.1" class="footref" href="#fn.1">1</a></sup>
 </p>
 
 <p>
 MRP is nice because, under the right conditions, it can make it possible to
 extrapolate from a sample population (e.g. the people who answer a survey) to a
-target population (e.g. people who vote on election day) even when the sample
-is non-representative. This is a relief because representative samples are
-pretty hard to make since people stopped using landlines.
+target population (e.g. people who vote on election day) and vice versa, even
+when the sample is non-representative. This is a relief because representative
+samples are pretty hard to make since people stopped using landlines.
 </p>
 </div>
 </div>
 
-<div id="outline-container-org7d3133d" class="outline-2">
-<h2 id="org7d3133d">What is good statistical communication?</h2>
-<div class="outline-text-2" id="text-org7d3133d">
+<div id="outline-container-org815087c" class="outline-2">
+<h2 id="org815087c">What are some criteria for good statistical communication?</h2>
+<div class="outline-text-2" id="text-org815087c">
 <p>
 I agree with the advice in the last slide of <a href="https://www.efsa.europa.eu/sites/default/files/event/180918-conference/presentations/18-0_04_Spiegelhalter.pdf">David Spiegelhalter's talk
 here</a>. In order to demonstrate trustworthiness, statistical analysis should be
 <b><b>accessible</b></b> (ideally it should be possible for someone interested to
-reproduce it), <b><b>intelligible</b></b>, <b><b>useable</b></b> (i.e. directly the model output
+reproduce it), <b><b>intelligible</b></b>, <b><b>usable</b></b> (i.e. directly the model output
 should relate directly to what the communicee cares about) and
 <b><b>assessable</b></b>. Uncertainty should be confidently acknowledged and
 represented. Potential misunderstandings should be pre-empted. Careful thought
@@ -336,7 +340,7 @@ should go into the the relationship between the communicator and listener.
 First, MRP is very sensitive to implementation details and there is no way for
 anyone to access or assess them. What kind of people were polled? What kind of
 effects did the model allow? What assumptions did the model make about what
-kind of people live where and who is likely to vote? Noone outside the loop can
+kind of people live where and who is likely to vote? No-one outside the loop can
 answer any of these questions. This is the biggest issue in my opinion - I
 can't see any good reason why the analysis couldn't be made fully reproducible.
 </p>
@@ -345,10 +349,11 @@ can't see any good reason why the analysis couldn't be made fully reproducible.
 The second problem is that, even without having any idea what kind of MRP
 analysis focaldata did, it was probably not the best possible prediction of the
 result on polling day. For one thing, it assumes that nothing will change
-between now and then. In the previous election campaign the two big parties
-tended to do well at the expense of smaller parties. Noone knows how this
-campaign will go, but something will surely change, which means ther is some
-uncertainty that the analysis probably isn't taking into account (I say
+between the survey dates (apparently these were done between September and
+October) and the election. In the previous election campaign the two big
+parties tended to do well at the expense of smaller parties. No-one knows how
+this campaign will go, but something will surely change, which means there is
+some uncertainty that the analysis probably isn't taking into account (I say
 probably as I can't be <i>certain</i> that they didn't do a <a href="http://www.stat.columbia.edu/~gelman/research/unpublished/MRT(1).pdf">dynamic MRP</a>, but I think
 it's highly unlikely).
 </p>
@@ -369,13 +374,13 @@ These problems aren't so much with the analysis itself but with its
 interpretation as a prediction of the final result. If interpreted as a summary
 of the information in the surveys, I think it would probably be fine, though
 not so relevant for tactical voting advice. So the problem here is really
-useability.
+usability.
 </p>
 
 <p>
 A third thing that went wrong is is that no attempt was made to share any
 uncertainty estimates, or indeed much model output beyond these
-<a href="https://getvoting.org/?postcode=NW4+3BU">hard-to-access-or-aggregate screenshots</a> of some barcharts presumably
+<a href="https://getvoting.org/?postcode=NW4+3BU">hard-to-access-or-aggregate screenshots</a> of some bar charts presumably
 representing point estimates. The advice seems to be very sensitive to small
 constituency-level Labour vs Libdem differences, which are probably highly
 uncertain in the model, with the uncertainty varying by constituency. There is
