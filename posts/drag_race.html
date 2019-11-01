@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2019-05-16 Thu 15:07 -->
+<!-- 2019-11-01 Fri 12:40 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>How to predict who will win Rupaul's drag race</title>
@@ -281,9 +281,9 @@ I entered <a href="https://shiraamitchell.github.io/rpdr">this competition</a> t
 model I made works.
 </p>
 
-<div id="outline-container-org5fba13d" class="outline-2">
-<h2 id="org5fba13d">Model</h2>
-<div class="outline-text-2" id="text-org5fba13d">
+<div id="outline-container-orgb463589" class="outline-2">
+<h2 id="orgb463589">Model</h2>
+<div class="outline-text-2" id="text-orgb463589">
 <p>
 My model treats the outcomes of both Drag Race episodes and <a href="https://www.reddit.com/r/rupaulsdragrace/comments/bmzhfk/s11e12_rpdr_poll_did_you_rankings_get_a_makeover/">Data For Progress's
 surveys</a> as depending probabilistically on the abilities of the contestants. The
@@ -294,9 +294,9 @@ as contributing a bit of randomness.
 </p>
 </div>
 
-<div id="outline-container-orge77e9b2" class="outline-3">
-<h3 id="orge77e9b2">Priors</h3>
-<div class="outline-text-3" id="text-orge77e9b2">
+<div id="outline-container-org7b92eff" class="outline-3">
+<h3 id="org7b92eff">Priors</h3>
+<div class="outline-text-3" id="text-org7b92eff">
 <p>
 Although there there are at least four dimensions of drag ability, for
 simplicity I assumed that these can safely be reduced to one number \(\eta_i\)
@@ -331,9 +331,9 @@ of followers drag race competitors tend to have.
 </div>
 </div>
 
-<div id="outline-container-org08d80ab" class="outline-3">
-<h3 id="org08d80ab">Episode outcomes</h3>
-<div class="outline-text-3" id="text-org08d80ab">
+<div id="outline-container-org9ba1574" class="outline-3">
+<h3 id="org9ba1574">Episode outcomes</h3>
+<div class="outline-text-3" id="text-org9ba1574">
 <p>
 The trickiest bit was to connect abilities with episode outcomes, which don't
 fit that neatly into a standard statistical model (at least not one that I was
@@ -421,9 +421,9 @@ nicely - check it out!
 </div>
 </div>
 
-<div id="outline-container-org696c0da" class="outline-3">
-<h3 id="org696c0da">Viewer survey data</h3>
-<div class="outline-text-3" id="text-org696c0da">
+<div id="outline-container-org1051829" class="outline-3">
+<h3 id="org1051829">Viewer survey data</h3>
+<div class="outline-text-3" id="text-org1051829">
 <p>
 Even if the model extracted as much information as possible from the outcome
 data, there would still be some room for improvement, as the final result
@@ -461,9 +461,9 @@ really simple example of joint modelling, which you can find out more about in
 </div>
 </div>
 
-<div id="outline-container-orgff679c5" class="outline-2">
-<h2 id="orgff679c5">Implementation</h2>
-<div class="outline-text-2" id="text-orgff679c5">
+<div id="outline-container-org0974936" class="outline-2">
+<h2 id="org0974936">Implementation</h2>
+<div class="outline-text-2" id="text-org0974936">
 <p>
 I largely followed <a href="https://shiraamitchell.github.io/rpdr#model">Shira Mitchell's approach</a> to representing drag race outcomes
 in Stan - the ability parameters for the contestants in each episode are sorted
@@ -473,20 +473,20 @@ described above:
 </p>
 
 <div class="org-src-container">
-<pre class="src src-stan"><span style="color: #859900; font-weight: bold;">functions</span> {
-  <span style="color: #b58900;">real</span> <span style="color: #268bd2;">rpdr_outcome_lp</span>(<span style="color: #b58900;">vector</span> ability, <span style="color: #b58900;">int</span>[] episode_rank){
-    <span style="color: #b58900;">real</span> out <span style="color: #268bd2; font-weight: bold;">=</span> 0;
-    <span style="color: #b58900;">int</span> first_in_group <span style="color: #268bd2; font-weight: bold;">=</span> 1;
-    <span style="color: #859900; font-weight: bold;">for</span> (contestant <span style="color: #859900; font-weight: bold;">in</span> 1:<span style="color: #268bd2;">rows</span>(ability)){
-      <span style="color: #859900; font-weight: bold;">if</span> ((contestant &gt; 1)
+<pre class="src src-stan"><span style="color: #000000; font-weight: bold;">functions</span> {
+  <span style="color: #000080; font-weight: bold;">real</span> <span style="color: #8b008b;">rpdr_outcome_lp</span>(<span style="color: #000080; font-weight: bold;">vector</span> ability, <span style="color: #000080; font-weight: bold;">int</span>[] episode_rank){
+    <span style="color: #000080; font-weight: bold;">real</span> out <span style="color: #0000cd;">=</span> 0;
+    <span style="color: #000080; font-weight: bold;">int</span> first_in_group <span style="color: #0000cd;">=</span> 1;
+    <span style="color: #000000; font-weight: bold;">for</span> (contestant <span style="color: #000000; font-weight: bold;">in</span> 1:<span style="color: #000080;">rows</span>(ability)){
+      <span style="color: #000000; font-weight: bold;">if</span> ((contestant &gt; 1)
           &amp;&amp; (episode_rank[contestant] &gt; episode_rank[contestant-1])){
-        first_in_group <span style="color: #268bd2; font-weight: bold;">=</span> contestant;
+        first_in_group <span style="color: #0000cd;">=</span> contestant;
       }
-      <span style="color: #859900; font-weight: bold;">if</span> (episode_rank[contestant] &lt; <span style="color: #268bd2;">max</span>(episode_rank)){
-        out <span style="color: #268bd2; font-weight: bold;">+=</span> ability[contestant] - <span style="color: #268bd2;">log_sum_exp</span>(ability[first_in_group:]);
+      <span style="color: #000000; font-weight: bold;">if</span> (episode_rank[contestant] &lt; <span style="color: #000080;">max</span>(episode_rank)){
+        out <span style="color: #0000cd;">+=</span> ability[contestant] - <span style="color: #000080;">log_sum_exp</span>(ability[first_in_group:]);
       }
   }
-  <span style="color: #859900; font-weight: bold;">return</span> out;
+  <span style="color: #000000; font-weight: bold;">return</span> out;
   }
 }
 </pre>
@@ -495,50 +495,50 @@ described above:
 Here's the rest of the model:
 </p>
 <div class="org-src-container">
-<pre class="src src-stan"><span style="color: #859900; font-weight: bold;">data</span> {
-  <span style="color: #b58900;">int</span>&lt;<span style="color: #859900; font-weight: bold;">lower</span><span style="color: #268bd2; font-weight: bold;">=</span>1&gt; <span style="color: #268bd2;">N</span>;         <span style="color: #586e75;">// </span><span style="color: #586e75;">Number of episode participations</span>
-  <span style="color: #b58900;">int</span>&lt;<span style="color: #859900; font-weight: bold;">lower</span><span style="color: #268bd2; font-weight: bold;">=</span>1&gt; <span style="color: #268bd2;">K</span>;         <span style="color: #586e75;">// </span><span style="color: #586e75;">Number of predictors</span>
-  <span style="color: #b58900;">int</span>&lt;<span style="color: #859900; font-weight: bold;">lower</span><span style="color: #268bd2; font-weight: bold;">=</span>1&gt; <span style="color: #268bd2;">E</span>;         <span style="color: #586e75;">// </span><span style="color: #586e75;">Number of episodes</span>
-  <span style="color: #b58900;">int</span>&lt;<span style="color: #859900; font-weight: bold;">lower</span><span style="color: #268bd2; font-weight: bold;">=</span>1&gt; <span style="color: #268bd2;">C</span>;         <span style="color: #586e75;">// </span><span style="color: #586e75;">Number of contestants</span>
-  <span style="color: #b58900;">int</span>&lt;<span style="color: #859900; font-weight: bold;">lower</span><span style="color: #268bd2; font-weight: bold;">=</span>1&gt; <span style="color: #268bd2;">N_survey</span>;  <span style="color: #586e75;">// </span><span style="color: #586e75;">Number of surveys</span>
-  <span style="color: #b58900;">matrix</span>[C, K] <span style="color: #268bd2;">X</span>;         <span style="color: #586e75;">// </span><span style="color: #586e75;">Contestant level predictors</span>
-  <span style="color: #586e75;">// </span><span style="color: #586e75;">episode data</span>
-  <span style="color: #b58900;">int</span>&lt;<span style="color: #859900; font-weight: bold;">lower</span><span style="color: #268bd2; font-weight: bold;">=</span>1&gt; <span style="color: #268bd2;">N_episode_contestant</span>[E];
-  <span style="color: #b58900;">int</span>&lt;<span style="color: #859900; font-weight: bold;">lower</span><span style="color: #268bd2; font-weight: bold;">=</span>1,<span style="color: #859900; font-weight: bold;">upper</span><span style="color: #268bd2; font-weight: bold;">=</span>6&gt; <span style="color: #268bd2;">episode_rank</span>[N];
-  <span style="color: #b58900;">int</span>&lt;<span style="color: #859900; font-weight: bold;">lower</span><span style="color: #268bd2; font-weight: bold;">=</span>1,<span style="color: #859900; font-weight: bold;">upper</span><span style="color: #268bd2; font-weight: bold;">=</span>C&gt; <span style="color: #268bd2;">contestant</span>[N];
-  <span style="color: #586e75;">// </span><span style="color: #586e75;">survey data</span>
-  <span style="color: #b58900;">int</span>&lt;<span style="color: #859900; font-weight: bold;">lower</span><span style="color: #268bd2; font-weight: bold;">=</span>1,<span style="color: #859900; font-weight: bold;">upper</span><span style="color: #268bd2; font-weight: bold;">=</span>C&gt; <span style="color: #268bd2;">survey_contestant</span>[N_survey];
-  <span style="color: #b58900;">int</span>&lt;<span style="color: #859900; font-weight: bold;">lower</span><span style="color: #268bd2; font-weight: bold;">=</span>1,<span style="color: #859900; font-weight: bold;">upper</span><span style="color: #268bd2; font-weight: bold;">=</span>C&gt; <span style="color: #268bd2;">survey_opponent</span>[N_survey];
-  <span style="color: #b58900;">int</span>&lt;<span style="color: #859900; font-weight: bold;">lower</span><span style="color: #268bd2; font-weight: bold;">=</span>1&gt; <span style="color: #268bd2;">survey_count</span>[N_survey];
-  <span style="color: #b58900;">int</span>&lt;<span style="color: #859900; font-weight: bold;">lower</span><span style="color: #268bd2; font-weight: bold;">=</span>0&gt; <span style="color: #268bd2;">survey_wins</span>[N_survey];
-  <span style="color: #586e75;">// </span><span style="color: #586e75;">config </span>
-  <span style="color: #b58900;">int</span>&lt;<span style="color: #859900; font-weight: bold;">lower</span><span style="color: #268bd2; font-weight: bold;">=</span>0,<span style="color: #859900; font-weight: bold;">upper</span><span style="color: #268bd2; font-weight: bold;">=</span>1&gt; <span style="color: #268bd2;">use_survey</span>;
-  <span style="color: #b58900;">int</span>&lt;<span style="color: #859900; font-weight: bold;">lower</span><span style="color: #268bd2; font-weight: bold;">=</span>0,<span style="color: #859900; font-weight: bold;">upper</span><span style="color: #268bd2; font-weight: bold;">=</span>1&gt; <span style="color: #268bd2;">use_episodes</span>;
+<pre class="src src-stan"><span style="color: #000000; font-weight: bold;">data</span> {
+  <span style="color: #000080; font-weight: bold;">int</span>&lt;<span style="color: #000000; font-weight: bold;">lower</span><span style="color: #0000cd;">=</span>1&gt; <span style="color: #8b008b;">N</span>;         <span style="color: #cd0000;">// </span><span style="color: #cd0000;">Number of episode participations</span>
+  <span style="color: #000080; font-weight: bold;">int</span>&lt;<span style="color: #000000; font-weight: bold;">lower</span><span style="color: #0000cd;">=</span>1&gt; <span style="color: #8b008b;">K</span>;         <span style="color: #cd0000;">// </span><span style="color: #cd0000;">Number of predictors</span>
+  <span style="color: #000080; font-weight: bold;">int</span>&lt;<span style="color: #000000; font-weight: bold;">lower</span><span style="color: #0000cd;">=</span>1&gt; <span style="color: #8b008b;">E</span>;         <span style="color: #cd0000;">// </span><span style="color: #cd0000;">Number of episodes</span>
+  <span style="color: #000080; font-weight: bold;">int</span>&lt;<span style="color: #000000; font-weight: bold;">lower</span><span style="color: #0000cd;">=</span>1&gt; <span style="color: #8b008b;">C</span>;         <span style="color: #cd0000;">// </span><span style="color: #cd0000;">Number of contestants</span>
+  <span style="color: #000080; font-weight: bold;">int</span>&lt;<span style="color: #000000; font-weight: bold;">lower</span><span style="color: #0000cd;">=</span>1&gt; <span style="color: #8b008b;">N_survey</span>;  <span style="color: #cd0000;">// </span><span style="color: #cd0000;">Number of surveys</span>
+  <span style="color: #000080; font-weight: bold;">matrix</span>[C, K] <span style="color: #8b008b;">X</span>;         <span style="color: #cd0000;">// </span><span style="color: #cd0000;">Contestant level predictors</span>
+  <span style="color: #cd0000;">// </span><span style="color: #cd0000;">episode data</span>
+  <span style="color: #000080; font-weight: bold;">int</span>&lt;<span style="color: #000000; font-weight: bold;">lower</span><span style="color: #0000cd;">=</span>1&gt; <span style="color: #8b008b;">N_episode_contestant</span>[E];
+  <span style="color: #000080; font-weight: bold;">int</span>&lt;<span style="color: #000000; font-weight: bold;">lower</span><span style="color: #0000cd;">=</span>1,<span style="color: #000000; font-weight: bold;">upper</span><span style="color: #0000cd;">=</span>6&gt; <span style="color: #8b008b;">episode_rank</span>[N];
+  <span style="color: #000080; font-weight: bold;">int</span>&lt;<span style="color: #000000; font-weight: bold;">lower</span><span style="color: #0000cd;">=</span>1,<span style="color: #000000; font-weight: bold;">upper</span><span style="color: #0000cd;">=</span>C&gt; <span style="color: #8b008b;">contestant</span>[N];
+  <span style="color: #cd0000;">// </span><span style="color: #cd0000;">survey data</span>
+  <span style="color: #000080; font-weight: bold;">int</span>&lt;<span style="color: #000000; font-weight: bold;">lower</span><span style="color: #0000cd;">=</span>1,<span style="color: #000000; font-weight: bold;">upper</span><span style="color: #0000cd;">=</span>C&gt; <span style="color: #8b008b;">survey_contestant</span>[N_survey];
+  <span style="color: #000080; font-weight: bold;">int</span>&lt;<span style="color: #000000; font-weight: bold;">lower</span><span style="color: #0000cd;">=</span>1,<span style="color: #000000; font-weight: bold;">upper</span><span style="color: #0000cd;">=</span>C&gt; <span style="color: #8b008b;">survey_opponent</span>[N_survey];
+  <span style="color: #000080; font-weight: bold;">int</span>&lt;<span style="color: #000000; font-weight: bold;">lower</span><span style="color: #0000cd;">=</span>1&gt; <span style="color: #8b008b;">survey_count</span>[N_survey];
+  <span style="color: #000080; font-weight: bold;">int</span>&lt;<span style="color: #000000; font-weight: bold;">lower</span><span style="color: #0000cd;">=</span>0&gt; <span style="color: #8b008b;">survey_wins</span>[N_survey];
+  <span style="color: #cd0000;">// </span><span style="color: #cd0000;">config </span>
+  <span style="color: #000080; font-weight: bold;">int</span>&lt;<span style="color: #000000; font-weight: bold;">lower</span><span style="color: #0000cd;">=</span>0,<span style="color: #000000; font-weight: bold;">upper</span><span style="color: #0000cd;">=</span>1&gt; <span style="color: #8b008b;">use_survey</span>;
+  <span style="color: #000080; font-weight: bold;">int</span>&lt;<span style="color: #000000; font-weight: bold;">lower</span><span style="color: #0000cd;">=</span>0,<span style="color: #000000; font-weight: bold;">upper</span><span style="color: #0000cd;">=</span>1&gt; <span style="color: #8b008b;">use_episodes</span>;
 }
-<span style="color: #859900; font-weight: bold;">parameters</span> {
-  <span style="color: #b58900;">vector</span>[C] <span style="color: #268bd2;">ability_z</span>;
-  <span style="color: #b58900;">real</span>&lt;<span style="color: #859900; font-weight: bold;">lower</span><span style="color: #268bd2; font-weight: bold;">=</span>0&gt; <span style="color: #268bd2;">sigma_ability</span>;
-  <span style="color: #b58900;">vector</span>[K] <span style="color: #268bd2;">beta</span>;
+<span style="color: #000000; font-weight: bold;">parameters</span> {
+  <span style="color: #000080; font-weight: bold;">vector</span>[C] <span style="color: #8b008b;">ability_z</span>;
+  <span style="color: #000080; font-weight: bold;">real</span>&lt;<span style="color: #000000; font-weight: bold;">lower</span><span style="color: #0000cd;">=</span>0&gt; <span style="color: #8b008b;">sigma_ability</span>;
+  <span style="color: #000080; font-weight: bold;">vector</span>[K] <span style="color: #8b008b;">beta</span>;
 }
-<span style="color: #859900; font-weight: bold;">transformed parameters</span> {
-  <span style="color: #b58900;">vector</span>[C] ability <span style="color: #268bd2; font-weight: bold;">=</span> X * beta + ability_z * sigma_ability;
+<span style="color: #000000; font-weight: bold;">transformed parameters</span> {
+  <span style="color: #000080; font-weight: bold;">vector</span>[C] ability <span style="color: #0000cd;">=</span> X * beta + ability_z * sigma_ability;
 }
-<span style="color: #859900; font-weight: bold;">model</span> {
-  <span style="color: #b58900;">int</span> pos <span style="color: #268bd2; font-weight: bold;">=</span> 1;
-  <span style="color: #586e75;">// </span><span style="color: #586e75;">priors</span>
-  ability_z <span style="color: #268bd2; font-weight: bold;">~</span> <span style="color: #268bd2;">normal</span>(0, 1);
-  beta <span style="color: #268bd2; font-weight: bold;">~</span> <span style="color: #268bd2;">normal</span>(0, 1);
-  sigma_ability <span style="color: #268bd2; font-weight: bold;">~</span> <span style="color: #268bd2;">normal</span>(0, 1);
-  <span style="color: #586e75;">// </span><span style="color: #586e75;">likelihood</span>
-  <span style="color: #859900; font-weight: bold;">if</span> (use_survey <span style="color: #268bd2; font-weight: bold;">==</span> 1){
-    survey_wins <span style="color: #268bd2; font-weight: bold;">~</span> <span style="color: #268bd2;">binomial_logit</span>(survey_count, ability[survey_contestant] - ability[survey_opponent]);
+<span style="color: #000000; font-weight: bold;">model</span> {
+  <span style="color: #000080; font-weight: bold;">int</span> pos <span style="color: #0000cd;">=</span> 1;
+  <span style="color: #cd0000;">// </span><span style="color: #cd0000;">priors</span>
+  ability_z <span style="color: #0000cd;">~</span> <span style="color: #000080;">normal</span>(0, 1);
+  beta <span style="color: #0000cd;">~</span> <span style="color: #000080;">normal</span>(0, 1);
+  sigma_ability <span style="color: #0000cd;">~</span> <span style="color: #000080;">normal</span>(0, 1);
+  <span style="color: #cd0000;">// </span><span style="color: #cd0000;">likelihood</span>
+  <span style="color: #000000; font-weight: bold;">if</span> (use_survey <span style="color: #0000cd;">==</span> 1){
+    survey_wins <span style="color: #0000cd;">~</span> <span style="color: #000080;">binomial_logit</span>(survey_count, ability[survey_contestant] - ability[survey_opponent]);
   }
-  <span style="color: #859900; font-weight: bold;">if</span> (use_episodes <span style="color: #268bd2; font-weight: bold;">==</span> 1){
-    <span style="color: #859900; font-weight: bold;">for</span> (<span style="color: #268bd2;">e</span> <span style="color: #859900; font-weight: bold;">in</span> 1:E){
-      <span style="color: #b58900;">int</span> <span style="color: #268bd2;">contestants</span>[N_episode_contestant[<span style="color: #268bd2;">e</span>]] <span style="color: #268bd2; font-weight: bold;">=</span> <span style="color: #268bd2;">segment</span>(contestant, pos, N_episode_contestant[<span style="color: #268bd2;">e</span>]);
-      <span style="color: #b58900;">int</span> <span style="color: #268bd2;">episode_ranks</span>[N_episode_contestant[<span style="color: #268bd2;">e</span>]] <span style="color: #268bd2; font-weight: bold;">=</span> <span style="color: #268bd2;">segment</span>(episode_rank, pos, N_episode_contestant[<span style="color: #268bd2;">e</span>]);
-      <span style="color: #859900; font-weight: bold;">target</span> <span style="color: #268bd2; font-weight: bold;">+=</span> rpdr_outcome_lp(ability[contestants], episode_ranks);
-      pos <span style="color: #268bd2; font-weight: bold;">+=</span> N_episode_contestant[<span style="color: #268bd2;">e</span>];
+  <span style="color: #000000; font-weight: bold;">if</span> (use_episodes <span style="color: #0000cd;">==</span> 1){
+    <span style="color: #000000; font-weight: bold;">for</span> (<span style="color: #000080;">e</span> <span style="color: #000000; font-weight: bold;">in</span> 1:E){
+      <span style="color: #000080; font-weight: bold;">int</span> <span style="color: #8b008b;">contestants</span>[N_episode_contestant[<span style="color: #000080;">e</span>]] <span style="color: #0000cd;">=</span> <span style="color: #000080;">segment</span>(contestant, pos, N_episode_contestant[<span style="color: #000080;">e</span>]);
+      <span style="color: #000080; font-weight: bold;">int</span> <span style="color: #8b008b;">episode_ranks</span>[N_episode_contestant[<span style="color: #000080;">e</span>]] <span style="color: #0000cd;">=</span> <span style="color: #000080;">segment</span>(episode_rank, pos, N_episode_contestant[<span style="color: #000080;">e</span>]);
+      <span style="color: #000000; font-weight: bold;">target</span> <span style="color: #0000cd;">+=</span> rpdr_outcome_lp(ability[contestants], episode_ranks);
+      pos <span style="color: #0000cd;">+=</span> N_episode_contestant[<span style="color: #000080;">e</span>];
     }
   }
 }
@@ -550,9 +550,9 @@ model. <a href="https://github.com/teddygroves/drag_race">Here</a>'s a link to a
 </p>
 </div>
 </div>
-<div id="outline-container-org58382c9" class="outline-2">
-<h2 id="org58382c9">Results</h2>
-<div class="outline-text-2" id="text-org58382c9">
+<div id="outline-container-org9bf79b1" class="outline-2">
+<h2 id="org9bf79b1">Results</h2>
+<div class="outline-text-2" id="text-org9bf79b1">
 <p>
 Here's what the model thinks of the remaining season 11 competitors (the low
 and high are the 10% and 90% quantiles of the posterior distributions). I
@@ -622,9 +622,9 @@ Velour had talent!
 </div>
 </div>
 
-<div id="outline-container-org5d0e60a" class="outline-2">
-<h2 id="org5d0e60a">Things that could be improved</h2>
-<div class="outline-text-2" id="text-org5d0e60a">
+<div id="outline-container-org0eda88c" class="outline-2">
+<h2 id="org0eda88c">Things that could be improved</h2>
+<div class="outline-text-2" id="text-org0eda88c">
 <p>
 This was a really fun task - I learned lots about ordinal models and came up
 with something that more or less passed my smell test. There are a few extra
@@ -633,9 +633,9 @@ it's still a good exercise.
 </p>
 </div>
 
-<div id="outline-container-org9767bf2" class="outline-3">
-<h3 id="org9767bf2">Probabilistic predictions</h3>
-<div class="outline-text-3" id="text-org9767bf2">
+<div id="outline-container-org21b30d2" class="outline-3">
+<h3 id="org21b30d2">Probabilistic predictions</h3>
+<div class="outline-text-3" id="text-org21b30d2">
 <p>
 Rather than just ranking competitors by ability it would be nice if the model
 outputted the probability of each queen winning or being eliminated in each
@@ -648,9 +648,9 @@ to attempt to implement one.
 </div>
 </div>
 
-<div id="outline-container-orgf181002" class="outline-3">
-<h3 id="orgf181002">Extra ability dimensions</h3>
-<div class="outline-text-3" id="text-orgf181002">
+<div id="outline-container-orgedbdb6d" class="outline-3">
+<h3 id="orgedbdb6d">Extra ability dimensions</h3>
+<div class="outline-text-3" id="text-orgedbdb6d">
 <p>
 There were a few times when I thought the model was a bit limited by only
 having one ability dimensions. For example, in the snatch game episode I
@@ -660,9 +660,9 @@ Ganashe would do better than indicated by their overall track records.
 </div>
 </div>
 
-<div id="outline-container-org780af75" class="outline-3">
-<h3 id="org780af75">Separate lipsync mechanics</h3>
-<div class="outline-text-3" id="text-org780af75">
+<div id="outline-container-org009caca" class="outline-3">
+<h3 id="org009caca">Separate lipsync mechanics</h3>
+<div class="outline-text-3" id="text-org009caca">
 <p>
 I think it would be nice to handle lipsyncs with a separate model. I initially
 took this approach but gave up as I seemed to be doing everything twice and the

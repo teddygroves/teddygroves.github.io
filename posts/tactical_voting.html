@@ -1,0 +1,477 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<!-- 2019-11-01 Fri 12:40 -->
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Think twice before using MRP-branded websites for tactical voting!</title>
+<meta name="generator" content="Org mode" />
+<style type="text/css">
+ <!--/*--><![CDATA[/*><!--*/
+  .title  { text-align: center;
+             margin-bottom: .2em; }
+  .subtitle { text-align: center;
+              font-size: medium;
+              font-weight: bold;
+              margin-top:0; }
+  .todo   { font-family: monospace; color: red; }
+  .done   { font-family: monospace; color: green; }
+  .priority { font-family: monospace; color: orange; }
+  .tag    { background-color: #eee; font-family: monospace;
+            padding: 2px; font-size: 80%; font-weight: normal; }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .org-right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .org-left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .org-center { margin-left: auto; margin-right: auto; text-align: center; }
+  .underline { text-decoration: underline; }
+  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
+  p.verse { margin-left: 3%; }
+  pre {
+    border: 1px solid #ccc;
+    box-shadow: 3px 3px 3px #eee;
+    padding: 8pt;
+    font-family: monospace;
+    overflow: auto;
+    margin: 1.2em;
+  }
+  pre.src {
+    position: relative;
+    overflow: visible;
+    padding-top: 1.2em;
+  }
+  pre.src:before {
+    display: none;
+    position: absolute;
+    background-color: white;
+    top: -10px;
+    right: 10px;
+    padding: 3px;
+    border: 1px solid black;
+  }
+  pre.src:hover:before { display: inline;}
+  /* Languages per Org manual */
+  pre.src-asymptote:before { content: 'Asymptote'; }
+  pre.src-awk:before { content: 'Awk'; }
+  pre.src-C:before { content: 'C'; }
+  /* pre.src-C++ doesn't work in CSS */
+  pre.src-clojure:before { content: 'Clojure'; }
+  pre.src-css:before { content: 'CSS'; }
+  pre.src-D:before { content: 'D'; }
+  pre.src-ditaa:before { content: 'ditaa'; }
+  pre.src-dot:before { content: 'Graphviz'; }
+  pre.src-calc:before { content: 'Emacs Calc'; }
+  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
+  pre.src-fortran:before { content: 'Fortran'; }
+  pre.src-gnuplot:before { content: 'gnuplot'; }
+  pre.src-haskell:before { content: 'Haskell'; }
+  pre.src-hledger:before { content: 'hledger'; }
+  pre.src-java:before { content: 'Java'; }
+  pre.src-js:before { content: 'Javascript'; }
+  pre.src-latex:before { content: 'LaTeX'; }
+  pre.src-ledger:before { content: 'Ledger'; }
+  pre.src-lisp:before { content: 'Lisp'; }
+  pre.src-lilypond:before { content: 'Lilypond'; }
+  pre.src-lua:before { content: 'Lua'; }
+  pre.src-matlab:before { content: 'MATLAB'; }
+  pre.src-mscgen:before { content: 'Mscgen'; }
+  pre.src-ocaml:before { content: 'Objective Caml'; }
+  pre.src-octave:before { content: 'Octave'; }
+  pre.src-org:before { content: 'Org mode'; }
+  pre.src-oz:before { content: 'OZ'; }
+  pre.src-plantuml:before { content: 'Plantuml'; }
+  pre.src-processing:before { content: 'Processing.js'; }
+  pre.src-python:before { content: 'Python'; }
+  pre.src-R:before { content: 'R'; }
+  pre.src-ruby:before { content: 'Ruby'; }
+  pre.src-sass:before { content: 'Sass'; }
+  pre.src-scheme:before { content: 'Scheme'; }
+  pre.src-screen:before { content: 'Gnu Screen'; }
+  pre.src-sed:before { content: 'Sed'; }
+  pre.src-sh:before { content: 'shell'; }
+  pre.src-sql:before { content: 'SQL'; }
+  pre.src-sqlite:before { content: 'SQLite'; }
+  /* additional languages in org.el's org-babel-load-languages alist */
+  pre.src-forth:before { content: 'Forth'; }
+  pre.src-io:before { content: 'IO'; }
+  pre.src-J:before { content: 'J'; }
+  pre.src-makefile:before { content: 'Makefile'; }
+  pre.src-maxima:before { content: 'Maxima'; }
+  pre.src-perl:before { content: 'Perl'; }
+  pre.src-picolisp:before { content: 'Pico Lisp'; }
+  pre.src-scala:before { content: 'Scala'; }
+  pre.src-shell:before { content: 'Shell Script'; }
+  pre.src-ebnf2ps:before { content: 'ebfn2ps'; }
+  /* additional language identifiers per "defun org-babel-execute"
+       in ob-*.el */
+  pre.src-cpp:before  { content: 'C++'; }
+  pre.src-abc:before  { content: 'ABC'; }
+  pre.src-coq:before  { content: 'Coq'; }
+  pre.src-groovy:before  { content: 'Groovy'; }
+  /* additional language identifiers from org-babel-shell-names in
+     ob-shell.el: ob-shell is the only babel language using a lambda to put
+     the execution function name together. */
+  pre.src-bash:before  { content: 'bash'; }
+  pre.src-csh:before  { content: 'csh'; }
+  pre.src-ash:before  { content: 'ash'; }
+  pre.src-dash:before  { content: 'dash'; }
+  pre.src-ksh:before  { content: 'ksh'; }
+  pre.src-mksh:before  { content: 'mksh'; }
+  pre.src-posh:before  { content: 'posh'; }
+  /* Additional Emacs modes also supported by the LaTeX listings package */
+  pre.src-ada:before { content: 'Ada'; }
+  pre.src-asm:before { content: 'Assembler'; }
+  pre.src-caml:before { content: 'Caml'; }
+  pre.src-delphi:before { content: 'Delphi'; }
+  pre.src-html:before { content: 'HTML'; }
+  pre.src-idl:before { content: 'IDL'; }
+  pre.src-mercury:before { content: 'Mercury'; }
+  pre.src-metapost:before { content: 'MetaPost'; }
+  pre.src-modula-2:before { content: 'Modula-2'; }
+  pre.src-pascal:before { content: 'Pascal'; }
+  pre.src-ps:before { content: 'PostScript'; }
+  pre.src-prolog:before { content: 'Prolog'; }
+  pre.src-simula:before { content: 'Simula'; }
+  pre.src-tcl:before { content: 'tcl'; }
+  pre.src-tex:before { content: 'TeX'; }
+  pre.src-plain-tex:before { content: 'Plain TeX'; }
+  pre.src-verilog:before { content: 'Verilog'; }
+  pre.src-vhdl:before { content: 'VHDL'; }
+  pre.src-xml:before { content: 'XML'; }
+  pre.src-nxml:before { content: 'XML'; }
+  /* add a generic configuration mode; LaTeX export needs an additional
+     (add-to-list 'org-latex-listings-langs '(conf " ")) in .emacs */
+  pre.src-conf:before { content: 'Configuration File'; }
+
+  table { border-collapse:collapse; }
+  caption.t-above { caption-side: top; }
+  caption.t-bottom { caption-side: bottom; }
+  td, th { vertical-align:top;  }
+  th.org-right  { text-align: center;  }
+  th.org-left   { text-align: center;   }
+  th.org-center { text-align: center; }
+  td.org-right  { text-align: right;  }
+  td.org-left   { text-align: left;   }
+  td.org-center { text-align: center; }
+  dt { font-weight: bold; }
+  .footpara { display: inline; }
+  .footdef  { margin-bottom: 1em; }
+  .figure { padding: 1em; }
+  .figure p { text-align: center; }
+  .equation-container {
+    display: table;
+    text-align: center;
+    width: 100%;
+  }
+  .equation {
+    vertical-align: middle;
+  }
+  .equation-label {
+    display: table-cell;
+    text-align: right;
+    vertical-align: middle;
+  }
+  .inlinetask {
+    padding: 10px;
+    border: 2px solid gray;
+    margin: 10px;
+    background: #ffffcc;
+  }
+  #org-div-home-and-up
+   { text-align: right; font-size: 70%; white-space: nowrap; }
+  textarea { overflow-x: auto; }
+  .linenr { font-size: smaller }
+  .code-highlighted { background-color: #ffff00; }
+  .org-info-js_info-navigation { border-style: none; }
+  #org-info-js_console-label
+    { font-size: 10px; font-weight: bold; white-space: nowrap; }
+  .org-info-js_search-highlight
+    { background-color: #ffff00; color: #000000; font-weight: bold; }
+  .org-svg { width: 90%; }
+  /*]]>*/-->
+</style>
+<link rel='stylesheet' href='../css/gongzhitaao.css' type='text/css'/>
+<script type="text/javascript">
+/*
+@licstart  The following is the entire license notice for the
+JavaScript code in this tag.
+
+Copyright (C) 2012-2019 Free Software Foundation, Inc.
+
+The JavaScript code in this tag is free software: you can
+redistribute it and/or modify it under the terms of the GNU
+General Public License (GNU GPL) as published by the Free Software
+Foundation, either version 3 of the License, or (at your option)
+any later version.  The code is distributed WITHOUT ANY WARRANTY;
+without even the implied warranty of MERCHANTABILITY or FITNESS
+FOR A PARTICULAR PURPOSE.  See the GNU GPL for more details.
+
+As additional permission under GNU GPL version 3 section 7, you
+may distribute non-source (e.g., minimized or compacted) forms of
+that code without the copy of the GNU GPL normally required by
+section 4, provided you include this license notice and a URL
+through which recipients can access the Corresponding Source.
+
+
+@licend  The above is the entire license notice
+for the JavaScript code in this tag.
+*/
+<!--/*--><![CDATA[/*><!--*/
+ function CodeHighlightOn(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(null != target) {
+     elem.cacheClassElem = elem.className;
+     elem.cacheClassTarget = target.className;
+     target.className = "code-highlighted";
+     elem.className   = "code-highlighted";
+   }
+ }
+ function CodeHighlightOff(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(elem.cacheClassElem)
+     elem.className = elem.cacheClassElem;
+   if(elem.cacheClassTarget)
+     target.className = elem.cacheClassTarget;
+ }
+/*]]>*///-->
+</script>
+</head>
+<body>
+<div id="preamble" class="status">
+<div class='main-header'><h1><a href='../index.html'> Teddy's Picnic </a></h1></div>
+</div>
+<div id="content">
+<h1 class="title">Think twice before using MRP-branded websites for tactical voting!</h1>
+
+<div class="figure">
+<p><img src="../img/careful.jpg" alt="careful.jpg" />
+</p>
+</div>
+
+<p>
+<b>tl:dr</b> If you want to vote tactically, use all available information and don't
+forget that other people can also do this.
+</p>
+
+<div id="outline-container-org2133de1" class="outline-2">
+<h2 id="org2133de1">What happened?</h2>
+<div class="outline-text-2" id="text-org2133de1">
+<p>
+A company called <a href="https://www.focaldata.com/">Focaldata</a> did a MRP analysis of some online surveys that were
+completed at some point in September or October and sold it to a group called
+<a href="https://www.bestforbritain.org/">Best for Britain</a>, who are now using the MRP brand to promote their <a href="https://getvoting.org/">tactical
+voting website</a>. Along the way I think some bad statistics communication
+happened.
+</p>
+
+<p>
+I am interested because I like both multilevel regression models and UK
+politics discourse, and also because I have a tangential connection with
+Focaldata. About a year ago I did a job interview at Focaldata and found them
+great. They pay people to do best-practice multilevel regressions within a
+modern and professional software engineering setup and have a cutting edge
+data. I think it seems like a great place to work.
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgb22b957" class="outline-2">
+<h2 id="orgb22b957">What is tactical voting?</h2>
+<div class="outline-text-2" id="text-orgb22b957">
+<p>
+Tactical voting is when you vote for something you don't like because you think
+this will trick the voting system. In this context it means voting for a
+Labour, Liberal Democrat or SNP candidate who you do not support in order to
+prevent the Conservative candidate winning in your parliamentary constituency.
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgf1b68ed" class="outline-2">
+<h2 id="orgf1b68ed">What is a MRP?</h2>
+<div class="outline-text-2" id="text-orgf1b68ed">
+<p>
+Multilevel regression and poststratification means making assumptions about how
+different kinds of people vote (specifically a multilevel regression model) and
+adjusting these assumptions based on some more assumptions about how many
+people of each kind there are (this is called post-stratification). That's
+it!<sup><a id="fnr.1" class="footref" href="#fn.1">1</a></sup>.
+</p>
+
+<p>
+MRP is nice because, under the right conditions, it can make it possible to
+extrapolate from a sample population (e.g. the people who answer a survey) to a
+target population (e.g. people who vote on election day) even when the sample
+is non-representative. This is a relief because representative samples are
+pretty hard to make since people stopped using landlines.
+</p>
+</div>
+</div>
+
+<div id="outline-container-org7d3133d" class="outline-2">
+<h2 id="org7d3133d">What is good statistical communication?</h2>
+<div class="outline-text-2" id="text-org7d3133d">
+<p>
+I agree with the advice in the last slide of <a href="https://www.efsa.europa.eu/sites/default/files/event/180918-conference/presentations/18-0_04_Spiegelhalter.pdf">David Spiegelhalter's talk
+here</a>. In order to demonstrate trustworthiness, statistical analysis should be
+<b><b>accessible</b></b> (ideally it should be possible for someone interested to
+reproduce it), <b><b>intelligible</b></b>, <b><b>useable</b></b> (i.e. directly the model output
+should relate directly to what the communicee cares about) and
+<b><b>assessable</b></b>. Uncertainty should be confidently acknowledged and
+represented. Potential misunderstandings should be pre-empted. Careful thought
+should go into the the relationship between the communicator and listener.
+</p>
+</div>
+</div>
+
+<div id="outline-container-org434d9ca" class="outline-2">
+<h2 id="org434d9ca">What went wrong in this case?</h2>
+<div class="outline-text-2" id="text-org434d9ca">
+<p>
+First, MRP is very sensitive to implementation details and there is no way for
+anyone to access or assess them. What kind of people were polled? What kind of
+effects did the model allow? What assumptions did the model make about what
+kind of people live where and who is likely to vote? Noone outside the loop can
+answer any of these questions. This is the biggest issue in my opinion - I
+can't see any good reason why the analysis couldn't be made fully reproducible.
+</p>
+
+<p>
+The second problem is that, even without having any idea what kind of MRP
+analysis Focaldata did, it was probably not the best possible prediction of the
+result on polling day. For one thing, it assumes that nothing will change
+between now and then. In the previous election campaign the two big parties
+tended to do well at the expense of smaller parties. Noone knows how this
+campaign will go, but something will surely change, which means ther is some
+uncertainty that the analysis probably isn't taking into account (I say
+probably as I can't be <i>certain</i> that they didn't do a <a href="http://www.stat.columbia.edu/~gelman/research/unpublished/MRT(1).pdf">dynamic MRP</a>, but I think
+it's highly unlikely).
+</p>
+
+<p>
+Another problem is that the analysis likely does not include historical
+constituency results, even though these are quite informative as to the future
+results. This is the main criticism that have been making on Twitter and I
+think it is correct. For example, in <a href="https://en.wikipedia.org/wiki/Hendon_(UK_Parliament_constituency)">Hendon</a> the Libdem vote share in the last 3
+elections has been between 4% and 12%, but the model <a href="https://getvoting.org/?postcode=NW4+3BU">apparently</a> predicts 27% in
+this one. Obviously history is not destiny, but it is surely comparably
+relevant to survey data obtained three months before polling day and shouldn't
+be ignored completely.
+</p>
+
+<p>
+These problems aren't so much with the analysis itself but with its
+interpretation as a prediction of the final result. If interpreted as a summary
+of the information in the surveys, I think it would probably be fine, though
+not so relevant for tactical voting advice. So the problem here is really
+useability.
+</p>
+
+<p>
+A third thing that went wrong is is that no attempt was made to share any
+uncertainty estimates, or indeed much model output beyond these
+<a href="https://getvoting.org/?postcode=NW4+3BU">hard-to-access-or-aggregate screenshots</a> of some barcharts presumably
+representing point estimates. The advice seems to be very sensitive to small
+constituency-level Labour vs Libdem differences, which are probably highly
+uncertain in the model, with the uncertainty varying by constituency. There is
+no way of telling if the model result is 'the Libdems are definitely ahead of
+Labour by 2% here' or 'Labour and the Libdems are about the same, I honestly
+can't really tell who is ahead'.
+</p>
+
+<p>
+Fourth, the method by which Best for Britain turned the MRP analysis into
+tactical voting advice is opaque and probably flawed. I couldn't find any
+explanation on the website, so again there is a problem of accessibility and
+assessibility. There is another problem though: it's not clear that there is
+any principled way of directly turning an MRP analysis into sound tactical
+voting advice.
+</p>
+
+<p>
+A tactical voting decision doesn't just require require knowing the likely
+election result but also knowing how other people are likely to tactically
+vote. Even if your best guess is that the Libdem are ahead of Labour in a
+constituency, it can be more tactical to vote Labour if you think other people
+are more likely to tactical-vote in this direction too. The tactical 'scenario'
+on the Best for Britain website seems to just transfer 30% of votes from all
+non-first-place Remain parties point estimates to that of the highest one. If
+that is really how it works, I don't think it's very realistic.
+</p>
+
+<p>
+This is not to say that tactical voters should ignore statistical analysis
+(provided it is done properly and communicated well), just that it isn't
+enough: you also need some information about the strategic situation.
+</p>
+
+<p>
+Fifth, it isn't clear from the website what MRP is, how it can go wrong or what
+steps if any have been taken to mitigate against the possible problems. Here
+are a few ways in which MRP can go wrong:
+</p>
+
+<ul class="org-ul">
+<li>People are more likely to respond to surveys when they think the side they
+support is doing well.</li>
+<li>People who respond to surveys are different from other people, even other
+people with the same demographic characteristics.</li>
+<li>Even with a big sample it's hard to get enough data on all relevant groups to
+make confident judgements.</li>
+<li>Assumptions about what kind of people live where can be wrong.</li>
+</ul>
+
+<p>
+There's no way for users to assess whether any of these pitfalls have been
+avoided.
+</p>
+
+<p>
+Finally, though this isn't really my area of expertise, there seems to be a bit
+of a problem of responsibility. Focaldata know the most about the analysis, but
+they don't seem to appear on the website outside a footnote in some
+screenshots. Best for Britain seem to have been hoping that people would trust
+trust them to find someone good, do independent research into focaldata or
+perhaps just be comforted by the magic letters 'MRP'. For their part, Focaldata
+don't seem to have made proper presentation of their work a condition for
+taking part, which seems like a bit of a mistake given that it was always going
+to be made public.
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgba2a85e" class="outline-2">
+<h2 id="orgba2a85e">So how should I vote tactically?</h2>
+<div class="outline-text-2" id="text-orgba2a85e">
+<p>
+First you should use all available information about how people are likely to
+vote. This means a) waiting until the last possible moment - for most people
+this will be just before election day when YouGov will likely publish a more
+up-to-date and reproducible MRP analysis and b) also taking into account
+historical results from your constituency.
+</p>
+
+<p>
+In addition, you also need to take into account that other people are going to
+vote tactically as well, and most people who do so won't be relying on
+three-month-old surveys glimsed darkly through an opaque website.
+</p>
+</div>
+</div>
+<div id="footnotes">
+<h2 class="footnotes">Footnotes: </h2>
+<div id="text-footnotes">
+
+<div class="footdef"><sup><a id="fn.1" class="footnum" href="#fnr.1">1</a></sup> <div class="footpara"><p class="footpara">
+Actually there's more! See <a href="http://www.stat.columbia.edu/~gelman/research/published/mrp_voterfile_20181030.pdf">here</a> and <a href="http://benjaminlauderdale.net/files/papers/mrp-polling-paper.pdf">here</a> for some nice papers about MRP. 
+</p></div></div>
+
+
+</div>
+</div></div>
+</body>
+</html>
