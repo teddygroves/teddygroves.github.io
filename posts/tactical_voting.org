@@ -7,18 +7,21 @@
 forget that other people can also do this.
 
 * What happened?
-A company called [[https://www.focaldata.com/][Focaldata]] did a MRP analysis of some online surveys that were
+A company called [[https://www.focaldata.com/][focaldata]] did a MRP analysis of some online surveys that were
 completed at some point in September or October and sold it to a group called
-[[https://www.bestforbritain.org/][Best for Britain]], who are now using the MRP brand to promote their [[https://getvoting.org/][tactical
-voting website]]. Along the way I think some bad statistics communication
-happened.
+[[https://www.bestforbritain.org/][Best for Britain]], who are now using the MRP brand to promote their
+[[https://getvoting.org/][tactical voting website]]. Along the way I think some
+bad statistics communication happened.
 
 I am interested because I like both multilevel regression models and UK
 politics discourse, and also because I have a tangential connection with
-Focaldata. About a year ago I did a job interview at Focaldata and found them
+focaldata. About a year ago I did a job interview at focaldata and found them
 great. They pay people to do best-practice multilevel regressions within a
 modern and professional software engineering setup and have a cutting edge
 data. I think it seems like a great place to work.
+
+I had some quick chats on Twitter with [[https://twitter.com/dsquareddigest][@dsquareddigest]], [[https://twitter.com/hmclandress][@hmclandress]] and
+[[https://twitter.com/JustinIbbett/][@JustinIbbet]] (founder and CEO of focaldata), then wrote up what I thought here.
 
 * What is tactical voting?
 Tactical voting is when you vote for something you don't like because you think
@@ -30,8 +33,7 @@ prevent the Conservative candidate winning in your parliamentary constituency.
 Multilevel regression and poststratification means making assumptions about how
 different kinds of people vote (specifically a multilevel regression model) and
 adjusting these assumptions based on some more assumptions about how many
-people of each kind there are (this is called post-stratification). That's
-it![fn:1].
+people of each kind there are (this is called post-stratification).[fn:1]
 
 MRP is nice because, under the right conditions, it can make it possible to
 extrapolate from a sample population (e.g. the people who answer a survey) to a
@@ -58,7 +60,7 @@ answer any of these questions. This is the biggest issue in my opinion - I
 can't see any good reason why the analysis couldn't be made fully reproducible.
 
 The second problem is that, even without having any idea what kind of MRP
-analysis Focaldata did, it was probably not the best possible prediction of the
+analysis focaldata did, it was probably not the best possible prediction of the
 result on polling day. For one thing, it assumes that nothing will change
 between now and then. In the previous election campaign the two big parties
 tended to do well at the expense of smaller parties. Noone knows how this
@@ -132,7 +134,7 @@ of a problem of responsibility. Focaldata know the most about the analysis, but
 they don't seem to appear on the website outside a footnote in some
 screenshots. Best for Britain seem to have been hoping that people would trust
 trust them to find someone good, do independent research into focaldata or
-perhaps just be comforted by the magic letters 'MRP'. For their part, Focaldata
+perhaps just be comforted by the magic letters 'MRP'. For their part, focaldata
 don't seem to have made proper presentation of their work a condition for
 taking part, which seems like a bit of a mistake given that it was always going
 to be made public.
@@ -145,9 +147,9 @@ up-to-date and reproducible MRP analysis and b) also taking into account
 historical results from your constituency.
 
 In addition, you also need to take into account that other people are going to
-vote tactically as well, and most people who do so won't be relying on
-three-month-old surveys glimsed darkly through an opaque website.
+vote tactically as well, and that most people who do so won't be relying on
+Best for Britain's website.
 
 * Footnotes
 
-[fn:1] Actually there's more! See [[http://www.stat.columbia.edu/~gelman/research/published/mrp_voterfile_20181030.pdf][here]] and [[http://benjaminlauderdale.net/files/papers/mrp-polling-paper.pdf][here]] for some nice papers about MRP. 
+[fn:1] See [[http://www.stat.columbia.edu/~gelman/research/published/mrp_voterfile_20181030.pdf][here]] and [[http://benjaminlauderdale.net/files/papers/mrp-polling-paper.pdf][here]] for some nice papers about MRP. 
