@@ -73,8 +73,8 @@ it's highly unlikely).
 
 Another problem is that the analysis likely does not include historical
 constituency results, even though these are quite informative as to the future
-results. This is the main criticism that have been making on Twitter and I
-think it is correct. For example, in [[https://en.wikipedia.org/wiki/Hendon_(UK_Parliament_constituency)][Hendon]] the Libdem vote share in the last 3
+results. This is the main criticism that has been made on Twitter and I think
+it is correct. For example, in [[https://en.wikipedia.org/wiki/Hendon_(UK_Parliament_constituency)][Hendon]] the Libdem vote share in the last 3
 elections has been between 4% and 12%, but the model [[https://getvoting.org/?postcode=NW4+3BU][apparently]] predicts 27% in
 this one. Obviously history is not destiny, but it is surely comparably
 relevant to survey data obtained three months before polling day and shouldn't
