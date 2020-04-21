@@ -1,0 +1,253 @@
+#+TITLE: A short story about formation energy
+
+A few months ago I decided to learn more about the formation energy numbers
+that appear on the website [[http://equilibrator.weizmann.ac.il/][eQuilibrator]]. I ended up learning a whole lot and
+thought I'd write it down here. 
+
+If you're coming to this topic for the first time, you may also want to check
+out [[http://equilibrator.weizmann.ac.il/static/classic_rxns/about.html][eQuilibrator's documentation]] or cite:noorConsistentEstimationGibbs2013,
+which are both very informative and readable guides to the scientific
+background. I've aimed to add some more detail to give an idea of where
+eQuilibrator's training data comes from and how it is transformed to take into
+account experimental conditions.
+
+* Background
+
+The formation energy of a compound is the amount of energy that is stored or
+released by the chemical reaction that creates it out of its constituent
+elements. For example, according to [[https://en.wikipedia.org/wiki/Standard_Gibbs_free_energy_of_formation][Wikipedia]], liquid water has a formation
+energy of -237.14 kilojoules per mole. This means that creating 1 mole of
+liquid water out of gaseous hydrogen and oxygen stores 237.14 kilojoules of
+energy from the surrounding environment.
+
+I'm interested in formation energies because I want to model the rates of
+metabolic reactions, which depend (among other things) on the thermodynamic
+properties of the metabolites that they produce and consume. For example, the
+compound ATP has a very low formation energy. Metabolism takes advantage of
+this by using ATP to store energy and to drive reactions that would otherwise
+be thermodynamically infeasible. Knowing the exact formation energy of a
+metabolite can help us to find out if a genetic intervention like knocking out
+a reaction or over-expressing an enzyme would help or hinder an organism's
+metabolism.
+
+Unfortunately it's not always straightforward to measure a compound's formation
+energy. Metabolic networks involve lots of compounds, and not all of them have
+been measured accurately. As a result, there is a lot to be gained by taking
+advantage of scientific knowledge and statistical machinery, so as to make the
+best possible use of the available information. Over the last decade or so, as
+metabolic modelling has become more feasible and popular, there has been a
+corresponding effort to estimate formation energies more accurately, and to
+increase the number of compounds whose formation energy can be estimated.
+
+In this short story I'll try to explain how this kind of modelling works, using
+worked examples. I lean heavily on the 'component contribution' method from
+cite:noorConsistentEstimationGibbs2013, which underpins the website
+[[http://equilibrator.weizmann.ac.il/][equilibrator]] and has a great collection of related [[https://gitlab.com/equilibrator/component-contribution/][python libraries]].
+
+My original code can be found here - to run it yourself you'll need a python 3
+environment with the following packages installed:
+
+- equilibrator_cache
+- component_contribution
+- pandas
+- numpy
+- scipy
+
+* Data fetching
+The maintainers of the equilibrator libraries have very helpfully aggregated
+enough machine-readable measurements, auxiliary information and analysis code
+for our purposes.
+
+I wrote a short python script to fetch some of this data and store it as csv
+files. Here it is:
+
+#+INCLUDE: "src/formation_energy/fetch_data.py" src python
+
+The files ~formation_measurements.csv~, ~redox_measurements.csv~ and
+~tecrdb_measurements.csv~ record the results of experiments that can be used to
+infer likely values of compounds' formation energies. The other files contain
+information about the compounds and their names.
+
+** Exploring the tecrdb measurements
+
+The experiments in ~tecrdb_measurements.csv~ originally come from [[https://randr.nist.gov/enzyme/][this
+website]]. The researchers who compiled it scanned lots of papers like this
+
+[[file:../img/citrate_synthase_measurements_paper.png]]
+
+and put them in machine-readable form like this
+
+[[file:../img/citrate_synthase_tecrdb.png]]
+
+It is possible to download the results from [[https://randr.nist.gov/enzyme/][the NIST website]] directly, but I
+preferred to use the equilibrator data as this saved some web scraping and also
+makes it easier to ensure direct comparability with other peoples' work.
+
+The measurements in the TECRDB record a quantity called $K'$, which is the
+ratio, at given experimental conditions, of substrates to products when a
+reaction is at thermal equilibrium. This quantity is related to the standard
+gibbs free energy of the reaction, which in turn is related to the formation
+energies of the compounds involved in the reaction.
+
+Here is a graph showing the distribution of the raw $K'$ measurements for
+different reactions, arraged according to each reaction's mean measured
+value. Each measurement's colour represents the pH at which it was obtained.
+
+[[file:../img/tecrdb_kprime.png]]
+
+Looking at the colours, it is clear that, for many reactions, the darker, bluer
+spots are on the left and the lighter, yellower spots are on the right. For
+these reactions, the measured $K'$ values were higher when the experiment was
+done at a higher pH. This is what one would expect based on the underlying
+science, as many of the measured chemical reactions are sensitive to hydrogen
+ions. 
+
+Accounting for the effect of experimental conditions like pH is a key part of
+analysing this data.
+
+*** From equilibrium constants to condition-specific standard gibbs free energy changes
+In order to connect the reaction-specific $K'$ measurements in the TECRDB with
+the compound-specific formation energies that we are interested in, the first
+step is to find the gibbs free energy change corresponding to each measurement.
+
+This is straightforward, as the condition-specific gibbs free energy change
+$\Delta_r G'^{o}$ at temperature $T$ is related to $K'$ as follows:
+
+$$
+\Delta_r G'^{o} = -RT\ln(K')
+$$
+
+where $R$ is a physical constant (the universal gas constant).
+
+Applying this transformation produces the following standard gibbs free energy
+measurements:
+
+[[file:../img/tecrdb_dgprime.png]]
+
+There is clearly still a systematic dependence on pH for many reactions - I
+explore below how the component contribution attempts to take into account pH
+and other experimental conditions.
+
+** Formation energy measurements
+The next source of relevant data are direct measurements of compound formation
+energies, taken from cite:albertyThermodynamicsBiochemicalReactions2003 and
+some other sources (see the column 'reference' in ~formation_measurements.csv~
+for details). The measurements are of the are all recorded as having been taken
+at the same pH and temperature.
+
+Here is a plot of these formation energy measurements:
+
+[[file:../img/formation_dgprime.png]]
+ 
+The range of $\Delta_f G'^o$ values shown here is much greater than that of the
+TECRDB $\Delta_r G'^o$ values plotted above. This is because of a technical
+limitation that means most biochemical reactions can only be measured when
+their $\Delta_r G'^o$ value is close to zero.
+
+** Redox reaction measurements
+The table ~redox_measurements.csv~ records changes in reduction potential due
+to redox reactions, where a compound gains an electron. For example,
+cite:loach2010oxidation records NAD reduction, where the compound NAD(+) turns
+into NADH by gaining an electron, as changing the reduction potential by -0.32
+Volts per mole.
+
+The reduction potential change $E'$ of a redox reaction is related to its
+condition-specific gibbs free energy change $\Delta_r G'^{o}$ by the following
+equation:
+
+$$
+\Delta_r G'^{o} = -F * E' * \Delta_e
+$$
+
+where $F$ is the Faraday constant and $\Delta_e$ is the number of electrons
+transferred by the reaction.
+
+Here is a plot of the $\Delta_r G'^{o}$ values of the measured redox reactions.
+
+[[file:../img/redox_dgprime.png]]
+
+* How to account for experimental conditions?
+
+This section sets out how the component contribution method preprocesses the
+reaction measurements it takes in, so as to take into account the effect of the
+experimental conditions under which the measurements were obtained. Most of
+what follows comes from cite:albertyThermodynamicsBiochemicalReactions2003,
+while the code examples are heavily inspired by the equilibrator packages.
+
+The component contribution method takes experimental conditions into account by
+transforming the measured $K'$ values to standard condition gibbs free energies
+of reaction, which are then used as inputs to a statistical model. To do this
+transformation, component contribution takes advantage of some scientific
+knowledge about the effects of temperature, ionic strength and the
+concentration of hydrogen and magnesium ions.
+
+** From condition-specific to standard gibbs free energy changes
+For each measurement, the component contribution method obtains a
+standard-condition gibbs free energy change $\Delta_r G^{o}$ corresponding to
+the measured condition-specific value $\Delta_r G^{o}'$ using inverse Legendre
+transformations, as described in
+cite:albertyThermodynamicsBiochemicalReactions2003. 
+
+The relationship between the two quantities is as follows:
+
+$$
+\Delta_r G^{o} = \Delta_r G^{o}' - \frac{ddg}{RT} \cdot RT
+$$
+
+The $ddg/RT$ quantity in this equation is obtained by the following procedure:
+
+    1. Find the standard condition $ddg/RT$ value for each microspecies in the
+       reaction by inferring it from acid dissociation constants.
+
+    2. Find the condition-specific $ddg/RT$ value for each microspecies in the
+       reaction by adding the standard condition value to the legendre
+       transform adjustment based on the conditions (pH, pMg, ionic strength
+       and temperature) and the microspecies's number of protons, charge and
+       number of magnesium atoms.
+
+    3. Find each compound's $ddg/RT$ value by calculating the log-sum-exp of -1
+       times the condition-specific $ddg/RT$ of each its component
+       microspecies, then multiplying the result by -1.
+
+    4. Find the reaction's $ddg/RT$ value by adding together the product of
+       each compound's $ddg/RT$ value and its stoichiometric coeffient.
+
+
+Here are some python functions I made that implement this procedure with the
+help of the package [[https://gitlab.com/equilibrator/equilibrator-cache][equilibrator_cache]], which supplies the standard-condition
+$ddg/RT$ for each microspecies and maps microspecies to compounds and compounds
+and stoichiometric coefficients to reactions:
+
+#+INCLUDE: "src/formation_energy/legendre.py" src python
+
+Here is the same graph as before, but now with transformed, standard condition
+gibbs free energy changes:
+
+[[file:../img/tecrdb_standard_dg.png]]
+
+The colors show the $ddg/RT$ value for each reaction, i.e. essentially the
+difference between the untransformed and transformed values. It is clear from
+the graph that the adjustments due to Legendre transforms are substantial.
+
+Using inverse Legendre transforms to coerce the measurements to standard
+conditions before modelling is better than naively using the $\Delta_r G^{o}'$
+values - see the supplementary appendix S1 of
+cite:noorConsistentEstimationGibbs2013 for a comparison of these two
+alternatives. However, this method introduces several issues. First, any
+uncertainty as to the dissociation constants used to infer each microspecies's
+standard condition $ddg/RT$ value is ignored. Second, the experimental
+conditions - particularly pMg and ionic strength - are not always recorded
+accurately and are sometimes missing altogether. In order to maintain
+reasonable coverage, the component contribution method imputes default values
+where pMg (default value 14) or ionic strength (default value 0.25M) is
+missing.
+
+These issues could be addressed by accounting for them when modelling the
+transformed data, for example by using a model that can assume different
+(hopefully worse) accuracies for measurements where a default ionic strength or
+pMg value was assumed. Alternatively, the dependency of measurements on
+experimental conditions could be included in a model using forward Legendre
+transforms rather than being addressed in pre-processing.
+
+
+* References

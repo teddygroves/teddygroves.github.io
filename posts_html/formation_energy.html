@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>A short story about formation energy</title>
+  <style>
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      span.underline{text-decoration: underline;}
+      div.column{display: inline-block; vertical-align: top; width: 50%;}
+  </style>
+  <style>
+code.sourceCode > span { display: inline-block; line-height: 1.25; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+  </style>
+  <link rel="stylesheet" href="../style.css" />
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">A short story about formation energy</h1>
+</header>
+<p>A few months ago I decided to learn more about the formation energy numbers that appear on the website <a href="http://equilibrator.weizmann.ac.il/">eQuilibrator</a>. I ended up learning a whole lot and thought I'd write it down here.</p>
+<p>If you're coming to this topic for the first time, you may also want to check out <a href="http://equilibrator.weizmann.ac.il/static/classic_rxns/about.html">eQuilibrator's documentation</a> or <span class="citation" data-cites="noorConsistentEstimationGibbs2013">Noor et al. (2013)</span>, which are both very informative and readable guides to the scientific background. I've aimed to add some more detail to give an idea of where eQuilibrator's training data comes from and how it is transformed to take into account experimental conditions.</p>
+<h1 id="background">Background</h1>
+<p>The formation energy of a compound is the amount of energy that is stored or released by the chemical reaction that creates it out of its constituent elements. For example, according to <a href="https://en.wikipedia.org/wiki/Standard_Gibbs_free_energy_of_formation">Wikipedia</a>, liquid water has a formation energy of -237.14 kilojoules per mole. This means that creating 1 mole of liquid water out of gaseous hydrogen and oxygen stores 237.14 kilojoules of energy from the surrounding environment.</p>
+<p>I'm interested in formation energies because I want to model the rates of metabolic reactions, which depend (among other things) on the thermodynamic properties of the metabolites that they produce and consume. For example, the compound ATP has a very low formation energy. Metabolism takes advantage of this by using ATP to store energy and to drive reactions that would otherwise be thermodynamically infeasible. Knowing the exact formation energy of a metabolite can help us to find out if a genetic intervention like knocking out a reaction or over-expressing an enzyme would help or hinder an organism's metabolism.</p>
+<p>Unfortunately it's not always straightforward to measure a compound's formation energy. Metabolic networks involve lots of compounds, and not all of them have been measured accurately. As a result, there is a lot to be gained by taking advantage of scientific knowledge and statistical machinery, so as to make the best possible use of the available information. Over the last decade or so, as metabolic modelling has become more feasible and popular, there has been a corresponding effort to estimate formation energies more accurately, and to increase the number of compounds whose formation energy can be estimated.</p>
+<p>In this short story I'll try to explain how this kind of modelling works, using worked examples. I lean heavily on the 'component contribution' method from <span class="citation" data-cites="noorConsistentEstimationGibbs2013">Noor et al. (2013)</span>, which underpins the website <a href="http://equilibrator.weizmann.ac.il/">equilibrator</a> and has a great collection of related <a href="https://gitlab.com/equilibrator/component-contribution/">python libraries</a>.</p>
+<p>My original code can be found here - to run it yourself you'll need a python 3 environment with the following packages installed:</p>
+<ul>
+<li>equilibrator<sub>cache</sub></li>
+<li>component<sub>contribution</sub></li>
+<li>pandas</li>
+<li>numpy</li>
+<li>scipy</li>
+</ul>
+<h1 id="data-fetching">Data fetching</h1>
+<p>The maintainers of the equilibrator libraries have very helpfully aggregated enough machine-readable measurements, auxiliary information and analysis code for our purposes.</p>
+<p>I wrote a short python script to fetch some of this data and store it as csv files. Here it is:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb1-2"><a href="#cb1-2"></a><span class="im">from</span> equilibrator_cache <span class="im">import</span> create_compound_cache_from_quilt</span>
+<span id="cb1-3"><a href="#cb1-3"></a><span class="im">import</span> component_contribution</span>
+<span id="cb1-4"><a href="#cb1-4"></a><span class="im">import</span> quilt</span>
+<span id="cb1-5"><a href="#cb1-5"></a></span>
+<span id="cb1-6"><a href="#cb1-6"></a></span>
+<span id="cb1-7"><a href="#cb1-7"></a>QUILT_PACKAGE_VERSION <span class="op">=</span> <span class="st">&#39;0.2.9&#39;</span></span>
+<span id="cb1-8"><a href="#cb1-8"></a></span>
+<span id="cb1-9"><a href="#cb1-9"></a><span class="kw">def</span> fetch_data(quilt_pkg):</span>
+<span id="cb1-10"><a href="#cb1-10"></a>    ccache <span class="op">=</span> create_compound_cache_from_quilt(version<span class="op">=</span>QUILT_PACKAGE_VERSION)</span>
+<span id="cb1-11"><a href="#cb1-11"></a>    con <span class="op">=</span> ccache.engine</span>
+<span id="cb1-12"><a href="#cb1-12"></a>    <span class="cf">return</span> {</span>
+<span id="cb1-13"><a href="#cb1-13"></a>        <span class="st">&#39;compounds&#39;</span>: pd.read_sql_table(<span class="st">&#39;compounds&#39;</span>, con<span class="op">=</span>con),</span>
+<span id="cb1-14"><a href="#cb1-14"></a>        <span class="st">&#39;compound_identifiers&#39;</span>: pd.read_sql_table(<span class="st">&#39;compound_identifiers&#39;</span>, con<span class="op">=</span>con),</span>
+<span id="cb1-15"><a href="#cb1-15"></a>        <span class="st">&#39;compound_microspecies&#39;</span>: pd.read_sql_table(<span class="st">&#39;compound_microspecies&#39;</span>, con<span class="op">=</span>con),</span>
+<span id="cb1-16"><a href="#cb1-16"></a>        <span class="st">&#39;registries&#39;</span>: pd.read_sql_table(<span class="st">&#39;registries&#39;</span>, con<span class="op">=</span>con),</span>
+<span id="cb1-17"><a href="#cb1-17"></a>        <span class="st">&#39;formation_measurements&#39;</span>: quilt_pkg.train.formation_energies_transformed(),</span>
+<span id="cb1-18"><a href="#cb1-18"></a>        <span class="st">&#39;redox_measurements&#39;</span>: quilt_pkg.train.redox(),</span>
+<span id="cb1-19"><a href="#cb1-19"></a>        <span class="st">&#39;tecrdb_measurements&#39;</span>: quilt_pkg.train.TECRDB(),</span>
+<span id="cb1-20"><a href="#cb1-20"></a>    }</span>
+<span id="cb1-21"><a href="#cb1-21"></a></span>
+<span id="cb1-22"><a href="#cb1-22"></a></span>
+<span id="cb1-23"><a href="#cb1-23"></a><span class="cf">if</span> <span class="va">__name__</span> <span class="op">==</span> <span class="st">&quot;__main__&quot;</span>:</span>
+<span id="cb1-24"><a href="#cb1-24"></a>    <span class="cf">try</span>:</span>
+<span id="cb1-25"><a href="#cb1-25"></a>        quilt_pkg <span class="op">=</span> quilt.load(<span class="st">&#39;equilibrator/component_contribution&#39;</span>)</span>
+<span id="cb1-26"><a href="#cb1-26"></a>    <span class="cf">except</span>:</span>
+<span id="cb1-27"><a href="#cb1-27"></a>        quilt.install(</span>
+<span id="cb1-28"><a href="#cb1-28"></a>            package<span class="op">=</span>component_contribution.DEFAULT_QUILT_PKG,</span>
+<span id="cb1-29"><a href="#cb1-29"></a>            version<span class="op">=</span>QUILT_PACKAGE_VERSION,</span>
+<span id="cb1-30"><a href="#cb1-30"></a>            force<span class="op">=</span><span class="va">True</span></span>
+<span id="cb1-31"><a href="#cb1-31"></a>        )</span>
+<span id="cb1-32"><a href="#cb1-32"></a>        quilt_pkg <span class="op">=</span> quilt.load(<span class="st">&#39;equilibrator/component_contribution&#39;</span>)</span>
+<span id="cb1-33"><a href="#cb1-33"></a></span>
+<span id="cb1-34"><a href="#cb1-34"></a>    dfs <span class="op">=</span> fetch_data(quilt_pkg)</span>
+<span id="cb1-35"><a href="#cb1-35"></a></span>
+<span id="cb1-36"><a href="#cb1-36"></a>    <span class="cf">for</span> df_name, df <span class="kw">in</span> dfs.items():</span>
+<span id="cb1-37"><a href="#cb1-37"></a>        df.to_csv(<span class="ss">f&#39;data/</span><span class="sc">{</span>df_name<span class="sc">}</span><span class="ss">.csv&#39;</span>)</span></code></pre></div>
+<p>The files <code>formation_measurements.csv</code>, <code>redox_measurements.csv</code> and <code>tecrdb_measurements.csv</code> record the results of experiments that can be used to infer likely values of compounds' formation energies. The other files contain information about the compounds and their names.</p>
+<h2 id="exploring-the-tecrdb-measurements">Exploring the tecrdb measurements</h2>
+<p>The experiments in <code>tecrdb_measurements.csv</code> originally come from <a href="https://randr.nist.gov/enzyme/">this website</a>. The researchers who compiled it scanned lots of papers like this</p>
+<p><img src="../img/citrate_synthase_measurements_paper.png" /></p>
+<p>and put them in machine-readable form like this</p>
+<p><img src="../img/citrate_synthase_tecrdb.png" /></p>
+<p>It is possible to download the results from <a href="https://randr.nist.gov/enzyme/">the NIST website</a> directly, but I preferred to use the equilibrator data as this saved some web scraping and also makes it easier to ensure direct comparability with other peoples' work.</p>
+<p>The measurements in the TECRDB record a quantity called <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>K</mi><mi>′</mi></mrow><annotation encoding="application/x-tex">K&#39;</annotation></semantics></math>, which is the ratio, at given experimental conditions, of substrates to products when a reaction is at thermal equilibrium. This quantity is related to the standard gibbs free energy of the reaction, which in turn is related to the formation energies of the compounds involved in the reaction.</p>
+<p>Here is a graph showing the distribution of the raw <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>K</mi><mi>′</mi></mrow><annotation encoding="application/x-tex">K&#39;</annotation></semantics></math> measurements for different reactions, arraged according to each reaction's mean measured value. Each measurement's colour represents the pH at which it was obtained.</p>
+<p><img src="../img/tecrdb_kprime.png" /></p>
+<p>Looking at the colours, it is clear that, for many reactions, the darker, bluer spots are on the left and the lighter, yellower spots are on the right. For these reactions, the measured <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>K</mi><mi>′</mi></mrow><annotation encoding="application/x-tex">K&#39;</annotation></semantics></math> values were higher when the experiment was done at a higher pH. This is what one would expect based on the underlying science, as many of the measured chemical reactions are sensitive to hydrogen ions.</p>
+<p>Accounting for the effect of experimental conditions like pH is a key part of analysing this data.</p>
+<h3 id="from-equilibrium-constants-to-condition-specific-standard-gibbs-free-energy-changes">From equilibrium constants to condition-specific standard gibbs free energy changes</h3>
+<p>In order to connect the reaction-specific <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>K</mi><mi>′</mi></mrow><annotation encoding="application/x-tex">K&#39;</annotation></semantics></math> measurements in the TECRDB with the compound-specific formation energies that we are interested in, the first step is to find the gibbs free energy change corresponding to each measurement.</p>
+<p>This is straightforward, as the condition-specific gibbs free energy change <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>Δ</mi><mi>r</mi></msub><mi>G</mi><msup><mi>′</mi><mi>o</mi></msup></mrow><annotation encoding="application/x-tex">\Delta_r G&#39;^{o}</annotation></semantics></math> at temperature <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>T</mi><annotation encoding="application/x-tex">T</annotation></semantics></math> is related to <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>K</mi><mi>′</mi></mrow><annotation encoding="application/x-tex">K&#39;</annotation></semantics></math> as follows:</p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>Δ</mi><mi>r</mi></msub><mi>G</mi><msup><mi>′</mi><mi>o</mi></msup><mo>=</mo><mo>−</mo><mi>R</mi><mi>T</mi><mo>ln</mo><mo stretchy="false" form="prefix">(</mo><mi>K</mi><mi>′</mi><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">
+\Delta_r G&#39;^{o} = -RT\ln(K&#39;)
+</annotation></semantics></math></p>
+<p>where <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>R</mi><annotation encoding="application/x-tex">R</annotation></semantics></math> is a physical constant (the universal gas constant).</p>
+<p>Applying this transformation produces the following standard gibbs free energy measurements:</p>
+<p><img src="../img/tecrdb_dgprime.png" /></p>
+<p>There is clearly still a systematic dependence on pH for many reactions - I explore below how the component contribution attempts to take into account pH and other experimental conditions.</p>
+<h2 id="formation-energy-measurements">Formation energy measurements</h2>
+<p>The next source of relevant data are direct measurements of compound formation energies, taken from <span class="citation" data-cites="albertyThermodynamicsBiochemicalReactions2003">Alberty (2003)</span> and some other sources (see the column 'reference' in <code>formation_measurements.csv</code> for details). The measurements are of the are all recorded as having been taken at the same pH and temperature.</p>
+<p>Here is a plot of these formation energy measurements:</p>
+<p><img src="../img/formation_dgprime.png" /></p>
+<p>The range of <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>Δ</mi><mi>f</mi></msub><mi>G</mi><msup><mi>′</mi><mi>o</mi></msup></mrow><annotation encoding="application/x-tex">\Delta_f G&#39;^o</annotation></semantics></math> values shown here is much greater than that of the TECRDB <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>Δ</mi><mi>r</mi></msub><mi>G</mi><msup><mi>′</mi><mi>o</mi></msup></mrow><annotation encoding="application/x-tex">\Delta_r G&#39;^o</annotation></semantics></math> values plotted above. This is because of a technical limitation that means most biochemical reactions can only be measured when their <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>Δ</mi><mi>r</mi></msub><mi>G</mi><msup><mi>′</mi><mi>o</mi></msup></mrow><annotation encoding="application/x-tex">\Delta_r G&#39;^o</annotation></semantics></math> value is close to zero.</p>
+<h2 id="redox-reaction-measurements">Redox reaction measurements</h2>
+<p>The table <code>redox_measurements.csv</code> records changes in reduction potential due to redox reactions, where a compound gains an electron. For example, <span class="citation" data-cites="loach2010oxidation">Loach (2010)</span> records NAD reduction, where the compound NAD(+) turns into NADH by gaining an electron, as changing the reduction potential by -0.32 Volts per mole.</p>
+<p>The reduction potential change <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>E</mi><mi>′</mi></mrow><annotation encoding="application/x-tex">E&#39;</annotation></semantics></math> of a redox reaction is related to its condition-specific gibbs free energy change <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>Δ</mi><mi>r</mi></msub><mi>G</mi><msup><mi>′</mi><mi>o</mi></msup></mrow><annotation encoding="application/x-tex">\Delta_r G&#39;^{o}</annotation></semantics></math> by the following equation:</p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>Δ</mi><mi>r</mi></msub><mi>G</mi><msup><mi>′</mi><mi>o</mi></msup><mo>=</mo><mo>−</mo><mi>F</mi><mo>*</mo><mi>E</mi><mi>′</mi><mo>*</mo><msub><mi>Δ</mi><mi>e</mi></msub></mrow><annotation encoding="application/x-tex">
+\Delta_r G&#39;^{o} = -F * E&#39; * \Delta_e
+</annotation></semantics></math></p>
+<p>where <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>F</mi><annotation encoding="application/x-tex">F</annotation></semantics></math> is the Faraday constant and <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>Δ</mi><mi>e</mi></msub><annotation encoding="application/x-tex">\Delta_e</annotation></semantics></math> is the number of electrons transferred by the reaction.</p>
+<p>Here is a plot of the <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>Δ</mi><mi>r</mi></msub><mi>G</mi><msup><mi>′</mi><mi>o</mi></msup></mrow><annotation encoding="application/x-tex">\Delta_r G&#39;^{o}</annotation></semantics></math> values of the measured redox reactions.</p>
+<p><img src="../img/redox_dgprime.png" /></p>
+<h1 id="how-to-account-for-experimental-conditions">How to account for experimental conditions?</h1>
+<p>This section sets out how the component contribution method preprocesses the reaction measurements it takes in, so as to take into account the effect of the experimental conditions under which the measurements were obtained. Most of what follows comes from <span class="citation" data-cites="albertyThermodynamicsBiochemicalReactions2003">Alberty (2003)</span>, while the code examples are heavily inspired by the equilibrator packages.</p>
+<p>The component contribution method takes experimental conditions into account by transforming the measured <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>K</mi><mi>′</mi></mrow><annotation encoding="application/x-tex">K&#39;</annotation></semantics></math> values to standard condition gibbs free energies of reaction, which are then used as inputs to a statistical model. To do this transformation, component contribution takes advantage of some scientific knowledge about the effects of temperature, ionic strength and the concentration of hydrogen and magnesium ions.</p>
+<h2 id="from-condition-specific-to-standard-gibbs-free-energy-changes">From condition-specific to standard gibbs free energy changes</h2>
+<p>For each measurement, the component contribution method obtains a standard-condition gibbs free energy change <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>Δ</mi><mi>r</mi></msub><msup><mi>G</mi><mi>o</mi></msup></mrow><annotation encoding="application/x-tex">\Delta_r G^{o}</annotation></semantics></math> corresponding to the measured condition-specific value <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>Δ</mi><mi>r</mi></msub><msup><mi>G</mi><mi>o</mi></msup><mi>′</mi></mrow><annotation encoding="application/x-tex">\Delta_r G^{o}&#39;</annotation></semantics></math> using inverse Legendre transformations, as described in <span class="citation" data-cites="albertyThermodynamicsBiochemicalReactions2003">Alberty (2003)</span>.</p>
+<p>The relationship between the two quantities is as follows:</p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>Δ</mi><mi>r</mi></msub><msup><mi>G</mi><mi>o</mi></msup><mo>=</mo><msub><mi>Δ</mi><mi>r</mi></msub><msup><mi>G</mi><mi>o</mi></msup><mi>′</mi><mo>−</mo><mfrac><mrow><mi>d</mi><mi>d</mi><mi>g</mi></mrow><mrow><mi>R</mi><mi>T</mi></mrow></mfrac><mo>⋅</mo><mi>R</mi><mi>T</mi></mrow><annotation encoding="application/x-tex">
+\Delta_r G^{o} = \Delta_r G^{o}&#39; - \frac{ddg}{RT} \cdot RT
+</annotation></semantics></math></p>
+<p>The <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>d</mi><mi>d</mi><mi>g</mi><mi>/</mi><mi>R</mi><mi>T</mi></mrow><annotation encoding="application/x-tex">ddg/RT</annotation></semantics></math> quantity in this equation is obtained by the following procedure:</p>
+<ol>
+<li><p>Find the standard condition <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>d</mi><mi>d</mi><mi>g</mi><mi>/</mi><mi>R</mi><mi>T</mi></mrow><annotation encoding="application/x-tex">ddg/RT</annotation></semantics></math> value for each microspecies in the reaction by inferring it from acid dissociation constants.</p></li>
+<li><p>Find the condition-specific <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>d</mi><mi>d</mi><mi>g</mi><mi>/</mi><mi>R</mi><mi>T</mi></mrow><annotation encoding="application/x-tex">ddg/RT</annotation></semantics></math> value for each microspecies in the reaction by adding the standard condition value to the legendre transform adjustment based on the conditions (pH, pMg, ionic strength and temperature) and the microspecies's number of protons, charge and number of magnesium atoms.</p></li>
+<li><p>Find each compound's <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>d</mi><mi>d</mi><mi>g</mi><mi>/</mi><mi>R</mi><mi>T</mi></mrow><annotation encoding="application/x-tex">ddg/RT</annotation></semantics></math> value by calculating the log-sum-exp of -1 times the condition-specific <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>d</mi><mi>d</mi><mi>g</mi><mi>/</mi><mi>R</mi><mi>T</mi></mrow><annotation encoding="application/x-tex">ddg/RT</annotation></semantics></math> of each its component microspecies, then multiplying the result by -1.</p></li>
+<li><p>Find the reaction's <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>d</mi><mi>d</mi><mi>g</mi><mi>/</mi><mi>R</mi><mi>T</mi></mrow><annotation encoding="application/x-tex">ddg/RT</annotation></semantics></math> value by adding together the product of each compound's <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>d</mi><mi>d</mi><mi>g</mi><mi>/</mi><mi>R</mi><mi>T</mi></mrow><annotation encoding="application/x-tex">ddg/RT</annotation></semantics></math> value and its stoichiometric coeffient.</p></li>
+</ol>
+<p>Here are some python functions I made that implement this procedure with the help of the package <a href="https://gitlab.com/equilibrator/equilibrator-cache">equilibrator<sub>cache</sub></a>, which supplies the standard-condition <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>d</mi><mi>d</mi><mi>g</mi><mi>/</mi><mi>R</mi><mi>T</mi></mrow><annotation encoding="application/x-tex">ddg/RT</annotation></semantics></math> for each microspecies and maps microspecies to compounds and compounds and stoichiometric coefficients to reactions:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1"></a><span class="co">&quot;&quot;&quot;Functions for doing Legendre transforms&quot;&quot;&quot;</span></span>
+<span id="cb2-2"><a href="#cb2-2"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb2-3"><a href="#cb2-3"></a><span class="im">from</span> equilibrator_cache.models <span class="im">import</span> Compound, CompoundMicrospecies</span>
+<span id="cb2-4"><a href="#cb2-4"></a><span class="im">from</span> equilibrator_cache.reaction <span class="im">import</span> Reaction</span>
+<span id="cb2-5"><a href="#cb2-5"></a><span class="im">from</span> scipy.special <span class="im">import</span> logsumexp</span>
+<span id="cb2-6"><a href="#cb2-6"></a></span>
+<span id="cb2-7"><a href="#cb2-7"></a></span>
+<span id="cb2-8"><a href="#cb2-8"></a>R <span class="op">=</span> <span class="fl">8.31e-3</span>                                       <span class="co"># kJ / mol / K</span></span>
+<span id="cb2-9"><a href="#cb2-9"></a>standard_dg_formation_mg <span class="op">=</span> <span class="fl">-455.3</span>                 <span class="co"># kJ/mol (Mg2+ formation energy)</span></span>
+<span id="cb2-10"><a href="#cb2-10"></a></span>
+<span id="cb2-11"><a href="#cb2-11"></a></span>
+<span id="cb2-12"><a href="#cb2-12"></a><span class="kw">def</span> dh(ionic_strength: <span class="bu">float</span>, temperature: <span class="bu">float</span>) <span class="op">-&gt;</span> <span class="bu">float</span>:</span>
+<span id="cb2-13"><a href="#cb2-13"></a>    <span class="co">&quot;&quot;&quot;Debeye-Hueckel factor for finding an ionic strength/temperature effect.&quot;&quot;&quot;</span></span>
+<span id="cb2-14"><a href="#cb2-14"></a>    _a1 <span class="op">=</span> <span class="fl">1.108</span></span>
+<span id="cb2-15"><a href="#cb2-15"></a>    _a2 <span class="op">=</span> <span class="fl">1.546e-3</span></span>
+<span id="cb2-16"><a href="#cb2-16"></a>    _a3 <span class="op">=</span> <span class="fl">5.959e-6</span></span>
+<span id="cb2-17"><a href="#cb2-17"></a>    B <span class="op">=</span> <span class="fl">1.6</span></span>
+<span id="cb2-18"><a href="#cb2-18"></a>    <span class="cf">if</span> ionic_strength <span class="op">&lt;=</span> <span class="fl">0.0</span>:</span>
+<span id="cb2-19"><a href="#cb2-19"></a>        <span class="cf">return</span> <span class="fl">0.0</span></span>
+<span id="cb2-20"><a href="#cb2-20"></a>    alpha <span class="op">=</span> _a1 <span class="op">-</span> _a2 <span class="op">*</span> temperature <span class="op">+</span> _a3 <span class="op">*</span> temperature <span class="op">**</span> <span class="dv">2</span></span>
+<span id="cb2-21"><a href="#cb2-21"></a>    <span class="cf">return</span> alpha <span class="op">*</span> ionic_strength <span class="op">**</span> <span class="fl">0.5</span> <span class="op">/</span> (<span class="fl">1.0</span> <span class="op">+</span> B <span class="op">*</span> ionic_strength <span class="op">**</span> <span class="fl">0.5</span>)</span>
+<span id="cb2-22"><a href="#cb2-22"></a></span>
+<span id="cb2-23"><a href="#cb2-23"></a></span>
+<span id="cb2-24"><a href="#cb2-24"></a><span class="kw">def</span> legendre_transform(</span>
+<span id="cb2-25"><a href="#cb2-25"></a>    p_h: <span class="bu">float</span>,</span>
+<span id="cb2-26"><a href="#cb2-26"></a>    ionic_strength: <span class="bu">float</span>,</span>
+<span id="cb2-27"><a href="#cb2-27"></a>    temperature: <span class="bu">float</span>,</span>
+<span id="cb2-28"><a href="#cb2-28"></a>    p_mg: <span class="bu">float</span>,</span>
+<span id="cb2-29"><a href="#cb2-29"></a>    num_protons: <span class="bu">float</span>,</span>
+<span id="cb2-30"><a href="#cb2-30"></a>    charge: <span class="bu">float</span>,</span>
+<span id="cb2-31"><a href="#cb2-31"></a>    num_magnesiums: <span class="bu">float</span>,</span>
+<span id="cb2-32"><a href="#cb2-32"></a>):</span>
+<span id="cb2-33"><a href="#cb2-33"></a>    log10 <span class="op">=</span> np.log(<span class="dv">10</span>)</span>
+<span id="cb2-34"><a href="#cb2-34"></a>    RT <span class="op">=</span> R <span class="op">*</span> temperature</span>
+<span id="cb2-35"><a href="#cb2-35"></a>    ph_part <span class="op">=</span> num_protons <span class="op">*</span> log10 <span class="op">*</span> p_h</span>
+<span id="cb2-36"><a href="#cb2-36"></a>    dh_part <span class="op">=</span> (num_protons <span class="op">-</span> charge <span class="op">**</span> <span class="dv">2</span>) <span class="op">*</span> dh(ionic_strength, temperature)</span>
+<span id="cb2-37"><a href="#cb2-37"></a>    mg_part <span class="op">=</span> <span class="dv">0</span> <span class="cf">if</span> num_magnesiums <span class="op">&lt;=</span> <span class="dv">0</span> <span class="cf">else</span> num_magnesiums <span class="op">*</span> (</span>
+<span id="cb2-38"><a href="#cb2-38"></a>        p_mg <span class="op">*</span> log10 <span class="op">-</span> standard_dg_formation_mg <span class="op">/</span> RT</span>
+<span id="cb2-39"><a href="#cb2-39"></a>    )</span>
+<span id="cb2-40"><a href="#cb2-40"></a>    <span class="cf">return</span> ph_part <span class="op">+</span> dh_part <span class="op">+</span> mg_part</span>
+<span id="cb2-41"><a href="#cb2-41"></a></span>
+<span id="cb2-42"><a href="#cb2-42"></a></span>
+<span id="cb2-43"><a href="#cb2-43"></a><span class="kw">def</span> get_ddg_over_rt_for_microspecies(</span>
+<span id="cb2-44"><a href="#cb2-44"></a>    ms: CompoundMicrospecies,</span>
+<span id="cb2-45"><a href="#cb2-45"></a>    p_h: <span class="bu">float</span>,</span>
+<span id="cb2-46"><a href="#cb2-46"></a>    ionic_strength: <span class="bu">float</span>,</span>
+<span id="cb2-47"><a href="#cb2-47"></a>    temperature: <span class="bu">float</span>,</span>
+<span id="cb2-48"><a href="#cb2-48"></a>    p_mg: <span class="bu">float</span></span>
+<span id="cb2-49"><a href="#cb2-49"></a>):</span>
+<span id="cb2-50"><a href="#cb2-50"></a>    conditions <span class="op">=</span> p_h, ionic_strength, temperature, p_mg</span>
+<span id="cb2-51"><a href="#cb2-51"></a>    ms_facts <span class="op">=</span> ms.number_protons, ms.charge, ms.number_magnesiums</span>
+<span id="cb2-52"><a href="#cb2-52"></a>    <span class="cf">return</span> ms.ddg_over_rt <span class="op">+</span> legendre_transform(<span class="op">*</span>conditions, <span class="op">*</span>ms_facts)</span>
+<span id="cb2-53"><a href="#cb2-53"></a></span>
+<span id="cb2-54"><a href="#cb2-54"></a></span>
+<span id="cb2-55"><a href="#cb2-55"></a><span class="kw">def</span> get_ddg_over_rt_for_compound(</span>
+<span id="cb2-56"><a href="#cb2-56"></a>    cpd: Compound,</span>
+<span id="cb2-57"><a href="#cb2-57"></a>    p_h: <span class="bu">float</span>,</span>
+<span id="cb2-58"><a href="#cb2-58"></a>    ionic_strength: <span class="bu">float</span>,</span>
+<span id="cb2-59"><a href="#cb2-59"></a>    temperature: <span class="bu">float</span>,</span>
+<span id="cb2-60"><a href="#cb2-60"></a>    p_mg: <span class="bu">float</span></span>
+<span id="cb2-61"><a href="#cb2-61"></a>):</span>
+<span id="cb2-62"><a href="#cb2-62"></a>    conditions <span class="op">=</span> p_h, ionic_strength, temperature, p_mg</span>
+<span id="cb2-63"><a href="#cb2-63"></a>    <span class="cf">return</span> <span class="op">-</span>logsumexp([</span>
+<span id="cb2-64"><a href="#cb2-64"></a>        <span class="dv">-1</span> <span class="op">*</span> get_ddg_over_rt_for_microspecies(ms, <span class="op">*</span>conditions)</span>
+<span id="cb2-65"><a href="#cb2-65"></a>        <span class="cf">for</span> ms <span class="kw">in</span> cpd.microspecies</span>
+<span id="cb2-66"><a href="#cb2-66"></a>    ])</span>
+<span id="cb2-67"><a href="#cb2-67"></a></span>
+<span id="cb2-68"><a href="#cb2-68"></a></span>
+<span id="cb2-69"><a href="#cb2-69"></a><span class="kw">def</span> get_ddg_over_rt_for_reaction(</span>
+<span id="cb2-70"><a href="#cb2-70"></a>        rxn: Reaction,</span>
+<span id="cb2-71"><a href="#cb2-71"></a>        p_h: <span class="bu">float</span>,</span>
+<span id="cb2-72"><a href="#cb2-72"></a>        ionic_strength: <span class="bu">float</span>,</span>
+<span id="cb2-73"><a href="#cb2-73"></a>        temperature: <span class="bu">float</span>,</span>
+<span id="cb2-74"><a href="#cb2-74"></a>        p_mg: <span class="bu">float</span></span>
+<span id="cb2-75"><a href="#cb2-75"></a>):</span>
+<span id="cb2-76"><a href="#cb2-76"></a>    conditions <span class="op">=</span> p_h, ionic_strength, temperature, p_mg</span>
+<span id="cb2-77"><a href="#cb2-77"></a>    <span class="cf">return</span> <span class="bu">sum</span>([</span>
+<span id="cb2-78"><a href="#cb2-78"></a>        stoichiometric_coef <span class="op">*</span> get_ddg_over_rt_for_compound(cpd, <span class="op">*</span>conditions)</span>
+<span id="cb2-79"><a href="#cb2-79"></a>        <span class="cf">for</span> cpd, stoichiometric_coef <span class="kw">in</span> rxn.items(protons<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb2-80"><a href="#cb2-80"></a>    ])</span></code></pre></div>
+<p>Here is the same graph as before, but now with transformed, standard condition gibbs free energy changes:</p>
+<p><img src="../img/tecrdb_standard_dg.png" /></p>
+<p>The colors show the <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>d</mi><mi>d</mi><mi>g</mi><mi>/</mi><mi>R</mi><mi>T</mi></mrow><annotation encoding="application/x-tex">ddg/RT</annotation></semantics></math> value for each reaction, i.e. essentially the difference between the untransformed and transformed values. It is clear from the graph that the adjustments due to Legendre transforms are substantial.</p>
+<p>Using inverse Legendre transforms to coerce the measurements to standard conditions before modelling is better than naively using the <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>Δ</mi><mi>r</mi></msub><msup><mi>G</mi><mi>o</mi></msup><mi>′</mi></mrow><annotation encoding="application/x-tex">\Delta_r G^{o}&#39;</annotation></semantics></math> values - see the supplementary appendix S1 of <span class="citation" data-cites="noorConsistentEstimationGibbs2013">Noor et al. (2013)</span> for a comparison of these two alternatives. However, this method introduces several issues. First, any uncertainty as to the dissociation constants used to infer each microspecies's standard condition <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>d</mi><mi>d</mi><mi>g</mi><mi>/</mi><mi>R</mi><mi>T</mi></mrow><annotation encoding="application/x-tex">ddg/RT</annotation></semantics></math> value is ignored. Second, the experimental conditions - particularly pMg and ionic strength - are not always recorded accurately and are sometimes missing altogether. In order to maintain reasonable coverage, the component contribution method imputes default values where pMg (default value 14) or ionic strength (default value 0.25M) is missing.</p>
+<p>These issues could be addressed by accounting for them when modelling the transformed data, for example by using a model that can assume different (hopefully worse) accuracies for measurements where a default ionic strength or pMg value was assumed. Alternatively, the dependency of measurements on experimental conditions could be included in a model using forward Legendre transforms rather than being addressed in pre-processing.</p>
+<h1 id="references" class="unnumbered">References</h1>
+<div id="refs" class="references" role="doc-bibliography">
+<div id="ref-albertyThermodynamicsBiochemicalReactions2003">
+<p>Alberty, Robert A. 2003. <em>Thermodynamics of Biochemical Reactions</em>. Hoboken, N.J: Wiley-Interscience.</p>
+</div>
+<div id="ref-loach2010oxidation">
+<p>Loach, Paul A. 2010. “Oxidation-Reduction Potentials, Absorbance Bands and Molar Absorbance of Compounds Used in Biochemical Studies.” <em>Handbook of Biochemistry and Molecular Biology, 4th Ed. CRC Press, Boca Raton, FL</em>, 557–63.</p>
+</div>
+<div id="ref-noorConsistentEstimationGibbs2013">
+<p>Noor, Elad, Hulda S. Haraldsdóttir, Ron Milo, and Ronan M. T. Fleming. 2013. “Consistent Estimation of Gibbs Energy Using Component Contributions.” Edited by Daniel A. Beard. <em>PLoS Computational Biology</em> 9 (7): e1003098. <a href="https://doi.org/10.1371/journal.pcbi.1003098">https://doi.org/10.1371/journal.pcbi.1003098</a>.</p>
+</div>
+</div>
+</body>
+</html>

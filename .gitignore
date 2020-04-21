@@ -1,3 +1,5 @@
 .DS_Store
 drafts/*
-*#
+*#*
+*/__pycache__/*
+src/formation_energy/data/*
