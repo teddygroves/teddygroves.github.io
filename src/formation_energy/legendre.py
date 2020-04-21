@@ -15,10 +15,10 @@ def dh(ionic_strength: float, temperature: float) -> float:
     _a2 = 1.546e-3
     _a3 = 5.959e-6
     B = 1.6
-    if ionic_strength <= 0.0:
-        return 0.0
     alpha = _a1 - _a2 * temperature + _a3 * temperature ** 2
-    return alpha * ionic_strength ** 0.5 / (1.0 + B * ionic_strength ** 0.5)
+    return 0.0 if ionic_strength <= 0.0 else (
+        alpha * ionic_strength ** 0.5 / (1.0 + B * ionic_strength ** 0.5)
+    )
 
 
 def legendre_transform(

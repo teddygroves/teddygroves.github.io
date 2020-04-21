@@ -173,7 +173,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>Δ</mi><mi>r</mi></msub><mi>G</mi><msup><mi>′</mi><mi>o</mi></msup><mo>=</mo><mo>−</mo><mi>F</mi><mo>*</mo><mi>E</mi><mi>′</mi><mo>*</mo><msub><mi>Δ</mi><mi>e</mi></msub></mrow><annotation encoding="application/x-tex">
 \Delta_r G&#39;^{o} = -F * E&#39; * \Delta_e
 </annotation></semantics></math></p>
-<p>where <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>F</mi><annotation encoding="application/x-tex">F</annotation></semantics></math> is the Faraday constant and <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>Δ</mi><mi>e</mi></msub><annotation encoding="application/x-tex">\Delta_e</annotation></semantics></math> is the number of electrons transferred by the reaction.</p>
+<p>where <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>F</mi><annotation encoding="application/x-tex">F</annotation></semantics></math> is the Faraday constant and <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>Δ</mi><mi>e</mi></msub><annotation encoding="application/x-tex">\Delta_e</annotation></semantics></math> is the total charge transferred by the reaction, taking into account both movements of electrons and hydrogen ions.</p>
 <p>Here is a plot of the <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>Δ</mi><mi>r</mi></msub><mi>G</mi><msup><mi>′</mi><mi>o</mi></msup></mrow><annotation encoding="application/x-tex">\Delta_r G&#39;^{o}</annotation></semantics></math> values of the measured redox reactions.</p>
 <p><img src="../img/redox_dgprime.png" /></p>
 <h1 id="how-to-account-for-experimental-conditions">How to account for experimental conditions?</h1>
@@ -210,10 +210,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb2-15"><a href="#cb2-15"></a>    _a2 <span class="op">=</span> <span class="fl">1.546e-3</span></span>
 <span id="cb2-16"><a href="#cb2-16"></a>    _a3 <span class="op">=</span> <span class="fl">5.959e-6</span></span>
 <span id="cb2-17"><a href="#cb2-17"></a>    B <span class="op">=</span> <span class="fl">1.6</span></span>
-<span id="cb2-18"><a href="#cb2-18"></a>    <span class="cf">if</span> ionic_strength <span class="op">&lt;=</span> <span class="fl">0.0</span>:</span>
-<span id="cb2-19"><a href="#cb2-19"></a>        <span class="cf">return</span> <span class="fl">0.0</span></span>
-<span id="cb2-20"><a href="#cb2-20"></a>    alpha <span class="op">=</span> _a1 <span class="op">-</span> _a2 <span class="op">*</span> temperature <span class="op">+</span> _a3 <span class="op">*</span> temperature <span class="op">**</span> <span class="dv">2</span></span>
-<span id="cb2-21"><a href="#cb2-21"></a>    <span class="cf">return</span> alpha <span class="op">*</span> ionic_strength <span class="op">**</span> <span class="fl">0.5</span> <span class="op">/</span> (<span class="fl">1.0</span> <span class="op">+</span> B <span class="op">*</span> ionic_strength <span class="op">**</span> <span class="fl">0.5</span>)</span>
+<span id="cb2-18"><a href="#cb2-18"></a>    alpha <span class="op">=</span> _a1 <span class="op">-</span> _a2 <span class="op">*</span> temperature <span class="op">+</span> _a3 <span class="op">*</span> temperature <span class="op">**</span> <span class="dv">2</span></span>
+<span id="cb2-19"><a href="#cb2-19"></a>    <span class="cf">return</span> <span class="fl">0.0</span> <span class="cf">if</span> ionic_strength <span class="op">&lt;=</span> <span class="fl">0.0</span> <span class="cf">else</span> (</span>
+<span id="cb2-20"><a href="#cb2-20"></a>        alpha <span class="op">*</span> ionic_strength <span class="op">**</span> <span class="fl">0.5</span> <span class="op">/</span> (<span class="fl">1.0</span> <span class="op">+</span> B <span class="op">*</span> ionic_strength <span class="op">**</span> <span class="fl">0.5</span>)</span>
+<span id="cb2-21"><a href="#cb2-21"></a>    )</span>
 <span id="cb2-22"><a href="#cb2-22"></a></span>
 <span id="cb2-23"><a href="#cb2-23"></a></span>
 <span id="cb2-24"><a href="#cb2-24"></a><span class="kw">def</span> legendre_transform(</span>

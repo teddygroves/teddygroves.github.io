@@ -159,8 +159,9 @@ $$
 \Delta_r G'^{o} = -F * E' * \Delta_e
 $$
 
-where $F$ is the Faraday constant and $\Delta_e$ is the number of electrons
-transferred by the reaction.
+where $F$ is the Faraday constant and $\Delta_e$ is the total charge
+transferred by the reaction, taking into account both movements of electrons
+and hydrogen ions.
 
 Here is a plot of the $\Delta_r G'^{o}$ values of the measured redox reactions.
 
