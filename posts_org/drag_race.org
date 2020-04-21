@@ -1,5 +1,5 @@
 #+TITLE: How to predict who will win Rupaul's drag race
-#+OPTIONS: author:nil Date:nil toc:nil
+#+OPTIONS: author:nil date:nil toc:nil
 
 #+CAPTION: When you're about to predict the drag race
 [[file:../img/emotional.png]]

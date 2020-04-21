@@ -9,5 +9,6 @@ I love football, politics, philosophy and animals.
 I have [[https://github.com/teddygroves][GitHub]], [[HTTps://twitter.com/teddygroves][Twitter]] and [[https://www.linkedin.com/in/teddy-groves-9002b8117/][LinkedIn]] and you can email me at ~groves DOT teddy AT gmail DOT com~.
 
 * Posts
-
-#+INCLUDE: posts/sitemap.org
+- [[file:posts_html/tactical_voting.html][Think twice before using MRP-branded websites for tactical voting!]]
+- [[file:posts_html/about.html][How I made this website]]
+- [[file:posts_html/drag_race.html][How to predict who will win Rupaul's drag race]]

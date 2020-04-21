@@ -1,5 +1,5 @@
 #+TITLE: Think twice before using MRP-branded websites for tactical voting!
-#+OPTIONS: author:nil Date:nil toc:nil
+#+OPTIONS: author:nil date:nil toc:nil
 
 #+CAPTION: Image source: [[http://resource.nlm.nih.gov/101454456][US National Library of Medicine]]
 [[file:../img/careful.jpg]]
@@ -13,8 +13,8 @@ it to a group called [[https://www.bestforbritain.org/][Best for Britain]], who 
 promote their [[https://getvoting.org/][tactical voting website]]. Along the way I think some bad
 statistics communication happened.
 
-I had some quick chats about this situation on Twitter with [[https://twitter.com/dsquareddigest][@dsquareddigest]],
-[[https://twitter.com/hmclandress][@hmclandress]] and [[https://twitter.com/JustinIbbett/][@JustinIbbet]] (founder and CEO of focaldata), then wrote up
+I had some quick chats about this situation on Twitter with [[https://twitter.com/dsquareddigest][dsquareddigest]],
+[[https://twitter.com/hmclandress][hmclandress]] and [[https://twitter.com/JustinIbbett/][JustinIbbet]] (founder and CEO of focaldata), then wrote up
 what I thought here.
 
 I am interested because I am into multilevel regression and statistical
@@ -103,7 +103,7 @@ can't really tell who is ahead'.
 Fourth, the method by which Best for Britain turned the MRP analysis into
 tactical voting advice is opaque - I couldn't find any explanation on the
 website, so again there is a problem of accessibility and assessibility. There
-is another problem though, which @dsquareddigest [[https://twitter.com/dsquareddigest/status/1189876959217631232?s=20][pointed out on Twitter]]. On its
+is another problem though, which dsquareddigest [[https://twitter.com/dsquareddigest/status/1189876959217631232?s=20][pointed out on Twitter]]. On its
 own a MRP analysis isn't enough to determine sound tactical voting advice.
 
 In order to make a good tactical voting decision you need to know how other
