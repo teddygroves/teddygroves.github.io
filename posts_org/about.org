@@ -1,0 +1,35 @@
+#+TITLE: How I made this website
+#+OPTIONS: author:nil date:nil toc:nil
+
+I had a go at making a personal website, mainly to share [[file:drag_race.html][my attempt to predict
+RuPaul's drag race]]. It was really fun and not as difficult as I thought it
+would be. I thought I'd write up the steps I went through in case anyone else
+is curious.
+
+At first I tried using the emacs package [[https://orgmode.org/manual/Publishing.html][org publish]] - this makes it possible
+to write all the content for a website in .org files, then convert them all to
+html files with a quick command ~M-x org-publish~. If you are already used to
+emacs and org mode I think this is a bit easier than learning how to use a
+static site generator. I read a few tutorials and found [[https://orgmode.org/worg/org-tutorials/org-publish-html-tutorial.html][this one]] the most
+useful. 
+
+Recently I thought it might be interesting to try using just [[https://www.gnu.org/software/make/][make]] and [[https://pandoc.org/][pandoc]]. I
+like this method because it is quite universal - you can use pretty much the
+same approach to write books and papers. I found [[https://keleshev.com/my-book-writing-setup/][this blog]] quite helpful for
+the basic process and then took some further inspiration from [[https://www.johnhawthorn.com/2018/01/this-website-is-a-makefile/][this blog post]]
+about using make to generate html. 
+
+The overall strategy is pretty simple - you write your blog in org files, then
+write some pandoc commands to turn these into html files, then put these
+commands in a makefile along with some information about which files require
+which other ones to exist. When you have changed something and want to update
+the blog you run the command ~make~, and this should do the minimum possible
+work to bring everything up to date.
+
+To style the blog I made a tiny modification to the [[https://github.com/edwardtufte/tufte-css][tufte-css]] defaults.
+
+To put the website on the internet I used [[https://pages.github.com/][github pages]], which is completely
+magical - you just push to the repository and seconds later the page has
+changed.
+
+You can find all the source code [[https://github.com/teddygroves/teddygroves.github.io/][here]].

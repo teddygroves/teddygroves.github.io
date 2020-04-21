@@ -1,5 +1,0 @@
-#+TITLE: 
-
-- [[file:tactical_voting.org][Think twice before using MRP-branded websites for tactical voting!]]
-- [[file:about.org][How I made this website]]
-- [[file:drag_race.org][How to predict who will win Rupaul's drag race]]
