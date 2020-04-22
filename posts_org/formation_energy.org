@@ -36,41 +36,53 @@ been measured accurately. As a result, there is a lot to be gained by taking
 advantage of scientific knowledge and statistical machinery, so as to make the
 best possible use of the available information. Over the last decade or so, as
 metabolic modelling has become more feasible and popular, there has been a
-corresponding effort to estimate formation energies more accurately, and to
-increase the number of compounds whose formation energy can be estimated.
+corresponding effort to develop improved methods for estimating formation
+energies.
 
-In this short story I'll try to explain how this kind of modelling works, using
-worked examples. I lean heavily on the 'component contribution' method from
-cite:noorConsistentEstimationGibbs2013, which underpins the website
-[[http://equilibrator.weizmann.ac.il/][equilibrator]] and has a great collection of related [[https://gitlab.com/equilibrator/component-contribution/][python libraries]].
+One of the most effective and, thanks to eQuilibrator well known, modelling
+methods is called component contribution. This method was introduced in
+cite:noorConsistentEstimationGibbs2013, and is implemented in a collection of
+great publicly available [[https://gitlab.com/equilibrator/component-contribution/][python libraries]].
 
-My original code can be found here - to run it yourself you'll need a python 3
-environment with the following packages installed:
+In what follows I'll try to explain where the training data for component
+contribution comes from and how it is pre-processed to take into account
+experimental conditions. I've written some original code to go with the text -
+it can be found [[https://github.com/teddygroves/teddygroves.github.io/tree/master/src/formation_energy][here]]. To run it yourself you'll need a python 3 environment
+with the following packages installed:
 
-- equilibrator_cache
-- component_contribution
-- pandas
-- numpy
-- scipy
+- [[https://gitlab.com/equilibrator/equilibrator-cache][equilibrator-cache]]
+- [[https://gitlab.com/equilibrator/component-contribution][component-contribution]]
+- [[https://pandas.pydata.org/][pandas]]
+- [[https://numpy.org/][numpy]]
+- [[https://www.scipy.org/][scipy]]
 
-* Data fetching
-The maintainers of the equilibrator libraries have very helpfully aggregated
-enough machine-readable measurements, auxiliary information and analysis code
-for our purposes.
+* Where does eQuilibrator's training data come from?
+Equilibrator's training data consists of the following kinds of measurements:
 
-I wrote a short python script to fetch some of this data and store it as csv
-files. Here it is:
+- direct measurements of the energy change due to formation reactions
+- measurements of the reduction potential change due to redox reactions 
+- measurements of equilibrium constants (i.e. the ratio of substrate to product
+  concentration at thermal equilibrium) of non-formation reactions
+
+In addition eQuilibrator requires some supporting information:
+
+- the stoichiometry of each measured reaction (i.e. the substrates and products
+  and their relative proportions)
+- each compound's decomposition into microspecies
+- each microspecies's acid dissociation constants
+- each compound's decomposition into chemical groups
+- definitions of the chemical groups
+  
+This python script fetches the measurements and some supporting information and
+saves them to csv files:
 
 #+INCLUDE: "src/formation_energy/fetch_data.py" src python
 
-The files ~formation_measurements.csv~, ~redox_measurements.csv~ and
-~tecrdb_measurements.csv~ record the results of experiments that can be used to
-infer likely values of compounds' formation energies. The other files contain
-information about the compounds and their names.
+Next we'll explore the different measurements in more detail.
 
-** Exploring the tecrdb measurements
+** The tecrdb measurements
 
-The experiments in ~tecrdb_measurements.csv~ originally come from [[https://randr.nist.gov/enzyme/][this
+The measurements in ~tecrdb_measurements.csv~ originally come from [[https://randr.nist.gov/enzyme/][this
 website]]. The researchers who compiled it scanned lots of papers like this
 
 [[file:../img/citrate_synthase_measurements_paper.png]]
@@ -79,15 +91,12 @@ and put them in machine-readable form like this
 
 [[file:../img/citrate_synthase_tecrdb.png]]
 
-It is possible to download the results from [[https://randr.nist.gov/enzyme/][the NIST website]] directly, but I
-preferred to use the equilibrator data as this saved some web scraping and also
-makes it easier to ensure direct comparability with other peoples' work.
-
-The measurements in the TECRDB record a quantity called $K'$, which is the
-ratio, at given experimental conditions, of substrates to products when a
-reaction is at thermal equilibrium. This quantity is related to the standard
-gibbs free energy of the reaction, which in turn is related to the formation
-energies of the compounds involved in the reaction.
+The measurements in the TECRDB record a quantity called the equilibrium
+constant, or $K'$, which is the (experimental condition specific) ratio of
+substrates to products when the measured reaction is at thermal
+equilibrium. This quantity is related to the standard gibbs free energy of the
+reaction, which in turn is related to the formation energies of the compounds
+involved in the reaction.
 
 Here is a graph showing the distribution of the raw $K'$ measurements for
 different reactions, arraged according to each reaction's mean measured
@@ -98,20 +107,12 @@ value. Each measurement's colour represents the pH at which it was obtained.
 Looking at the colours, it is clear that, for many reactions, the darker, bluer
 spots are on the left and the lighter, yellower spots are on the right. For
 these reactions, the measured $K'$ values were higher when the experiment was
-done at a higher pH. This is what one would expect based on the underlying
-science, as many of the measured chemical reactions are sensitive to hydrogen
-ions. 
+done at a higher pH. This illustrates the need to take into account
+experimental conditions - we will later look at how equilibrator does this.
 
-Accounting for the effect of experimental conditions like pH is a key part of
-analysing this data.
-
-*** From equilibrium constants to condition-specific standard gibbs free energy changes
-In order to connect the reaction-specific $K'$ measurements in the TECRDB with
-the compound-specific formation energies that we are interested in, the first
-step is to find the gibbs free energy change corresponding to each measurement.
-
-This is straightforward, as the condition-specific gibbs free energy change
-$\Delta_r G'^{o}$ at temperature $T$ is related to $K'$ as follows:
+The relationship, at temperature $T$, between the condition-specific
+equilibrium constant of a reaction $K'$ and the condition-sepcific gibbs free
+energy change $\Delta_r G'^{o}$ is described by this equation:
 
 $$
 \Delta_r G'^{o} = -RT\ln(K')
@@ -124,9 +125,6 @@ measurements:
 
 [[file:../img/tecrdb_dgprime.png]]
 
-There is clearly still a systematic dependence on pH for many reactions - I
-explore below how the component contribution attempts to take into account pH
-and other experimental conditions.
 
 ** Formation energy measurements
 The next source of relevant data are direct measurements of compound formation
@@ -141,8 +139,8 @@ Here is a plot of these formation energy measurements:
  
 The range of $\Delta_f G'^o$ values shown here is much greater than that of the
 TECRDB $\Delta_r G'^o$ values plotted above. This is because of a technical
-limitation that means most biochemical reactions can only be measured when
-their $\Delta_r G'^o$ value is close to zero.
+limitation that equilibrium constants can only be measured when $\Delta_r G'^o$
+is close to zero.
 
 ** Redox reaction measurements
 The table ~redox_measurements.csv~ records changes in reduction potential due
@@ -167,27 +165,23 @@ Here is a plot of the $\Delta_r G'^{o}$ values of the measured redox reactions.
 
 [[file:../img/redox_dgprime.png]]
 
-* How to account for experimental conditions?
-
-This section sets out how the component contribution method preprocesses the
-reaction measurements it takes in, so as to take into account the effect of the
-experimental conditions under which the measurements were obtained. Most of
-what follows comes from cite:albertyThermodynamicsBiochemicalReactions2003,
-while the code examples are heavily inspired by the equilibrator packages.
-
+* How does eQuilibrator account for experimental conditions?
 The component contribution method takes experimental conditions into account by
-transforming the measured $K'$ values to standard condition gibbs free energies
-of reaction, which are then used as inputs to a statistical model. To do this
-transformation, component contribution takes advantage of some scientific
-knowledge about the effects of temperature, ionic strength and the
-concentration of hydrogen and magnesium ions.
+transforming the measured condition-specific gibbs free energy changes to
+standard condition gibbs free energy changes using the method described in
+cite:albertyThermodynamicsBiochemicalReactions2003. The transformed
+standard-condition values are then used as inputs to a statistical model. 
 
-** From condition-specific to standard gibbs free energy changes
+This section outlines this pre-processing strategy, describes how eQuilibrator
+implements it and illustrates the results of transfomation on the TECRDB
+measurements.
+
+** The procedure
 For each measurement, the component contribution method obtains a
 standard-condition gibbs free energy change $\Delta_r G^{o}$ corresponding to
 the measured condition-specific value $\Delta_r G^{o}'$ using inverse Legendre
 transformations, as described in
-cite:albertyThermodynamicsBiochemicalReactions2003. 
+cite:albertyThermodynamicsBiochemicalReactions2003.
 
 The relationship between the two quantities is as follows:
 
@@ -213,16 +207,27 @@ The $ddg/RT$ quantity in this equation is obtained by the following procedure:
     4. Find the reaction's $ddg/RT$ value by adding together the product of
        each compound's $ddg/RT$ value and its stoichiometric coeffient.
 
+** How eQuilibrator implements the procedure
+The code that is spread across two equilibrator packages: [[https://gitlab.com/equilibrator/equilibrator-assets][equilibrator-assets]]
+and [[https://gitlab.com/equilibrator/equilibrator-cache][equilibrator-cache]]. The calculation of standard condition $ddg/RT$ values
+for each microspecies, based on acid dissociation constants, is done [[https://gitlab.com/equilibrator/equilibrator-assets/-/blob/master/src/equilibrator_assets/chemaxon.py#L483][here]]. The
+code for calculating the legendre transform for a microspecies at a condition
+is [[https://gitlab.com/equilibrator/equilibrator-cache/blob/develop/src/equilibrator_cache/thermodynamic_constants.py][here]]. Condition-specific $ddg/RT$ for microspecies are calculated by a
+method that belongs to the [[https://gitlab.com/equilibrator/equilibrator-cache/-/blob/develop/src/equilibrator_cache/models/compound_microspecies.py][CompoundMicrospecies]] object. Compound $ddg/RT$s are
+calculated from microspecies in the [[https://gitlab.com/equilibrator/equilibrator-cache/-/blob/develop/src/equilibrator_cache/models/compound.py][Compound]] object, and reaction $ddg/RT$s in
+the [[https://gitlab.com/equilibrator/equilibrator-cache/-/blob/develop/src/equilibrator_cache/reaction.py][Reaction]] object.
 
-Here are some python functions I made that implement this procedure with the
-help of the package [[https://gitlab.com/equilibrator/equilibrator-cache][equilibrator_cache]], which supplies the standard-condition
-$ddg/RT$ for each microspecies and maps microspecies to compounds and compounds
-and stoichiometric coefficients to reactions:
+To make clear how these calculations work together, and to make sure I
+understood it myself, I made some python functions that give equivalent results
+to eQuilibrator's preprocessing, but can all be viewed in the same place. A
+script that uses the functions can be found [[https://github.com/teddygroves/teddygroves.github.io/blob/master/src/formation_energy/process_tecrdb.py][here]] - for the TECRDB measurements
+the results seem to be the same.
 
 #+INCLUDE: "src/formation_energy/legendre.py" src python
 
-Here is the same graph as before, but now with transformed, standard condition
-gibbs free energy changes:
+** What do the TECRDB measurements look like after preprocessing?
+Here are the transformed, standard condition gibbs free energy changes for
+the TECRDB measurements:
 
 [[file:../img/tecrdb_standard_dg.png]]
 
@@ -230,6 +235,7 @@ The colors show the $ddg/RT$ value for each reaction, i.e. essentially the
 difference between the untransformed and transformed values. It is clear from
 the graph that the adjustments due to Legendre transforms are substantial.
 
+** Discussion
 Using inverse Legendre transforms to coerce the measurements to standard
 conditions before modelling is better than naively using the $\Delta_r G^{o}'$
 values - see the supplementary appendix S1 of
