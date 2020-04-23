@@ -213,9 +213,9 @@ and [[https://gitlab.com/equilibrator/equilibrator-cache][equilibrator-cache]]. 
 for each microspecies, based on acid dissociation constants, is done [[https://gitlab.com/equilibrator/equilibrator-assets/-/blob/master/src/equilibrator_assets/chemaxon.py#L483][here]]. The
 code for calculating the legendre transform for a microspecies at a condition
 is [[https://gitlab.com/equilibrator/equilibrator-cache/blob/develop/src/equilibrator_cache/thermodynamic_constants.py][here]]. Condition-specific $ddg/RT$ for microspecies are calculated by a
-method that belongs to the [[https://gitlab.com/equilibrator/equilibrator-cache/-/blob/develop/src/equilibrator_cache/models/compound_microspecies.py][CompoundMicrospecies]] object. Compound $ddg/RT$s are
-calculated from microspecies in the [[https://gitlab.com/equilibrator/equilibrator-cache/-/blob/develop/src/equilibrator_cache/models/compound.py][Compound]] object, and reaction $ddg/RT$s in
-the [[https://gitlab.com/equilibrator/equilibrator-cache/-/blob/develop/src/equilibrator_cache/reaction.py][Reaction]] object.
+method that belongs to the [[https://gitlab.com/equilibrator/equilibrator-cache/-/blob/develop/src/equilibrator_cache/models/compound_microspecies.py][CompoundMicrospecies]] object. Compound $ddg/RT$
+values are calculated from microspecies in the [[https://gitlab.com/equilibrator/equilibrator-cache/-/blob/develop/src/equilibrator_cache/models/compound.py][Compound]] object, and reaction
+$ddg/RT$ values in the [[https://gitlab.com/equilibrator/equilibrator-cache/-/blob/develop/src/equilibrator_cache/reaction.py][Reaction]] object.
 
 To make clear how these calculations work together, and to make sure I
 understood it myself, I made some python functions that give equivalent results
