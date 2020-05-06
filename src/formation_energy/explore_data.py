@@ -12,9 +12,6 @@ def load_data():
             pd.read_csv('data/tecrdb_measurements.csv', index_col=0)
             .dropna(subset=['K_prime'])
         ),
-        'tecrdb_processed': (
-            pd.read_csv('data/tecrdb_measurements_processed.csv', index_col=0)
-        ),
         'formation': (
             pd.read_csv('data/formation_measurements.csv', index_col=0)
             .dropna(subset=['standard_dg_prime'])
@@ -22,6 +19,9 @@ def load_data():
         'redox': (
             pd.read_csv('data/redox_measurements.csv', index_col=0)
         ),
+        'processed': (
+            pd.read_csv('data/measurements_processed.csv', index_col=0)
+        )
     }
 
 
@@ -158,13 +158,20 @@ def plot_dg_prime_redox(measurements, colorcol, filename):
 def main():
     data = load_data()
     tecrdb = data['tecrdb']
-    processed = data['tecrdb_processed']
+    processed = data['processed']
     formation = data['formation']
     redox = data['redox']
     plot_k_prime(tecrdb, 'p_h', filename='tecrdb_kprime.png')
     plot_dg_prime(tecrdb, 'p_h', filename='tecrdb_dgprime.png')
     plot_dg_prime_formation(formation, 'p_h', filename='formation_dgprime.png')
-    plot_standard_dg(processed, 'ddg_over_rt', filename='tecrdb_standard_dg.png')
+    plot_standard_dg(
+        processed.loc[lambda df: df['measurement_type'] == 'tecrdb'],
+        'ddg', filename='tecrdb_standard_dg.png'
+    )
+    plot_standard_dg(
+        processed.loc[lambda df: df['measurement_type'] == 'redox'],
+        'ddg', filename='redox_standard_dg.png'
+    )
     plot_dg_prime_redox(redox, 'p_h', filename='redox_dgprime.png')
     plt.close('all')
 

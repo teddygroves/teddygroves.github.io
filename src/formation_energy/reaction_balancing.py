@@ -1,4 +1,3 @@
-from component_contribution.training_data import TrainingData
 from equilibrator_cache.reaction import Reaction
 from equilibrator_cache.compound_cache import CompoundCache
 from typing import Union
