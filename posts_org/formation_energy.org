@@ -209,7 +209,7 @@ $$
 
 The condition-specific formation energy of a microspecies has the following
 relationship with the conditions (i.e. the temperature $T$, ionic strength $I$,
-$pH$ and $pMg$), the microspecies's standard-condition formation energy
+$pH$ and $pMg$), the microspecies's standard-condition formation entropy
 $\Delta_f S^o$, the properties of the microspecies (i.e. its charge $z$, its
 number of protons $nH$ and its number of magnesium ions $nMg$) and some
 temperature-specific quantities (the formation energy of magnesium $\Delta_f
@@ -272,37 +272,64 @@ change given the standard-condition number, and vice versa. The next section
 looks at how equilibrator does this conversion in practice.
 
 ** The procedure
-For each measurement, the component contribution method obtains a
-standard-condition gibbs free energy change $\Delta_r G^{o}$ corresponding to
-the measured condition-specific value $\Delta_r G^{o}'$ using inverse Legendre
-transformations, as described in
-cite:albertyThermodynamicsBiochemicalReactions2003.
+Equilibrator's strategy for taking into account experimental conditions is to
+use the theoretical relationships described above to transform all the
+$\Delta_r G'^o$ measurements to the values they would have had in standard
+conditions, and then fit a regression model to the transformed measurements.
 
-The relationship between the two quantities is as follows:
+To find the number to subtract from a reaction's $\Delta_r G'^o$ measurement in
+order to transform it to standard conditions, equilibrator starts by
+considering all the microspecies of all the reactants. 
+
+Each microspecies has a starting change in $\Delta_r G^o$ which is the sum of
+its dissociation constants. Equilibrator expresses all the changes in units of
+$RT$, so the starting change for microspecies $j$ is:
 
 $$
-\Delta_r G^{o} = \Delta_r G^{o}' - \frac{ddg}{RT} \cdot RT
+start_j = \sum_{i=0}^m \cdot\log_{10}(PK_{ai}) + \sum_{i=0}^n\cdot\log_{10}(PK_{Mgi})
 $$
 
-The $ddg/RT$ quantity in this equation is obtained by the following procedure:
+where $m$ is the microspecies's number of hydrogen ions above the minimum and
+$n$ is its number of magnesium ions. This number is zero for the least
+protonated and magnesium-bonded microspecies of each compound.
 
-    1. Find the standard condition $ddg/RT$ value for each microspecies in the
-       reaction by inferring it from acid dissociation constants.
+Next, in order to take into account the conditions, the starting change of each
+microspecies is modified using the Legendre transform for number of protons,
+number of magnesiums and Debeye-Hükel factor, i.e. by adding
 
-    2. Find the condition-specific $ddg/RT$ value for each microspecies in the
-       reaction by adding the standard condition value to the legendre
-       transform adjustment based on the conditions (pH, pMg, ionic strength
-       and temperature) and the microspecies's number of protons, charge and
-       number of magnesium atoms.
+$$
+\begin{align*}
+\frac{ddg_j}{RT} &= start_j \\
+&+ nH \cdot\log_{10}(pH) \\
+&+ nMg \cdot(\log_{10}(pMg)- \frac{\Delta_f G^o_{Mg}}{RT}) \\
+&+ (nH + 4\cdot nMg - z^2) * \alpha(T) * \frac{\sqrt(I)}{1 + 1.6 * sqrt(I)}
+\end{align*}
+$$
 
-    3. Find each compound's $ddg/RT$ value by calculating the log-sum-exp of -1
-       times the condition-specific $ddg/RT$ of each its component
-       microspecies, then multiplying the result by -1.
+where $\alpha(T)$ is the temperature-dependent Debeye-Hükel number. Note that,
+unlike in the equation above, equilibrator makes no adjustment for temperature
+and formation entropy.
 
-    4. Find the reaction's $ddg/RT$ value by adding together the product of
-       each compound's $ddg/RT$ value and its stoichiometric coeffient.
+Next each microspecies's condition-specific, $RT$-relative $\Delta_r G^o$
+changes are aggregated to the compound level.
 
-** How eQuilibrator implements the procedure
+$$
+\frac{ddg_c}{RT} = -\ln\sum_{i\ is\ a\ microspecies\ of\ c}-\exp(\frac{ddg_i}{RT})
+$$
+
+Finally, compound-level $\frac{ddg}{RT}$ numbers are aggregated to the reaction
+level:
+
+$$
+\frac{ddg_r}{RT} = \sum_{i\ is\ a\ reactant\ of\ r} s_i\cdot\frac{ddg_i}{RT}
+$$
+
+and the transformed measurement is found as follows:
+
+$$
+\Delta_r G^{o} = \Delta_r G^{o}' - \frac{ddg_r}{RT} \cdot RT
+$$
+
 The code that is spread across two equilibrator packages: [[https://gitlab.com/equilibrator/equilibrator-assets][equilibrator-assets]]
 and [[https://gitlab.com/equilibrator/equilibrator-cache][equilibrator-cache]]. The calculation of standard condition $ddg/RT$ values
 for each microspecies, based on acid dissociation constants, is done [[https://gitlab.com/equilibrator/equilibrator-assets/-/blob/master/src/equilibrator_assets/chemaxon.py#L483][here]]. The
