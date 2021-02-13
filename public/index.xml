@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Teddy&#39;s Picnic</title>
+    <link>/</link>
+    <description>Recent content on Teddy&#39;s Picnic</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-uk</language>
+    <copyright>© Teddy Groves 2021</copyright>
+    <lastBuildDate>Wed, 10 Feb 2021 00:00:00 +0100</lastBuildDate><atom:link href="/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>About me</title>
+      <link>/about/</link>
+      <pubDate>Sat, 13 Feb 2021 00:00:00 +0100</pubDate>
+      
+      <guid>/about/</guid>
+      <description>I work at DTU&amp;rsquo;s Biosustain research center making statistical models of chemical reactions that happen inside living cells.
+I love football, politics, philosophy and animals.</description>
+    </item>
+    
+    <item>
+      <title>Data Fetching</title>
+      <link>/posts/data_fetching/</link>
+      <pubDate>Wed, 10 Feb 2021 00:00:00 +0100</pubDate>
+      
+      <guid>/posts/data_fetching/</guid>
+      <description>After formulating an idea (we&amp;rsquo;re going to try and predict technical scores of international figure skating elements) the next step is to fetch the data.</description>
+    </item>
+    
+    <item>
+      <title>The Big Picture</title>
+      <link>/posts/big_picture/</link>
+      <pubDate>Sun, 10 Jan 2021 00:00:00 +0100</pubDate>
+      
+      <guid>/posts/big_picture/</guid>
+      <description>A nice overview of the current scoring rules for singles figure skating can be found here.
+The gist is that each skater makes two performances: a &amp;ldquo;short programme&amp;rdquo; lasting a bit under 3 minutes amd a &amp;ldquo;free skate&amp;rdquo; lasting just over 4 minutes.</description>
+    </item>
+    
+    <item>
+      <title>Data Analysis on Ice</title>
+      <link>/data_analysis_on_ice/</link>
+      <pubDate>Fri, 01 Jan 2021 00:00:00 +0100</pubDate>
+      
+      <guid>/data_analysis_on_ice/</guid>
+      <description>Some posts about ice skating</description>
+    </item>
+    
+    <item>
+      <title>Think twice before using MRP-branded websites for tactical voting!</title>
+      <link>/posts/tactical_voting/</link>
+      <pubDate>Fri, 15 Nov 2019 00:00:00 +0000</pubDate>
+      
+      <guid>/posts/tactical_voting/</guid>
+      <description>Image source: US National Library of Medicine    tl:dr If you want to vote tactically, use all available information and don&amp;#39;t forget that other people can also do this.</description>
+    </item>
+    
+    <item>
+      <title>How to predict who will win Rupaul&#39;s drag race</title>
+      <link>/posts/drag_race/</link>
+      <pubDate>Tue, 01 Jan 2019 00:00:00 +0100</pubDate>
+      
+      <guid>/posts/drag_race/</guid>
+      <description>When you&amp;rsquo;re about to predict the drag race
+  I entered this competition to predict the outcomes of RuPaul&amp;rsquo;s Drag Race season 11 - it was really fun and I learned a lot, so I thought I&amp;rsquo;d write down how the model I made works.</description>
+    </item>
+    
+  </channel>
+</rss>

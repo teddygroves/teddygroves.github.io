@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge"><title>How to predict who will win Rupaul&#39;s drag race - Teddy&#39;s Picnic</title><meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta property="og:title" content="How to predict who will win Rupaul&#39;s drag race" />
+<meta property="og:description" content="Season 11 of RPDR, now with Stan!" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="/posts/drag_race/" />
+<meta property="article:published_time" content="2019-01-01T00:00:00+01:00" />
+<meta property="article:modified_time" content="2019-01-01T00:00:00+01:00" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="How to predict who will win Rupaul&#39;s drag race"/>
+<meta name="twitter:description" content="Season 11 of RPDR, now with Stan!"/>
+<link href="https://fonts.googleapis.com/css?family=Ubuntu:300,400,300italic,400italic|Raleway:200,300" rel="stylesheet">
+
+	<link rel="stylesheet" type="text/css" media="screen" href="/css/normalize.css" />
+	<link rel="stylesheet" type="text/css" media="screen" href="/css/main.css" /><link rel="stylesheet" type="text/css" href="/css/dark.css" media="(prefers-color-scheme: dark)" />
+
+	<script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
+	<script src="/js/main.js"></script>
+</head>
+
+<body>
+	<div class="container wrapper post">
+		<div class="header">
+	<base href="/">
+	<h1 class="site-title"><a href="/">Teddy&#39;s Picnic</a></h1>
+	<div class="site-description"><h2></h2><nav class="nav social">
+			<ul class="flat"><a href="https://github.com/teddygroves" title="Github"><i data-feather="github"></i></a><a href="/index.xml" title="RSS"><i data-feather="rss"></i></a></ul>
+		</nav>
+	</div>
+
+	<nav class="nav">
+		<ul class="flat">
+			
+			<li>
+				<a href="/posts">All posts</a>
+			</li>
+			
+			<li>
+				<a href="/about">About me</a>
+			</li>
+			
+			<li>
+				<a href="/data_analysis_on_ice">Data Analysis on Ice</a>
+			</li>
+			
+		</ul>
+	</nav>
+</div>
+
+
+		<div class="post-header">
+			<h1 class="title">How to predict who will win Rupaul&#39;s drag race</h1>
+			<div class="meta">Posted at &mdash; Jan 1, 2019</div>
+		</div>
+
+		<div class="markdown">
+			<figure>
+    <img src="/img/emotional.png"
+         alt="When you&amp;rsquo;re about to predict the drag race"/> <figcaption>
+            <p>When you&rsquo;re about to predict the drag race</p>
+        </figcaption>
+</figure>
+
+<p>I entered <a href="https://shiraamitchell.github.io/rpdr">this competition</a> to predict
+the outcomes of RuPaul&rsquo;s Drag Race season 11 - it was really fun and I learned
+a lot, so I thought I&rsquo;d write down how the model I made works.</p>
+<h1 id="model">Model</h1>
+<p>My model treats the outcomes of both Drag Race episodes and <a href="https://www.reddit.com/r/rupaulsdragrace/comments/bmzhfk/s11e12_rpdr_poll_did_you_rankings_get_a_makeover/">Data For
+Progress&rsquo;s
+surveys</a>
+as depending probabilistically on the abilities of the contestants. The higher
+a queen&rsquo;s ability, the more likely it is that she will do well. Other factors -
+e.g. does Ru just want to keep you around for the drama? - don&rsquo;t directly
+feature, but can be thought of either as implicitly part of ability or as
+contributing a bit of randomness.</p>
+<h2 id="priors">Priors</h2>
+<p>Although there there are at least four dimensions of drag ability, for
+simplicity I assumed that these can safely be reduced to one number (\eta_i)
+for each contestant (i).</p>
+<p>I used a pretty standard multilevel structure to represent the available
+pre-competition information about these ability parameters:</p>
+<p>$$
+\begin{align*}
+\eta_i &amp;\sim Normal(X_i\beta, \sigma_{\eta}) \<br>
+\beta &amp;\sim Normal(0,1) \<br>
+\sigma_{\eta} &amp;\sim halfNormal(0, 1)
+\end{align*}
+$$</p>
+<p>These assumptions allow us to use some information in a design matrix $X$ to
+predict how good each competitor will be, with the amounts being controlled by
+the $\beta$ parameters, and deviation from the predicted ability controlled by
+the parameter (\sigma_{\eta}).</p>
+<p>To fill up the design matrix I used age and number of pre-competition twitter
+followers. I massaged the latter numbers a little: instead of using the raw
+numbers I used each contestant&rsquo;s rank compared to the other season
+starters. This was to avoid being biased by between-season trends in the number
+of followers drag race competitors tend to have.</p>
+<h2 id="episode-outcomes">Episode outcomes</h2>
+<p>The trickiest bit was to connect abilities with episode outcomes, which don&rsquo;t
+fit that neatly into a standard statistical model (at least not one that I was
+aware of before working on this competiton).</p>
+<p>Each episode ends with the remaining contestants being sorted into ordered
+groups - typically these are win, high, safe, low, bottom and eliminated -
+according to how well they performed. The total number of contestants changes
+from week to week, and the number in each group is unpredictable - Ru often
+mixes things up with double wins, double eliminations and suchlike.</p>
+<p>To represent this structure in my model I started with the rank-ordered logit
+model. This is a standard-ish model for data where some things are ranked in a
+way that depends probabilistically on their latent qualities. [[http://khakieconomics.github.io/2018/12/27/Ranked-random-coefficients-logit.html][This blog]] has a
+really nice explanation of the rank-ordered logit model and an interesting case
+study from economics.</p>
+<p>The main idea with a rank-logit model is that the probability that option (i)
+comes first out of (J) options is</p>
+<p>$$
+\frac{\exp(\eta_i)}{\sum_{j=i}^{J}\exp(\eta_j)}
+$$</p>
+<p>The probability of a whole ranking (e.g. (a) beats (b) beats (c) beats
+(d)) can be found by evaluating this equation for each number from (1) to
+(J-1), then multiplying together the resulting probabilities.</p>
+<p>This would fit the drag race if only Ru would explicitly rank every queen in
+every episode, with no ties allowed. To capture what actually happens -
+i.e. multiple competitors getting the same rank - the rank ordered logit model
+needs to be generalised a bit.</p>
+<p>The correct generalisation finds the probability of an outcome with ties by
+enumerating all the possible no-tie orderings that are consistent with it and
+averaging their probabilities. <a href="https://pdfs.semanticscholar.org/b6de/4079beb058979185b887fad3be0dcee8251d.pdf">This
+paper</a>
+lays out the maths of this idea. I had a go at applying this approach to drag
+race outcomes but didn&rsquo;t get very far because there are just too many no-tie
+orderings to consider. Say there is one winner, two high queens, 9 safe
+contestants, one low queen and two eliminees: this not-too-unusual early season
+outcome has (* 9! * 2! = 1451520) compatible no-tie orderings.</p>
+<p>Instead of the correct solution, I used the following approximation. For each
+rank, I found the rank-logit probability that each non-eliminated queen with
+that rank would came first in a contest featuring them and all the queens with
+equal or worse rank. In other words, I found this number for each
+non-eliminated queen:</p>
+<p>$$
+\frac{\exp(\eta_i)}{\sum_{rank(j)\geq rank(i)}^{J}\exp(\eta_j)}
+$$</p>
+<p>To find the probability of a whole episode&rsquo;s outcome I multiplied all of these
+numbers together.</p>
+<p>I&rsquo;m still not sure this is the best way to approximate a full rank-ordered
+logit model with ties, but I was a bit encouraged when I found [[http://www.glicko.net/research/multicompetitor.pdf][this paper]] by
+Mark Glickman and Jonathan Hennessy. The authors use the same approximation
+with some success to model competitive downhill skiing, which it turns out is
+structurally kind of similar to the drag race! They also explain the model very
+nicely - check it out!</p>
+<h2 id="viewer-survey-data">Viewer survey data</h2>
+<p>Even if the model extracted as much information as possible from the outcome
+data, there would still be some room for improvement, as the final result
+doesn&rsquo;t always tell the whole story. Some wins are more impressive than others,
+and sometimes even a winning performance can reveal long-term limitations. To
+try and capture this kind of dynamic I thought the survey results on data for
+progress&rsquo;s spreadsheet might be a nice complement to the outcome data. Whereas
+the outcomes are nice because they are the exact same thing the model wants to
+predict, the survey responses are also nice because they use extra information
+that isn&rsquo;t available in the outcomes.</p>
+<p>The survey data consists of binary choices between two current contestants -
+the answerer has to enter a winner and a loser, and the time they took to make
+the choice is recorded. I decided to only use data from the most recent
+available survey out of fear that old ones might mess things up. I found the
+aggregate win/loss score for each pair and modelled these as depending on the
+same abilities as the episode outcome data, according to the following
+equation:</p>
+<p>$$
+wins_{ij} \sim Binomial(comparisons_{ij}, logit^{-1}(\eta_i -\eta_j))
+$$</p>
+<p>Putting the same \eta variables in two different likelihood functions is a
+really simple example of joint modelling, which you can find out more about in
+[[https://www.sambrilleman.com/talk/2018_contributed_stancon/][this video]].</p>
+<h1 id="implementation">Implementation</h1>
+<p>I largely followed [Shira Mitchell&rsquo;s
+approach](<a href="https://shiraamitchell.github.io/rpdr#model%5D">https://shiraamitchell.github.io/rpdr#model]</a> to representing drag
+race outcomes in Stan - the ability parameters for the contestants in each
+episode are sorted according to the outcome, making it much easier to calculate
+all the (log scale) probabilities. Here&rsquo;s how I implemented the custom
+likelihood function described above:</p>
+<div class="highlight"><pre style="color:#93a1a1;background-color:#002b36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-fallback" data-lang="fallback">functions {
+  real rpdr_outcome_lp(vector ability, int[] episode_rank){
+    real out = 0;
+    int first_in_group = 1;
+    for (contestant in 1:rows(ability)){
+      if ((contestant &gt; 1)
+          &amp;&amp; (episode_rank[contestant] &gt; episode_rank[contestant-1])){
+        first_in_group = contestant;
+      }
+      if (episode_rank[contestant] &lt; max(episode_rank)){
+        out += ability[contestant] - log_sum_exp(ability[first_in_group:]);
+      }
+  }
+  return out;
+  }
+}
+</code></pre></div><p>Here&rsquo;s the rest of the model:</p>
+<div class="highlight"><pre style="color:#93a1a1;background-color:#002b36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-fallback" data-lang="fallback">data {
+  int&lt;lower=1&gt; N;         // Number of episode participations
+  int&lt;lower=1&gt; K;         // Number of predictors
+  int&lt;lower=1&gt; E;         // Number of episodes
+  int&lt;lower=1&gt; C;         // Number of contestants
+  int&lt;lower=1&gt; N_survey;  // Number of surveys
+  matrix[C, K] X;         // Contestant level predictors
+  // episode data
+  int&lt;lower=1&gt; N_episode_contestant[E];
+  int&lt;lower=1,upper=6&gt; episode_rank[N];
+  int&lt;lower=1,upper=C&gt; contestant[N];
+  // survey data
+  int&lt;lower=1,upper=C&gt; survey_contestant[N_survey];
+  int&lt;lower=1,upper=C&gt; survey_opponent[N_survey];
+  int&lt;lower=1&gt; survey_count[N_survey];
+  int&lt;lower=0&gt; survey_wins[N_survey];
+  // config 
+  int&lt;lower=0,upper=1&gt; use_survey;
+  int&lt;lower=0,upper=1&gt; use_episodes;
+}
+parameters {
+  vector[C] ability_z;
+  real&lt;lower=0&gt; sigma_ability;
+  vector[K] beta;
+}
+transformed parameters {
+  vector[C] ability = X * beta + ability_z * sigma_ability;
+}
+model {
+  int pos = 1;
+  // priors
+  ability_z ~ normal(0, 1);
+  beta ~ normal(0, 1);
+  sigma_ability ~ normal(0, 1);
+  // likelihood
+  if (use_survey == 1){
+    survey_wins ~ binomial_logit(survey_count, ability[survey_contestant] - ability[survey_opponent]);
+  }
+  if (use_episodes == 1){
+    for (e in 1:E){
+      int contestants[N_episode_contestant[e]] = segment(contestant, pos, N_episode_contestant[e]);
+      int episode_ranks[N_episode_contestant[e]] = segment(episode_rank, pos, N_episode_contestant[e]);
+      target += rpdr_outcome_lp(ability[contestants], episode_ranks);
+      pos += N_episode_contestant[e];
+    }
+  }
+}
+</code></pre></div><p>I used <a href="https://pandas.pydata.org/">pandas</a>,
+<a href="https://pystan.readthedocs.io/en/latest/">pystan</a> and
+<a href="https://arviz-devs.github.io/arviz/">arviz</a> to get data in and out of the
+resulting model. <a href="https://github.com/teddygroves/drag_race">Here</a>&rsquo;s a link to a
+github repository with all the code.</p>
+<h1 id="results">Results</h1>
+<p>Here&rsquo;s what the model thinks of the remaining season 11 competitors (the low
+and high are the 10% and 90% quantiles of the posterior distributions). I
+didn&rsquo;t include survey data this week as it was a bit out of date.</p>
+<div class="highlight"><pre style="color:#93a1a1;background-color:#002b36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">                          ability_low  ability_median  ability_high
+contestant_name                                                    
+Brooke Lynn Hytes               -0.04            0.22          0.59
+Yvie Oddly                      -0.12            0.13          0.48
+Silky Nutmeg Ganache            -0.12            0.12          0.44
+A&#39;keria Chanel Davenport        -0.11            0.11          0.42
+Vanessa Vanjie Mateo            -0.17            0.09          0.35
+</code></pre></div><p>These results more or less agree with my take on the current situation. Brooke
+is the clear frontrunner, with very little to choose between the remaining four
+and Vanjie probably the weakest.</p>
+<p>I&rsquo;ve also been sanity checking the model by looking at who it thinks were the
+best RPDR contestants of all time. This is a bit tricky as there aren&rsquo;t any
+between-season comparisons.</p>
+<div class="highlight"><pre style="color:#93a1a1;background-color:#002b36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">                    ability_low  ability_median  ability_high
+contestant_name                                              
+Sasha Velour              -0.00            0.28          0.65
+Jinkx Monsoon             -0.01            0.27          0.65
+Tyra Sanchez              -0.01            0.27          0.66
+Bianca Del Rio            -0.05            0.26          0.67
+Sharon Needles            -0.05            0.24          0.63
+Brooke Lynn Hytes         -0.04            0.22          0.59
+Ginger Minj               -0.04            0.21          0.53
+Shea Couleé               -0.05            0.21          0.54
+Violet Chachki            -0.07            0.19          0.53
+Manila Luzon              -0.05            0.18          0.52
+Raja                      -0.07            0.18          0.53
+Bob the Drag Queen        -0.07            0.18          0.51
+Aquaria                   -0.08            0.17          0.50
+Roxxxy Andrews            -0.08            0.17          0.49
+Alaska                    -0.08            0.15          0.47
+Chad Michaels             -0.13            0.14          0.51
+Kim Chi                   -0.12            0.13          0.47
+Yvie Oddly                -0.12            0.13          0.48
+Nina Flowers              -0.12            0.13          0.51
+Trinity Taylor            -0.11            0.13          0.44
+</code></pre></div><p>This seems more or less plausible - as Yvie Oddly observed this season, Sasha
+Velour had talent!</p>
+<figure>
+    <img src="/img/emotional_rose.png"
+         alt="When your predictions recognise that your fave is the best"/> <figcaption>
+            <p>When your predictions recognise that your fave is the best</p>
+        </figcaption>
+</figure>
+
+<h1 id="things-that-could-be-improved">Things that could be improved</h1>
+<p>This was a really fun task - I learned lots about ordinal models and came up
+with something that more or less passed my smell test. There are a few extra
+features it would be nice to add - I&rsquo;m not sure I&rsquo;ll ever get round to them but
+it&rsquo;s still a good exercise.</p>
+<h2 id="probabilistic-predictions">Probabilistic predictions</h2>
+<p>Rather than just ranking competitors by ability it would be nice if the model
+outputted the probability of each queen winning or being eliminated in each
+episode. This wasn&rsquo;t strictly required for this competition as only a discrete
+best/worst prediction for the next episode was needed, but would make it a lot
+easier to test the model. Unfortunately a custom random number generating Stan
+function would be needed for this and I didn&rsquo;t quite have the emotional energy
+to attempt to implement one.</p>
+<h2 id="extra-ability-dimensions">Extra ability dimensions</h2>
+<p>There were a few times when I thought the model was a bit limited by only
+having one ability dimensions. For example, in the snatch game episode I
+thought it was pretty clear that personality queens Nina West and Silky Nutmeg
+Ganashe would do better than indicated by their overall track records.</p>
+<h2 id="separate-lipsync-mechanics">Separate lipsync mechanics</h2>
+<p>I think it would be nice to handle lipsyncs with a separate model. I initially
+took this approach but gave up as I seemed to be doing everything twice and the
+lipsync component of the model wasn&rsquo;t having a very big effect. Of course, as
+soon as I did this Rajah emerged as season 11&rsquo;s lipsync assassin and I started
+getting second thoughts.</p>
+
+		</div>
+
+		<div class="post-tags">
+			
+				
+			
+		</div>
+		</div>
+	<script type="text/javascript"
+  src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+</body>
+</html>
