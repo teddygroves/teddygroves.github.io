@@ -1,0 +1,191 @@
+<!doctype html><html><head><meta charset=utf-8><meta http-equiv=x-ua-compatible content="IE=edge"><title>Data Fetching - Teddy's Picnic</title><meta name=viewport content="width=device-width,initial-scale=1"><meta property="og:title" content="Data Fetching"><meta property="og:description" content="How to get some figure skating data"><meta property="og:type" content="article"><meta property="og:url" content="/posts/data_fetching/"><meta property="article:published_time" content="2021-02-10T00:00:00+00:00"><meta property="article:modified_time" content="2021-02-10T00:00:00+00:00"><meta name=twitter:card content="summary"><meta name=twitter:title content="Data Fetching"><meta name=twitter:description content="How to get some figure skating data"><link href="https://fonts.googleapis.com/css?family=Ubuntu:300,400,300italic,400italic|Raleway:200,300" rel=stylesheet><link rel=stylesheet type=text/css media=screen href=/css/normalize.css><link rel=stylesheet type=text/css media=screen href=/css/main.css><link rel=stylesheet type=text/css href=/css/dark.css media="(prefers-color-scheme: dark)"><script src=https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js></script><script src=/js/main.js></script></head><body><div class="container wrapper post"><div class=header><base href=/><h1 class=site-title><a href=/>Teddy's Picnic</a></h1><div class=site-description><h2></h2><nav class="nav social"><ul class=flat><a href=https://github.com/teddygroves title=Github><i data-feather=github></i></a><a href=/index.xml title=RSS><i data-feather=rss></i></a></ul></nav></div><nav class=nav><ul class=flat><li><a href=/posts>All posts</a></li><li><a href=/about>About me</a></li><li><a href=/data_analysis_on_ice>Data Analysis on Ice</a></li></ul></nav></div><div class=post-header><h1 class=title>Data Fetching</h1><div class=meta>Posted at &mdash; Feb 10, 2021</div></div><div class=markdown><figure><img src=/img/heights.jpg></figure><p>After <a href=./big_picture.html>formulating an idea</a> (we&rsquo;re going to try and predict
+technical scores of international figure skating elements) the next step is to
+fetch the data.</p><p>This can be anything from a moderate to an enormous faff, but in this case it&rsquo;s
+relatively straightforward as the information we need is available in a
+predictable and friendly format from skatingscores.</p><p>This post shows how to scrape this information in a considerate way
+(i.e. without putting too much pressure on the data provider&rsquo;s server) and save
+it in a format that will be easy to do some analysis on later.</p><p>A couple of potentially attention-saving disclaimers:</p><ul><li>If you are looking for figure skating data, using the skatingscores <a href=https://skatingscores.com/q/>database
+query functionality</a> may well be easier than
+adapting the method I used here.</li><li>If you are mostly interested in analysis and not so much in scraping and
+data wrangling, you may want to skip to the next post.</li></ul><p>If none of these apply to you, read on!</p><h2 id=preamble>Preamble</h2><p>The first step is to have a look at the kind of page we want to scrape and
+decide what to try and fetch from it.</p><p><img src=/img/skating_scores.png alt></p><p>We are interested in the stripy tables of element scores, the blue skater
+names, the big event title and the nicely formatted url.</p><p>Now we&rsquo;re ready to start writing a python script to fetch the data.</p><h2 id=imports>Imports</h2><p>The most important import this script uses is the html parsing library
+<a href=https://www.crummy.com/software/BeautifulSoup/bs4/doc/>BeautifulSoup</a> - I&rsquo;d
+highly recommend reading the documentation at that link if you&rsquo;re interested in
+scraping. We&rsquo;ll also use <a href=https://pandas.pydata.org/>pandas</a> to make the data
+tabular, <a href=https://requests.readthedocs.io/en/master/>requests</a> for talking to
+the internet and some built in python libararies for string manipulation
+(<a href=https://docs.python.org/3/library/re.html>re</a>) and temporarily pausing
+(<a href=https://docs.python.org/3/library/time.html>time</a>).</p><div class=highlight><pre style=color:#93a1a1;background-color:#002b36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python><span style=color:#719e07>from</span> bs4 <span style=color:#719e07>import</span> BeautifulSoup
+<span style=color:#719e07>import</span> re
+<span style=color:#719e07>import</span> requests
+<span style=color:#719e07>import</span> pandas <span style=color:#719e07>as</span> pd
+<span style=color:#719e07>import</span> time
+</code></pre></div><h2 id=urls>Urls</h2><p>The skatingscores urls we need have the format
+<code>https://skatingscores.com/&lt;SEASON>/&lt;EVENT_NAME>/&lt;GENDER>/&lt;PROGRAM></code>, so the
+urls we need to query can be specified with only the following hardcoded
+information:</p><div class=highlight><pre style=color:#93a1a1;background-color:#002b36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python>BASE_URL <span style=color:#719e07>=</span> <span style=color:#2aa198>&#34;https://skatingscores.com&#34;</span>
+EVENTS <span style=color:#719e07>=</span> [
+    <span style=color:#2aa198>&#34;1920/gpcan&#34;</span>,
+    <span style=color:#2aa198>&#34;1920/gpchn&#34;</span>,
+    <span style=color:#2aa198>&#34;1920/gpjpn&#34;</span>,
+    <span style=color:#2aa198>&#34;1920/gpfra&#34;</span>,
+    <span style=color:#2aa198>&#34;1920/gpusa&#34;</span>,
+    <span style=color:#2aa198>&#34;1920/gpf&#34;</span>,
+    <span style=color:#2aa198>&#34;1920/gpf&#34;</span>,
+    <span style=color:#2aa198>&#34;1920/4cc&#34;</span>,
+    <span style=color:#2aa198>&#34;2021/natjpn&#34;</span>,
+    <span style=color:#2aa198>&#34;2021/natusa&#34;</span>
+]
+GENDERS <span style=color:#719e07>=</span> [<span style=color:#2aa198>&#34;men&#34;</span>, <span style=color:#2aa198>&#34;ladies&#34;</span>]
+PROGRAMS <span style=color:#719e07>=</span> [<span style=color:#2aa198>&#34;short&#34;</span>, <span style=color:#2aa198>&#34;long&#34;</span>]
+</code></pre></div><p>These can be turned into a list of urls with a simple function:</p><div class=highlight><pre style=color:#93a1a1;background-color:#002b36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python><span style=color:#719e07>def</span> <span style=color:#268bd2>get_urls</span>(base_url, events, genders, programs):
+   <span style=color:#719e07>return</span> [
+        f<span style=color:#2aa198>&#34;{base_url}/{event}/{gender}/{program}&#34;</span>
+        <span style=color:#719e07>for</span> event <span style=color:#719e07>in</span> events
+        <span style=color:#719e07>for</span> gender <span style=color:#719e07>in</span> genders
+        <span style=color:#719e07>for</span> program <span style=color:#719e07>in</span> programs
+    ]
+</code></pre></div><h2 id=fetching-html-considerately>Fetching html considerately</h2><p>The next step is to fetch an html string for each url from the internet and
+turn them into BeautifulSoup objects. The following functions take care of
+this:</p><div class=highlight><pre style=color:#93a1a1;background-color:#002b36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python><span style=color:#719e07>def</span> <span style=color:#268bd2>fetch_html</span>(url):
+   time<span style=color:#719e07>.</span>sleep(<span style=color:#2aa198>0.2</span>)  <span style=color:#586e75># to avoid overloading the skatingscores server</span>
+   <span style=color:#719e07>try</span>:
+      r <span style=color:#719e07>=</span> requests<span style=color:#719e07>.</span>get(url)
+      r<span style=color:#719e07>.</span>raise_for_status()   
+      <span style=color:#719e07>return</span> r<span style=color:#719e07>.</span>content
+   <span style=color:#719e07>except</span> requests<span style=color:#719e07>.</span>exceptions<span style=color:#719e07>.</span>HTTPError <span style=color:#719e07>as</span> err:
+      <span style=color:#719e07>raise</span> <span style=color:#cb4b16>SystemExit</span>(err)
+
+
+<span style=color:#719e07>def</span> <span style=color:#268bd2>fetch_soups</span>(urls):
+    <span style=color:#719e07>return</span> [BeautifulSoup(fetch_html(url), <span style=color:#2aa198>&#39;html.parser&#39;</span>) <span style=color:#719e07>for</span> url <span style=color:#719e07>in</span> urls]
+</code></pre></div><p>Note that the <code>fetch_html</code> function includes a brief pause to avoid overloading
+the target server, and that these functions use the verb &ldquo;fetch&rdquo; to indicate
+that they interact with the outside world.</p><h2 id=from-beautiful-soup-to-native-python>From Beautiful soup to native python</h2><p>Next, we need to extract information we want - i.e. the event name for each
+program and the skater name and score table for each skate - from our list of
+BeautifulSoup objects and put them in native python objects like lists.</p><p>The easiest thing to get is the event name. The function below finds the text
+of a soup&rsquo;s first <code>h1</code> element (<code>soup.find("h1").text</code>), filters out
+non-alphanumeric characters (<code>re.sub(...)</code>) and removes any leading whitespace
+(<code>.lstrip()</code>).</p><div class=highlight><pre style=color:#93a1a1;background-color:#002b36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python><span style=color:#719e07>def</span> <span style=color:#268bd2>get_event_name</span>(soup):
+    <span style=color:#719e07>return</span> re<span style=color:#719e07>.</span>sub(<span style=color:#2aa198>r</span><span style=color:#2aa198>&#39;[^A-Za-z0-9 ]+&#39;</span>, <span style=color:#2aa198>&#39;&#39;</span>,  soup<span style=color:#719e07>.</span>find(<span style=color:#2aa198>&#34;h1&#34;</span>)<span style=color:#719e07>.</span>text)<span style=color:#719e07>.</span>lstrip()
+
+</code></pre></div><p>The skate-specific information, i.e. the name and country of each skater and
+the table recording their technical scores, lies in html divs with the class
+<code>skat-wrap</code>. We can get a list of BeautifulSoup obejects representing all the
+<code>skat-wrap</code> elements for a page with another function:</p><div class=highlight><pre style=color:#93a1a1;background-color:#002b36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python><span style=color:#719e07>def</span> <span style=color:#268bd2>get_skates</span>(soup):
+    <span style=color:#719e07>return</span> soup<span style=color:#719e07>.</span>find_all(<span style=color:#2aa198>&#34;div&#34;</span>, {<span style=color:#2aa198>&#34;class&#34;</span>: <span style=color:#2aa198>&#34;skat-wrap&#34;</span>})
+
+</code></pre></div><p>The skater&rsquo;s name and country are always the text of the first two links in the
+header row of a skate table. This function extracts that information from a
+BeautifulSoup object representing a <code>skat-wrap</code>:</p><div class=highlight><pre style=color:#93a1a1;background-color:#002b36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python><span style=color:#719e07>def</span> <span style=color:#268bd2>get_name_and_country</span>(skate_soup):
+    headlinks <span style=color:#719e07>=</span> (
+        skate_soup
+        <span style=color:#719e07>.</span>find(<span style=color:#2aa198>&#34;div&#34;</span>, class_<span style=color:#719e07>=</span><span style=color:#2aa198>&#34;ptab1-wrap&#34;</span>)
+        <span style=color:#719e07>.</span>find(<span style=color:#2aa198>&#34;table&#34;</span>)
+        <span style=color:#719e07>.</span>find(<span style=color:#2aa198>&#34;tr&#34;</span>, class_<span style=color:#719e07>=</span><span style=color:#2aa198>&#34;head&#34;</span>)
+        <span style=color:#719e07>.</span>find_all(<span style=color:#2aa198>&#34;a&#34;</span>)
+    )
+    name <span style=color:#719e07>=</span> <span style=color:#2aa198>&#34; &#34;</span><span style=color:#719e07>.</span>join([n<span style=color:#719e07>.</span>capitalize() <span style=color:#719e07>for</span> n <span style=color:#719e07>in</span> headlinks[<span style=color:#2aa198>0</span>]<span style=color:#719e07>.</span>text<span style=color:#719e07>.</span>split(<span style=color:#2aa198>&#34; &#34;</span>)])
+    country <span style=color:#719e07>=</span> headlinks[<span style=color:#2aa198>1</span>]<span style=color:#719e07>.</span>text
+    <span style=color:#719e07>return</span> name, country
+</code></pre></div><p>The table of scores for each skate lives in the <code>table</code> element of a div with
+the class <code>ptab2-wrap</code>. We can get the required information by filtering out
+the <code>head</code> and <code>tally</code> rows and then extracting the text of each <code>td</code> element
+of each remaining row:</p><div class=highlight><pre style=color:#93a1a1;background-color:#002b36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python><span style=color:#719e07>def</span> <span style=color:#268bd2>get_score_table</span>(skate_soup):
+    exclude <span style=color:#719e07>=</span> {<span style=color:#2aa198>&#34;head&#34;</span>, <span style=color:#2aa198>&#34;tally&#34;</span>}
+    rows <span style=color:#719e07>=</span> <span style=color:#b58900>list</span>(<span style=color:#b58900>filter</span>(
+        <span style=color:#719e07>lambda</span> r: <span style=color:#b58900>len</span>(<span style=color:#b58900>set</span>(r<span style=color:#719e07>.</span>attrs[<span style=color:#2aa198>&#34;class&#34;</span>]) <span style=color:#719e07>&amp;</span> exclude) <span style=color:#719e07>==</span> <span style=color:#2aa198>0</span>,
+        skate_soup
+        <span style=color:#719e07>.</span>find(<span style=color:#2aa198>&#34;div&#34;</span>, class_<span style=color:#719e07>=</span><span style=color:#2aa198>&#34;ptab2-wrap&#34;</span>)
+        <span style=color:#719e07>.</span>find(<span style=color:#2aa198>&#34;table&#34;</span>)
+        <span style=color:#719e07>.</span>find_all(<span style=color:#2aa198>&#34;tr&#34;</span>)
+    ))
+    <span style=color:#719e07>return</span> [[td<span style=color:#719e07>.</span>text <span style=color:#719e07>for</span> td <span style=color:#719e07>in</span> r<span style=color:#719e07>.</span>find_all(<span style=color:#2aa198>&#34;td&#34;</span>)] <span style=color:#719e07>for</span> r <span style=color:#719e07>in</span> rows]
+</code></pre></div><p>Putting everything together from this step, we can now turn a BeautifulSoup
+representing an event page into the event name and a list of sub-soups
+representing skates, and we can turn each skate into a name/country tuple and a
+list with technical score information.</p><p>Now we need to put these bits together to get a single, nicely formatted table.</p><h2 id=from-native-python-to-a-table>From native python to a table</h2><p>First we need to decide what we want our table to look like - what should its
+rows represent? I think a good choice is for the rows to represent assignments
+of technical scores by individual judges - i.e. the numbers between -5 and +5
+in the . This is nice because these are the most fine-grained bits of
+information, and also fits the tidy data philosophy that in tables used for
+statistical modelling, rows should represent individual measurements. In other
+words we want to end up with something like this:</p><div class=highlight><pre style=color:#93a1a1;background-color:#002b36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell>event                                      name         judge score
+<span style=color:#2aa198>2021</span> Japanese Nationals Mens Short Program Yuzuru Hanyu <span style=color:#2aa198>1</span>     <span style=color:#2aa198>4</span>
+<span style=color:#2aa198>2021</span> Japanese Nationals Mens Short Program Yuzuru Hanyu <span style=color:#2aa198>1</span>     <span style=color:#2aa198>3</span>
+...
+</code></pre></div><p>The next function does most of the work to turn the native python objects that
+the previous steps creted into a pandas DataFrame with the tabular form we are
+looking for. The main trick is the call to the <code>melt</code> method, which reshapes
+the table from wider form in which it appears on skatingscores to the longer
+form we want.</p><div class=highlight><pre style=color:#93a1a1;background-color:#002b36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python><span style=color:#719e07>def</span> <span style=color:#268bd2>get_df_from_skate</span>(event, name, country, score_table):
+    n_judge <span style=color:#719e07>=</span> <span style=color:#b58900>len</span>(score_table[<span style=color:#2aa198>0</span>]) <span style=color:#719e07>-</span> <span style=color:#2aa198>7</span>
+    judge_cols <span style=color:#719e07>=</span> [<span style=color:#b58900>str</span>(i<span style=color:#719e07>+</span><span style=color:#2aa198>1</span>) <span style=color:#719e07>for</span> i <span style=color:#719e07>in</span> <span style=color:#b58900>range</span>(n_judge)]
+    pre_cols <span style=color:#719e07>=</span> [<span style=color:#2aa198>&#34;order&#34;</span>, <span style=color:#2aa198>&#34;element&#34;</span>, <span style=color:#2aa198>&#34;notes&#34;</span>, <span style=color:#2aa198>&#34;base_value&#34;</span>, <span style=color:#2aa198>&#34;late&#34;</span>, <span style=color:#2aa198>&#34;goe_total&#34;</span>]
+    post_cols <span style=color:#719e07>=</span> [<span style=color:#2aa198>&#34;aggregate_score&#34;</span>]
+    cols <span style=color:#719e07>=</span> pre_cols <span style=color:#719e07>+</span> judge_cols <span style=color:#719e07>+</span> post_cols
+    <span style=color:#719e07>return</span> (
+        pd<span style=color:#719e07>.</span>DataFrame(score_table, columns<span style=color:#719e07>=</span>cols)
+        <span style=color:#719e07>.</span>assign(late<span style=color:#719e07>=</span><span style=color:#719e07>lambda</span> df: df[<span style=color:#2aa198>&#34;late&#34;</span>]<span style=color:#719e07>.</span>map({<span style=color:#2aa198>&#34;x&#34;</span>: <span style=color:#268bd2>True</span>, <span style=color:#2aa198>&#34;&#34;</span>: <span style=color:#268bd2>False</span>}))
+        <span style=color:#719e07>.</span>melt(id_vars<span style=color:#719e07>=</span>pre_cols<span style=color:#719e07>+</span>post_cols, var_name<span style=color:#719e07>=</span><span style=color:#2aa198>&#34;judge&#34;</span>, value_name<span style=color:#719e07>=</span><span style=color:#2aa198>&#34;score&#34;</span>)
+        <span style=color:#719e07>.</span>assign(event<span style=color:#719e07>=</span>event, name<span style=color:#719e07>=</span>name, country<span style=color:#719e07>=</span>country)
+        <span style=color:#719e07>.</span>apply(pd<span style=color:#719e07>.</span>to_numeric, errors<span style=color:#719e07>=</span><span style=color:#2aa198>&#34;ignore&#34;</span>, downcast<span style=color:#719e07>=</span><span style=color:#2aa198>&#34;integer&#34;</span>)
+    )
+</code></pre></div><h2 id=putting-everything-together>Putting everything together</h2><p>The last step in the process is to make a couple of functions to glue the
+different parts together. First we need a function that takes in a page soup,
+makes a table for each skate, and stacks all of these tables together:</p><div class=highlight><pre style=color:#93a1a1;background-color:#002b36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python><span style=color:#719e07>def</span> <span style=color:#268bd2>get_df_from_soup</span>(soup):
+    event <span style=color:#719e07>=</span> get_event_name(soup)
+    skates <span style=color:#719e07>=</span> get_skates(soup)
+    out <span style=color:#719e07>=</span> pd<span style=color:#719e07>.</span>DataFrame()
+    <span style=color:#719e07>for</span> skate <span style=color:#719e07>in</span> skates:
+       name, country <span style=color:#719e07>=</span> get_name_and_country(skate)
+       score_table <span style=color:#719e07>=</span> get_score_table(skate)
+       score_df <span style=color:#719e07>=</span> get_df_from_skate(event, name, country, score_table)
+       out <span style=color:#719e07>=</span> pd<span style=color:#719e07>.</span>concat([out, score_df], ignore_index<span style=color:#719e07>=</span><span style=color:#268bd2>True</span>)
+    <span style=color:#719e07>return</span> out
+</code></pre></div><p>Finally, we make another function that takes a list of page soups, gets tables
+from them and stacks the results:</p><div class=highlight><pre style=color:#93a1a1;background-color:#002b36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python><span style=color:#719e07>def</span> <span style=color:#268bd2>get_df_from_soups</span>(soups):
+    <span style=color:#719e07>return</span> pd<span style=color:#719e07>.</span>concat(
+       [get_df_from_soup(soup) <span style=color:#719e07>for</span> soup <span style=color:#719e07>in</span> soups], ignore_index<span style=color:#719e07>=</span><span style=color:#268bd2>True</span>
+    )
+</code></pre></div><p>Now we really have everything we need, so we can write our script&rsquo;s main
+function:</p><div class=highlight><pre style=color:#93a1a1;background-color:#002b36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python><span style=color:#719e07>def</span> <span style=color:#268bd2>main</span>():
+    urls <span style=color:#719e07>=</span> get_urls(BASE_URL, EVENTS, GENDERS, PROGRAMS)
+    <span style=color:#719e07>print</span>(<span style=color:#2aa198>&#34;Fetching data...&#34;</span>)
+    soups <span style=color:#719e07>=</span> fetch_soups(urls)
+    <span style=color:#719e07>print</span>(<span style=color:#2aa198>&#34;Processing data...&#34;</span>)
+    scores <span style=color:#719e07>=</span> get_df_from_soups(soups)
+    <span style=color:#719e07>print</span>(f<span style=color:#2aa198>&#34;Writing data to {OUTPUT_FILE}&#34;</span>)
+    scores<span style=color:#719e07>.</span>to_csv(OUTPUT_FILE)
+
+
+<span style=color:#719e07>if</span> __name__ <span style=color:#719e07>==</span> <span style=color:#2aa198>&#34;__main__&#34;</span>:
+    main()
+</code></pre></div><p><a href=https://github.com/teddygroves/figure_skating/blob/master/fetch_scores.py>Here</a>&rsquo;s
+what the final script looks like.</p><p>Now we can run the script with <code>python fetch_scores.py</code> and see something like
+this:</p><div class=highlight><pre style=color:#93a1a1;background-color:#002b36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>
+tedgro@nnfcb-l0601 ~/Code/figure_skating <span style=color:#719e07>(</span>master<span style=color:#719e07>)</span>
+$ python fetch_scores.py 
+Fetching data...
+Processing data...
+Writing data to scores.csv
+</code></pre></div><p>and then check that the output looks as expected</p><div class=highlight><pre style=color:#93a1a1;background-color:#002b36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>tedgro@nnfcb-l0601 ~/Code/figure_skating <span style=color:#719e07>(</span>master<span style=color:#719e07>)</span>
+$ <span style=color:#b58900>echo</span> -e <span style=color:#2aa198>&#34;import pandas as pd\nprint(pd.read_csv(&#39;scores.csv&#39;).iloc[0])&#34;</span> | python
+Unnamed: <span style=color:#2aa198>0</span>                                               <span style=color:#2aa198>0</span>
+order                                                    <span style=color:#2aa198>1</span>
+element                                                 4S
+notes                                                  NaN
+base_value                                             9.7
+late                                                 False
+goe_total                                             4.43
+aggregate_score                                      14.13
+judge                                                    <span style=color:#2aa198>1</span>
+score                                                    <span style=color:#2aa198>5</span>
+event              <span style=color:#2aa198>2019</span> GP Skate Canada Mens Short Program
+name                                          Yuzuru Hanyu
+country                                                JPN
+Name: 0, dtype: object
+</code></pre></div><h2 id=conclusion>Conclusion</h2><p>So, that was how I fetched goe data from skatingscores. I hope you found it
+useful.</p><p>The next post in this series will get started with analysing this data. Until
+then goodbye and happy scraping!</p></div><div class=post-tags><nav class="nav tags"><ul class=flat><li><a href=/tags/skating>skating</a></li></ul></nav></div></div><script type=text/javascript src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script></body></html>
