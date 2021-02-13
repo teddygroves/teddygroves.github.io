@@ -25,17 +25,12 @@ mode = "auto" # "dark", "auto", "light"
 # customJS = ["https://code.jquery.com/jquery-3.4.1.js", "js/custom1.js"]  # Custom JS scripts.
 
 [[menu.main]]
-name = "Home"
-url = "/"
-weight = 1
-
-[[menu.main]]
 name = "All posts"
 url = "/posts"
 weight = 2
 
 [[menu.main]]
-name = "About"
+name = "About me"
 url = "/about"
 weight = 3
 
