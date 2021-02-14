@@ -27,16 +27,21 @@ mode = "auto" # "dark", "auto", "light"
 [[menu.main]]
 name = "All posts"
 url = "/posts"
-weight = 2
+weight = 1
 
 [[menu.main]]
 name = "About me"
 url = "/about"
-weight = 3
+weight = 2
 
 [[menu.main]]
 name = "Data Analysis on Ice"
 url = "/data_analysis_on_ice"
+weight = 3
+
+[[menu.main]]
+name = "RSS"
+url = "/index.xml"
 weight = 4
 
 [[params.social]]
