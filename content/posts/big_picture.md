@@ -3,7 +3,6 @@ title = "The Big Picture"
 date = 2021-01-10
 description = "What is this all about anyway?"
 tags = ["skating"]
-tags_weight = 10
 +++
 
 {{<spotify 4y1althCKOLRstp7nv8kIa>}}
