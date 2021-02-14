@@ -125,12 +125,12 @@ that they interact with the outside world.
 
 ## From Beautiful soup to native python
 
-Next, we need to extract information we want - i.e. the event name for each
+The next step is to extract information we want - i.e. the event name for each
 program and the skater name and score table for each skate - from our list of
-BeautifulSoup objects and put them in native python objects like lists.
+BeautifulSoup objects and put them in native python objects.
 
 The easiest thing to get is the event name. The function below finds the text
-of a soup's first `h1` element (`soup.find("h1").text`), filters out
+of a parsed page's first `h1` element (`soup.find("h1").text`), filters out
 non-alphanumeric characters (`re.sub(...)`) and removes any leading whitespace
 (`.lstrip()`).
 
@@ -141,7 +141,7 @@ def get_event_name(soup):
 ```
 
 The skate-specific information, i.e. the name and country of each skater and
-the table recording their technical scores, lies in html divs with the class
+the table recording their technical scores, lives in html divs with the class
 `skat-wrap`. We can get a list of BeautifulSoup obejects representing all the
 `skat-wrap` elements for a page with another function:
 
@@ -153,7 +153,7 @@ def get_skates(soup):
 
 The skater's name and country are always the text of the first two links in the
 header row of a skate table. This function extracts that information from a
-BeautifulSoup object representing a `skat-wrap`:
+BeautifulSoup object representing a `skat-wrap` div:
 
 ```python
 def get_name_and_country(skate_soup):
@@ -190,20 +190,24 @@ def get_score_table(skate_soup):
 
 Putting everything together from this step, we can now turn a BeautifulSoup
 representing an event page into the event name and a list of sub-soups
-representing skates, and we can turn each skate into a name/country tuple and a
-list with technical score information. 
+representing skates, and we can turn each skate soup into a name/country tuple
+and a list with technical score information.
 
 Now we need to put these bits together to get a single, nicely formatted table.
 
 ## From native python to a table
 
 First we need to decide what we want our table to look like - what should its
-rows represent? I think a good choice is for the rows to represent assignments
-of technical scores by individual judges - i.e. the numbers between -5 and +5
-in the . This is nice because these are the most fine-grained bits of
-information, and also fits the tidy data philosophy that in tables used for
-statistical modelling, rows should represent individual measurements. In other
-words we want to end up with something like this:
+rows represent? 
+
+I think a good choice is for the rows to represent assignments of technical
+scores by individual judges - i.e. the numbers between -5 and +5 in the
+screenshot above. This is nice because these are the most fine-grained bits of
+information, and also fits the [tidy
+data](https://cran.r-project.org/web/packages/tidyr/vignettes/tidy-data.html)
+philosophy that table rows should usually represent individual measurements. 
+
+In other words we want to end up with something like this:
 
 
 ``` shell
@@ -215,9 +219,10 @@ event                                      name         judge score
 
 The next function does most of the work to turn the native python objects that
 the previous steps creted into a pandas DataFrame with the tabular form we are
-looking for. The main trick is the call to the `melt` method, which reshapes
-the table from wider form in which it appears on skatingscores to the longer
-form we want.
+looking for. The main trick is the call to the
+[`melt`](https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.melt.html)
+method, which reshapes the table from wider form in which it appears on
+skatingscores to the longer form we want.
 
 ```python
 def get_df_from_skate(event, name, country, score_table):
@@ -320,8 +325,7 @@ Name: 0, dtype: object
 
 ## Conclusion
 
-So, that was how I fetched goe data from skatingscores. I hope you found it
-useful.
+So, that was how I fetched some skating data from skatingscores. 
 
 The next post in this series will get started with analysing this data. Until
 then goodbye and happy scraping!
