@@ -12,7 +12,7 @@ found
 [here](https://soyouwanttowatchfs.com/post/176876853980/introduction-to-the-isu-judging-system-post-2018).
 
 The gist is that each skater makes two performances: a "short programme"
-lasting a bit under 3 minutes amd a "free skate" lasting just over 4
+lasting a bit under 3 minutes and a "free skate" lasting just over 4
 minutes. During these programmes the skater attempts a series of "technical
 elements" (i.e. jumps, spins and sequences). A panel of judges numerically
 assesses both the individual elements and various aspects of the overall
@@ -20,13 +20,12 @@ performance, and these assessments are aggregated into an overall score for the
 programme. The skater's final score is the sum of their two programme scores.
 
 At least to start with, the analysis here is going to focus on one aspect of
-the scoring system that these posts are going to focus on are the "grade of
-execution" scores that the judges assign to each element. These are whole
-numbers between -5 and 5, representing how well the judge thinks that the
-skater pulled off the element. If the skater falls on a jump, the jump's grade
-of execution is -5; if they complete the jump but don't land well the grade
-might be -1; if they enter smoothly and land perfectly the jump would probably
-score 4 or 5.
+the scoring system: the "grade of execution" scores that the judges assign to
+each element. These are whole numbers between -5 and 5, representing how well
+the judge thinks that the skater pulled off the element. If the skater falls on
+a jump, the jump's grade of execution is -5; if they complete the jump but
+don't land well the grade might be -1; if they enter smoothly and land
+perfectly the jump would probably score 4 or 5.
 
 The aim will be to make a statistical model that describes and predicts these
 numbers.  In other words, when a particular skater, say [Yuzuru
