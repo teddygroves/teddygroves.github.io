@@ -45,7 +45,7 @@ compared to other triple axels, but to other under-rotated triple axels.
 Since the data has a quite specific and informative structure that needs to be
 taken into account, I was pretty sure that I wanted to try a custom Stan
 model. I recently wrote a [cookiecutter
-template](https://github.com/teddygroves/cookiecutter-cmdstanpy) template for
+template](https://github.com/teddygroves/cookiecutter-cmdstanpy) for
 just this kind of project, so I thought I'd try it out and hopefully save
 writing a bit of boilerplate code.
 
