@@ -166,8 +166,60 @@ sim_study-20210322170324-simple_posterior     0 -4952.580176    93.164296 ...  3
 sim_study-20210322170324-simple_prior         1 -7919.559170  2448.849177 ...  47.280981  44.640614     True
 
 </code></pre></div><p>I wasn&rsquo;t too worried about the loo warning for the prior model. To check that
-it wasn&rsquo;t too far wrong I wrote some sanity-checking plotting functions and ran
-them with a new script <code>analyse.py</code>.</p><p>Here are the prior model&rsquo;s opinions about the skaters' abilities, together with
+it wasn&rsquo;t too far wrong I wrote some sanity-checking plotting functions:</p><div class=highlight><pre style=color:#93a1a1;background-color:#002b36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python><span style=color:#719e07>def</span> <span style=color:#268bd2>plot_marginals</span>(
+    infd: az<span style=color:#719e07>.</span>InferenceData,
+    var_name: <span style=color:#b58900>str</span>,
+    ax: plt<span style=color:#719e07>.</span>Axes,
+    true_values: pd<span style=color:#719e07>.</span>Series <span style=color:#719e07>=</span> <span style=color:#268bd2>None</span>,
+):
+    <span style=color:#2aa198>&#34;&#34;&#34;Plot marginal 10</span><span style=color:#2aa198>%-90%</span><span style=color:#2aa198> intervals, with true values if available.&#34;&#34;&#34;</span>
+    qs <span style=color:#719e07>=</span> infd<span style=color:#719e07>.</span>posterior[var_name]<span style=color:#719e07>.</span>to_series()<span style=color:#719e07>.</span>unstack()<span style=color:#719e07>.</span>quantile([<span style=color:#2aa198>0.1</span>, <span style=color:#2aa198>0.9</span>])<span style=color:#719e07>.</span>T
+    qs <span style=color:#719e07>=</span> qs<span style=color:#719e07>.</span>sort_values(<span style=color:#2aa198>0.9</span>)
+    y <span style=color:#719e07>=</span> np<span style=color:#719e07>.</span>linspace(<span style=color:#719e07>*</span>ax<span style=color:#719e07>.</span>get_ylim(), <span style=color:#b58900>len</span>(qs))
+    ax<span style=color:#719e07>.</span>set_yticks(y)
+    ax<span style=color:#719e07>.</span>set_yticklabels(qs<span style=color:#719e07>.</span>index)
+    ax<span style=color:#719e07>.</span>hlines(
+        y, qs[<span style=color:#2aa198>0.1</span>], qs[<span style=color:#2aa198>0.9</span>], color<span style=color:#719e07>=</span><span style=color:#2aa198>&#34;tab:blue&#34;</span>, label<span style=color:#719e07>=</span><span style=color:#2aa198>&#34;90% marginal interval&#34;</span>
+    )
+    <span style=color:#719e07>if</span> true_values <span style=color:#719e07>is</span> <span style=color:#719e07>not</span> <span style=color:#268bd2>None</span>:
+        qs[<span style=color:#2aa198>&#34;truth&#34;</span>] <span style=color:#719e07>=</span> true_values
+        qs[<span style=color:#2aa198>&#34;truth_in_interval&#34;</span>] <span style=color:#719e07>=</span> (qs[<span style=color:#2aa198>&#34;truth&#34;</span>] <span style=color:#719e07>&lt;</span> qs[<span style=color:#2aa198>0.9</span>]) <span style=color:#719e07>&amp;</span> (
+            qs[<span style=color:#2aa198>&#34;truth&#34;</span>] <span style=color:#719e07>&gt;</span> qs[<span style=color:#2aa198>0.1</span>]
+        )
+        ax<span style=color:#719e07>.</span>scatter(
+            qs[<span style=color:#2aa198>&#34;truth&#34;</span>], y, marker<span style=color:#719e07>=</span><span style=color:#2aa198>&#34;|&#34;</span>, color<span style=color:#719e07>=</span><span style=color:#2aa198>&#34;red&#34;</span>, label<span style=color:#719e07>=</span><span style=color:#2aa198>&#34;True ability&#34;</span>
+        )
+    ax<span style=color:#719e07>.</span>legend(frameon<span style=color:#719e07>=</span><span style=color:#268bd2>False</span>)
+    <span style=color:#719e07>return</span> ax
+
+
+<span style=color:#719e07>def</span> <span style=color:#268bd2>plot_ppc</span>(infd: az<span style=color:#719e07>.</span>InferenceData, scores: pd<span style=color:#719e07>.</span>DataFrame, ax: plt<span style=color:#719e07>.</span>Axes):
+    <span style=color:#2aa198>&#34;&#34;&#34;Plot observed scores vs predictive distributions.&#34;&#34;&#34;</span>
+    ix <span style=color:#719e07>=</span> scores<span style=color:#719e07>.</span>sort_values(<span style=color:#2aa198>&#34;score&#34;</span>)<span style=color:#719e07>.</span>index
+    obs_score <span style=color:#719e07>=</span> scores<span style=color:#719e07>.</span>sort_values(<span style=color:#2aa198>&#34;score&#34;</span>)[<span style=color:#2aa198>&#34;score&#34;</span>]<span style=color:#719e07>.</span>values
+    bins <span style=color:#719e07>=</span> (
+        infd<span style=color:#719e07>.</span>posterior_predictive[<span style=color:#2aa198>&#34;yrep&#34;</span>]
+        <span style=color:#719e07>.</span>to_series()
+        <span style=color:#719e07>.</span>subtract(<span style=color:#2aa198>6</span>)
+        <span style=color:#719e07>.</span>astype(<span style=color:#b58900>int</span>)
+        <span style=color:#719e07>.</span>reset_index()
+        <span style=color:#719e07>.</span>groupby([<span style=color:#2aa198>&#34;measurement&#34;</span>, <span style=color:#2aa198>&#34;yrep&#34;</span>])
+        <span style=color:#719e07>.</span>size()
+        <span style=color:#719e07>.</span>unstack()
+        <span style=color:#719e07>.</span>pipe(<span style=color:#719e07>lambda</span> df: df<span style=color:#719e07>.</span>div(df<span style=color:#719e07>.</span>sum(axis<span style=color:#719e07>=</span><span style=color:#2aa198>1</span>), axis<span style=color:#719e07>=</span><span style=color:#2aa198>0</span>))
+        <span style=color:#719e07>.</span>reindex(ix)
+        <span style=color:#719e07>.</span>set_index(obs_score)
+        <span style=color:#719e07>.</span>rename_axis(<span style=color:#2aa198>&#34;Observed score&#34;</span>)
+        <span style=color:#719e07>.</span>rename_axis(<span style=color:#2aa198>&#34;Predicted score&#34;</span>, axis<span style=color:#719e07>=</span><span style=color:#2aa198>1</span>)
+        <span style=color:#719e07>.</span>T
+    )
+    ax <span style=color:#719e07>=</span> sns<span style=color:#719e07>.</span>heatmap(
+        bins, cmap<span style=color:#719e07>=</span><span style=color:#2aa198>&#34;YlGnBu&#34;</span>, ax<span style=color:#719e07>=</span>ax, cbar_kws<span style=color:#719e07>=</span>{<span style=color:#2aa198>&#34;label&#34;</span>: <span style=color:#2aa198>&#34;Modelled probability&#34;</span>}
+    )
+    ax<span style=color:#719e07>.</span>invert_yaxis()
+    <span style=color:#719e07>return</span> ax
+
+</code></pre></div><p>Here are the prior model&rsquo;s opinions about the skaters' abilities, together with
 the true values that were used to generate the fake data:</p><figure><img src=/img/prior_abilities.png alt="Simulated data ability priors" width=300><figcaption><p>Simulated data ability priors</p></figcaption></figure><p>This seemed more or less fine.</p><p>Next I made a prior predictive check, comparing each observed score with the
 distribution of modelled scores:</p><figure><img src=/img/prior_ppc.png alt="Simulated data prior predictive checks" width=1000><figcaption><p>Simulated data prior predictive checks</p></figcaption></figure><p>Again nothing especially worrying, at least at this early stage.</p><p>Repeating the same plots for the fitted data gave these results:</p><figure><img src=/img/posterior_abilities.png alt="Simulated data ability posteriors" width=300><figcaption><p>Simulated data ability posteriors</p></figcaption></figure><figure><img src=/img/posterior_ppc.png alt="Simulated data posterior predictive checks" width=1000><figcaption><p>Simulated data posterior predictive checks</p></figcaption></figure><p>It&rsquo;s nice that the available data seems sufficient to separate the skaters
 quite cleanly and that there is a visible, albeit not the sharpest,
