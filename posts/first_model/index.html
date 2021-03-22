@@ -1,0 +1,196 @@
+<!doctype html><html><head><meta charset=utf-8><meta http-equiv=x-ua-compatible content="IE=edge"><title>Who does the best triple axel? - Teddy's Picnic</title><meta name=viewport content="width=device-width,initial-scale=1"><meta property="og:title" content="Who does the best triple axel?"><meta property="og:description" content="A first go at modelling some skatingscores data"><meta property="og:type" content="article"><meta property="og:url" content="/posts/first_model/"><meta property="article:section" content="posts"><meta property="article:published_time" content="2021-03-22T00:00:00+00:00"><meta property="article:modified_time" content="2021-03-22T00:00:00+00:00"><meta name=twitter:card content="summary"><meta name=twitter:title content="Who does the best triple axel?"><meta name=twitter:description content="A first go at modelling some skatingscores data"><link href="https://fonts.googleapis.com/css?family=Ubuntu:300,400,300italic,400italic|Raleway:200,300" rel=stylesheet><link rel=stylesheet type=text/css media=screen href=/css/normalize.css><link rel=stylesheet type=text/css media=screen href=/css/main.css><link rel=stylesheet type=text/css href=/css/dark.css media="(prefers-color-scheme: dark)"><script src=https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js></script><script src=/js/main.js></script></head><body><div class="container wrapper post"><div class=header><base href=/><h1 class=site-title><a href=/>Teddy's Picnic</a></h1><div class=site-description><h2></h2><nav class="nav social"><ul class=flat><a href=https://github.com/teddygroves title=Github><i data-feather=github></i></a><a href=/index.xml title=RSS><i data-feather=rss></i></a></ul></nav></div><nav class=nav><ul class=flat><li><a href=/posts>All posts</a></li><li><a href=/about>About me</a></li><li><a href=/data_analysis_on_ice>Data Analysis on Ice</a></li><li><a href=/index.xml>RSS</a></li></ul></nav></div><div class=post-header><h1 class=title>Who does the best triple axel?</h1><div class=meta>Posted at &mdash; Mar 22, 2021</div></div><div class=markdown><div style=position:relative;padding-bottom:56.25%;height:0;overflow:hidden><iframe src=https://www.youtube.com/embed/_WHCClGHYMw style=position:absolute;top:0;left:0;width:100%;height:100%;border:0 allowfullscreen title="YouTube Video"></iframe></div><p>To recap, the <a href=/posts/big_picture/>first post</a> in this series set
+out the overall project: to predict grade-of-execution scores in international
+singles figure skating competions, using data from the website
+<a href=https://skatingscores.com/>skatingscores</a>. Ideally we&rsquo;d like to be able to
+answer high-level questions involving the relative difficulty of different
+elements and the abilities of the skaters. The <a href=/posts/data_fetching/>second post</a> showed how to scrape the data.</p><p>This post will start to analyse the data by fitting a relatively simple model
+to a relatively homogenous subset of the data - the scores for triple axel
+jumps. The triple axel seemed like a good choice for a first analysis because
+it is attempted by most of the top skaters, but is difficult enough that even
+the best skaters can&rsquo;t be 100% sure of pulling it off.</p><p>You can find all the code I used for this analysis
+<a href=https://github.com/teddygroves/figure_skating/>here</a>.</p><h1 id=data>Data</h1><p>The data that we fetched in the first post come from the 2019/2020 grand prix
+series, the 2020 <a href=https://skatingscores.com/1920/4cc/>Four Continents
+Championships</a>, the 2020 European
+championships and the 2020 Japanese, Russian and US national
+championships.</p><p>Of these we will look only at <code>3A</code> elements with no deductions for
+under-rotation. Altogether the data records 305 qualifying triple axels,
+attempted by 108 different skaters and receiving 2687 scores.</p><p>The reason for excluding jumps with a rotation deduction is that in these cases
+the judges' scores are not supposed to reflect how well the jump was executed
+compared to other triple axels, but to other under-rotated triple axels.</p><h1 id=project-structure>Project structure</h1><p>Since the data has a quite specific and informative structure that needs to be
+taken into account, I was pretty sure that I wanted to try a custom Stan
+model. I recently wrote a <a href=https://github.com/teddygroves/cookiecutter-cmdstanpy>cookiecutter
+template</a> template for
+just this kind of project, so I thought I&rsquo;d try it out and hopefully save
+writing a bit of boilerplate code.</p><p>To set up the project I set up a new virtual environment and installed
+cookiecutter in it:</p><div class=highlight><pre style=color:#93a1a1;background-color:#002b36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-fallback data-lang=fallback>$ python -m venv ~/.venvs/figure_skating
+tedgro@nnfcb-l0601 ~/Code 
+$ source ~/.venvs/figure_skating/bin/activate
+(figure_skating) tedgro@nnfcb-l0601 ~/Code 
+$ pip install cookiecutter
+</code></pre></div><p>Next I used the <code>cookiecutter</code> command to download the template from github and
+start a questionnaire:</p><div class=highlight><pre style=color:#93a1a1;background-color:#002b36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-fallback data-lang=fallback>...
+(figure_skating) tedgro@nnfcb-l0601 ~/Code 
+$ cookiecutter gh:teddygroves/cookiecutter-cmdstanpy
+You&#39;ve downloaded /Users/tedgro/.cookiecutters/cookiecutter-cmdstanpy before. Is it okay to delete and re-download it? [yes]:  
+project_name [project_name]: Figure skating
+repo_name [figure_skating]: 
+author_name [Your name (or your organization/company/team)]: Teddy Groves
+description [A short description of the project.]: Statistical models of figure skating data
+Select open_source_license:
+1 - MIT
+2 - BSD-3-Clause
+3 - No license file
+Choose from 1, 2, 3 [1]: 1
+</code></pre></div><p>I now had a folder called <code>figure_skating</code> with the following structure:</p><div class=highlight><pre style=color:#93a1a1;background-color:#002b36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-fallback data-lang=fallback>(figure_skating) tedgro@nnfcb-l0601 ~/Code 
+$ tree figure_skating
+figure_skating
+├── LICENSE
+├── Makefile
+├── README.md
+├── bibliography.bib
+├── data
+│   ├── fake
+│   │   └── readme.md
+│   ├── prepared
+│   │   └── readme.md
+│   └── raw
+│       ├── raw_measurements.csv
+│       └── readme.md
+├── fit_fake_data.py
+├── fit_real_data.py
+├── prepare_data.py
+├── report.md
+├── requirements.txt
+├── results
+│   ├── infd
+│   │   └── readme.md
+│   ├── input_data_json
+│   │   └── readme.md
+│   ├── loo
+│   │   └── readme.md
+│   ├── plots
+│   │   └── readme.md
+│   └── samples
+│       └── readme.md
+└── src
+    ├── cmdstanpy_to_arviz.py
+    ├── data_preparation.py
+    ├── fake_data_generation.py
+    ├── fitting.py
+    ├── model_configuration.py
+    ├── model_configurations_to_try.py
+    ├── pandas_to_cmdstanpy.py
+    ├── readme.md
+    ├── stan
+    │   ├── custom_functions.stan
+    │   ├── model.stan
+    │   └── readme.md
+    └── util.py
+
+12 directories, 30 files
+</code></pre></div><p>I moved the <code>fetch_scores.py</code> script and the resulting csv file <code>scores.csv</code>
+into the this folder.</p><h1 id=first-model>First model</h1><p>The first model I wanted to try was a basic hierarchical ordered logistic
+regression:</p><p>\begin{align*}
+score &\sim ordered\ logistic(ability, cutpoints)\newline
+ability &\sim normal(\mu, 1)\newline
+\mu &\sim normal(0, 1)\newline
+cutpoints_5 &= 0\newline
+cutpoints_{2:11} - cutpoints_{1:10} &\sim normal(0.2, 0.3)
+\end{align*}</p><p>I expected that this model would be too simple, as it is missing the rather
+important information that a lot of the scores come from the exact same
+jumps. However I think it is generally good practice not to include this kind
+of detail, and add it to a simpler model when there is a clear benefit from
+doing so.</p><p>To implement this model in Stan I first added the following function to the
+file <code>custom_functions.stan</code>. The purpose of the function is to get a vector of
+cutpoints from a vector of differences while ensuring that a certain cutpoint
+is exactly zero, which should make the model parameters easier to interpret and
+the priors easier to specify.</p><div class=highlight><pre style=color:#93a1a1;background-color:#002b36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-fallback data-lang=fallback>vector get_ordered_from_diffs(vector diffs, int fixed_ix, real fixed_val){
+  /* Get an ordered vector of length K from a vector of K-1 differences, plus
+     the index of an entry that is exactly fixed_val.
+  */
+  int K = rows(diffs) + 1;
+  vector[K] out;
+  out[fixed_ix] = fixed_val;
+  out[1:fixed_ix-1] = reverse(-cumulative_sum(reverse(diffs[1:fixed_ix-1])));
+  out[fixed_ix+1:K] = cumulative_sum(diffs[fixed_ix:K]);
+  return out;
+}
+</code></pre></div><p>The rest of the model as follows:</p><div class=highlight><pre style=color:#93a1a1;background-color:#002b36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-fallback data-lang=fallback>functions {
+#include custom_functions.stan
+}
+data {
+  int&lt;lower=1&gt; N;
+  int&lt;lower=1&gt; N_skater;
+  int&lt;lower=1&gt; N_grade;
+  int&lt;lower=1,upper=N_skater&gt; skater[N];
+  int&lt;lower=1,upper=N_grade&gt; y[N];
+  int&lt;lower=1&gt; N_test;
+  int&lt;lower=1,upper=N_skater&gt; skater_test[N_test];
+  int&lt;lower=1,upper=N_grade&gt; y_test[N_test];
+  int&lt;lower=0,upper=1&gt; likelihood;
+  vector[2] prior_mu;
+  vector[2] prior_cutpoint_diffs;
+}
+parameters {
+  real mu;
+  vector[N_skater] ability;
+  vector&lt;lower=0&gt;[N_grade-2] cutpoint_diffs;
+}
+transformed parameters {
+  ordered[N_grade-1] cutpoints = get_ordered_from_diffs(cutpoint_diffs, 5, 0);
+}
+model {
+  mu ~ normal(prior_mu[1], prior_mu[2]);
+  ability ~ normal(0, 1);
+  cutpoint_diffs ~ normal(prior_cutpoint_diffs[1], prior_cutpoint_diffs[2]);
+  if (likelihood){
+    y ~ ordered_logistic(mu + ability[skater], cutpoints);
+  }
+}
+generated quantities {
+  vector[N_test] yrep;
+  vector[N_test] llik;
+  for (n in 1:N_test){
+    real eta = mu + ability[skater_test[n]];
+    yrep[n] = ordered_logistic_rng(eta, cutpoints);
+    llik[n] = ordered_logistic_lpmf(y_test[n] | eta, cutpoints);
+  }
+}
+</code></pre></div><h1 id=fitting-fake-data>Fitting fake data</h1><p>After customising the python functions to match my model I filtered the data
+with the <code>prepare_data.py</code> script, then generated some fake scores and fit the
+model to them in priors only and likelihood-included mode using the
+<code>fit_fake_data.py</code> script. Posterior samples appeared fairly quickly and
+without diagnostic warnings in both cases and the loo comparison looked ok too:</p><div class=highlight><pre style=color:#93a1a1;background-color:#002b36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-fallback data-lang=fallback>Loo comparison:
+                                           rank          loo        p_loo ...         se        dse  warning
+sim_study-20210322170324-simple_posterior     0 -4952.580176    93.164296 ...  32.849310   0.000000    False
+sim_study-20210322170324-simple_prior         1 -7919.559170  2448.849177 ...  47.280981  44.640614     True
+
+</code></pre></div><p>I wasn&rsquo;t too worried about the loo warning for the prior model. To check that
+it wasn&rsquo;t too far wrong I wrote some sanity-checking plotting functions and ran
+them with a new script <code>analyse.py</code>.</p><p>Here are the prior model&rsquo;s opinions about the skaters' abilities, together with
+the true values that were used to generate the fake data:</p><figure><img src=/img/prior_abilities.png alt="Simulated data ability priors" width=300><figcaption><p>Simulated data ability priors</p></figcaption></figure><p>This seemed more or less fine.</p><p>Next I made a prior predictive check, comparing each observed score with the
+distribution of modelled scores:</p><figure><img src=/img/prior_ppc.png alt="Simulated data prior predictive checks" width=1000><figcaption><p>Simulated data prior predictive checks</p></figcaption></figure><p>Again nothing especially worrying, at least at this early stage.</p><p>Repeating the same plots for the fitted data gave these results:</p><figure><img src=/img/posterior_abilities.png alt="Simulated data ability posteriors" width=300><figcaption><p>Simulated data ability posteriors</p></figcaption></figure><figure><img src=/img/posterior_ppc.png alt="Simulated data posterior predictive checks" width=1000><figcaption><p>Simulated data posterior predictive checks</p></figcaption></figure><p>It&rsquo;s nice that the available data seems sufficient to separate the skaters
+quite cleanly and that there is a visible, albeit not the sharpest,
+relationship between the observed outcome and the model&rsquo;s predictions. The next
+logical step was to see how the model predicts some real data.</p><h1 id=fitting-real-data>Fitting real data</h1><p>Again the fitting and loo results were ok, but with a warning for the prior model:</p><div class=highlight><pre style=color:#93a1a1;background-color:#002b36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-fallback data-lang=fallback>Loo comparison:
+                                            rank          loo        p_loo       d_loo  ...         se       dse  warning
+real_study-20210322173057-simple_posterior     0 -4409.900382    81.597118     0.00000  ...  39.440729   0.00000    False
+real_study-20210322173057-simple_prior         1 -8289.477432  2487.627217  3879.57705  ...  44.615350  62.40983     True
+
+</code></pre></div><p>The posterior predictive check shows a decent visual relationship between
+observed and predicted scores. It&rsquo;s interesting that there seems to be a lot of
+mis-prediction for the low observed scores on the left compared to the high
+ones on the right.</p><figure><img src=/img/posterior_ppc_real.png alt="Real data posterior predictive checks" width=1000><figcaption><p>Real data posterior predictive checks</p></figcaption></figure><p>Finally, here are the modelled abilities, according to the real data:</p><figure><img src=/img/posterior_abilities_real.png alt="Real data ability posteriors" width=300><figcaption><p>Real data ability posteriors</p></figcaption></figure><p>That&rsquo;s right, the model&rsquo;s answer to the title question is <em>Yuzuru Hanyu, by a
+mile</em>.</p><p><img src=./img/yuzuru_winning.jpg alt></p><h1 id=conclusion>Conclusion</h1><p>The model&rsquo;s striking opinion about Yuzuru is defensible, as his triple axel is
+ridiculously good. This video showing how the jump has evolved through his
+career makes it clear how amazingly Yuzuru has been pulling it off in the last few
+seasons:</p><div style=position:relative;padding-bottom:56.25%;height:0;overflow:hidden><iframe src=https://www.youtube.com/embed/Naev6CmYMvs style=position:absolute;top:0;left:0;width:100%;height:100%;border:0 allowfullscreen title="YouTube Video"></iframe></div><p>Still 5-6 standard deviations away from the average seems possibly a bit too
+extreme. Perhaps this is a clue as to how the model could be improved.</p><p>The next post in this series will attempt to do exactly that, comparing
+different models against the simple one.</p></div><div class=post-tags><nav class="nav tags"><ul class=flat><li><a href=/tags/skating>skating</a></li></ul></nav></div></div><script type=text/x-mathjax-config>
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script><script type=text/javascript src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script></body></html>
