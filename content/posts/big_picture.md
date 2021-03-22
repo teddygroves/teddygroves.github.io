@@ -47,12 +47,12 @@ questions:
   best skater will get the higher score?
 - How good is Yuzuru, really?
 
-There are lots of ways to narrow this idea down and lots of details to narrow
-down. Should we measure all elements or just jumps, or just quad jumps? Should
+There are lots of ways to narrow this idea down and lots of details to work
+out. Should we measure all elements or just jumps, or just quad jumps? Should
 we include qualitative judgements - for example about whether a jump was over
 or under rotated - as well as the quantitative -5 to +5 scores? What
 measurement model should we use? Should we allow skaters to change how good
-they are over time? 
+they are over time?
 
 In my opinion these questions are best left until later. Now it's time to fetch
 and format some data, then dive into the tangled cycle of model formulation,
@@ -61,5 +61,6 @@ might end up doing something like this:
 
 {{< figure src="/img/workflow.png" caption="Bayesian workflow, as visualised in Gelman, A., Vehtari, A., Simpson, D., Margossian, C. C., Carpenter, B., Yao, Y., Kennedy, L., Gabry, J., Bürkner, P.C., Modràk, M. (2020). Bayesian Workflow. [arXiv:2011.01808](arXiv:2011.01808)" >}}
 
-The next post will start this process by setting out how to fetch and format
-the data we need from skatingscores using some python libaries.
+The [next post](https://teddygroves.github.io/posts/data_fetching/) will start
+this process by setting out how to fetch and format the data we need from
+skatingscores using some python libaries.

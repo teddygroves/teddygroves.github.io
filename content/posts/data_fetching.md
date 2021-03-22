@@ -327,5 +327,6 @@ Name: 0, dtype: object
 
 So, that was how I fetched some skating data from skatingscores. 
 
-The next post in this series will get started with analysing this data. Until
-then goodbye and happy scraping!
+The [next post](https://teddygroves.github.io/posts/first_model/) in this
+series will get started with analysing this data. Until then goodbye and happy
+scraping!
