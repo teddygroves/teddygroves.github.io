@@ -18,16 +18,17 @@ Hanyu</a>, attempts a certain jump,
 this <a href="https://www.youtube.com/results?search_query=quad+loop">quad loop</a> for example</p><div style=position:relative;padding-bottom:56.25%;height:0;overflow:hidden><iframe src="https://www.youtube.com/embed/AvvcLtKMkOQ?start=54&end=62" style=position:absolute;top:0;left:0;width:100%;height:100%;border:0 allowfullscreen title="YouTube Video"></iframe></div><p>we want to know how likely it is that his scorecard will look like
 <a href=https://skatingscores.com/2021/natjpn/men/long/jpn_yuzuru_hanyu/element/1>this</a>:</p><figure><img src=/img/quad_loop.png></figure><p>With such a model it might be possible to answer some of these tantalising
 questions:</p><ul><li>Could someone game the system by choosing high scoring but easy elements?</li><li>What are the chances that, if two skaters attempt the same programme, the
-best skater will get the higher score?</li><li>How good is Yuzuru, really?</li></ul><p>There are lots of ways to narrow this idea down and lots of details to narrow
-down. Should we measure all elements or just jumps, or just quad jumps? Should
+best skater will get the higher score?</li><li>How good is Yuzuru, really?</li></ul><p>There are lots of ways to narrow this idea down and lots of details to work
+out. Should we measure all elements or just jumps, or just quad jumps? Should
 we include qualitative judgements - for example about whether a jump was over
 or under rotated - as well as the quantitative -5 to +5 scores? What
 measurement model should we use? Should we allow skaters to change how good
 they are over time?</p><p>In my opinion these questions are best left until later. Now it&rsquo;s time to fetch
 and format some data, then dive into the tangled cycle of model formulation,
 analysis and testing that characterises most projects like this. With luck we
-might end up doing something like this:</p><figure><img src=/img/workflow.png alt="Bayesian workflow, as visualised in Gelman, A., Vehtari, A., Simpson, D., Margossian, C. C., Carpenter, B., Yao, Y., Kennedy, L., Gabry, J., Bürkner, P.C., Modràk, M. (2020). Bayesian Workflow. arXiv:2011.01808"><figcaption><p>Bayesian workflow, as visualised in Gelman, A., Vehtari, A., Simpson, D., Margossian, C. C., Carpenter, B., Yao, Y., Kennedy, L., Gabry, J., Bürkner, P.C., Modràk, M. (2020). Bayesian Workflow. <a href=arXiv:2011.01808>arXiv:2011.01808</a></p></figcaption></figure><p>The next post will start this process by setting out how to fetch and format
-the data we need from skatingscores using some python libaries.</p></div><div class=post-tags><nav class="nav tags"><ul class=flat><li><a href=/tags/skating>skating</a></li></ul></nav></div></div><script type=text/x-mathjax-config>
+might end up doing something like this:</p><figure><img src=/img/workflow.png alt="Bayesian workflow, as visualised in Gelman, A., Vehtari, A., Simpson, D., Margossian, C. C., Carpenter, B., Yao, Y., Kennedy, L., Gabry, J., Bürkner, P.C., Modràk, M. (2020). Bayesian Workflow. arXiv:2011.01808"><figcaption><p>Bayesian workflow, as visualised in Gelman, A., Vehtari, A., Simpson, D., Margossian, C. C., Carpenter, B., Yao, Y., Kennedy, L., Gabry, J., Bürkner, P.C., Modràk, M. (2020). Bayesian Workflow. <a href=arXiv:2011.01808>arXiv:2011.01808</a></p></figcaption></figure><p>The <a href=https://teddygroves.github.io/posts/data_fetching/>next post</a> will start
+this process by setting out how to fetch and format the data we need from
+skatingscores using some python libaries.</p></div><div class=post-tags><nav class="nav tags"><ul class=flat><li><a href=/tags/skating>skating</a></li></ul></nav></div></div><script type=text/x-mathjax-config>
   MathJax.Hub.Config({
     tex2jax: {
       inlineMath: [ ['$','$'], ["\\(","\\)"] ],
