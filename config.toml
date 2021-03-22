@@ -6,6 +6,7 @@ paginate = 5
 
 copyright = "© Teddy Groves 2021"
 
+pygmentsUseClassic = false
 pygmentsstyle = "solarized-dark"
 pygmentscodefences = true
 pygmentscodefencesguesssyntax = true
